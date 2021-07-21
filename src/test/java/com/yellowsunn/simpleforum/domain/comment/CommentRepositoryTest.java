@@ -71,7 +71,7 @@ class CommentRepositoryTest {
                 .build();
 
         //then
-        assertThatThrownBy(() -> commentRepository.save(comment))
+        assertThatThrownBy(() -> commentRepository.saveAndFlush(comment))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 

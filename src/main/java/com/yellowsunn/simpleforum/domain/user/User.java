@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.domain.user;
 
+import com.yellowsunn.simpleforum.domain.BaseCreatedTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import javax.persistence.*;
         @UniqueConstraint(name = "username_unique", columnNames = {"username"})
 })
 @Entity
-public class User {
+public class User extends BaseCreatedTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "user_id")
@@ -32,10 +33,10 @@ public class User {
     private Role role;
 
     @Builder
-    public User(String username, String password, String nickname, Role role) {
+    public User(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.role = role;
+        this.role = Role.USER;
     }
 }
