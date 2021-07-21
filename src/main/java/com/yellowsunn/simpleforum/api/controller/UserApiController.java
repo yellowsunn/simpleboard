@@ -4,6 +4,7 @@ import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
 
 @Slf4j
@@ -52,10 +54,12 @@ public class UserApiController {
             Long userId = userService.login(userDto);
             HttpSession session = request.getSession();
             session.setAttribute(SessionConst.LOGIN_ID, userId);
-
         } catch(IllegalArgumentException e) {
             log.error("error=", e);
             response.sendError(SC_BAD_REQUEST, e.getMessage());
+        } catch (NotFoundException e) {
+            log.error("error=",e);
+            response.sendError(SC_NOT_FOUND, e.getMessage());
         }
     }
 

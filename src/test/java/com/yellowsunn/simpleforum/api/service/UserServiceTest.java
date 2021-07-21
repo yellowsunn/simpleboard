@@ -3,6 +3,7 @@ package com.yellowsunn.simpleforum.api.service;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,7 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -84,7 +85,7 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotFoundException.class);
     }
 
     private UserLoginDto getTestUserLoginDto() {

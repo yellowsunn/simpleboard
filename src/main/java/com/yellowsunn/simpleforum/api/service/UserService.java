@@ -4,6 +4,7 @@ import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,8 @@ public class UserService {
     @Transactional(readOnly = true)
     public Long login(UserLoginDto userLoginDto) {
         Optional<User> userOptional = userRepository.findByUsername(userLoginDto.getUsername());
-        if (userOptional.isEmpty() ||
-                !passwordEncoder.matches(userLoginDto.getPassword(), userOptional.get().getPassword())) {
-            throw new IllegalArgumentException("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
+        if (isUserNotFoundOrPasswordNotMatch(userLoginDto, userOptional)) {
+            throw new NotFoundException("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
         }
 
         return userOptional.get().getId();
@@ -41,5 +41,10 @@ public class UserService {
                 .nickname(userDto.getNickname())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .build();
+    }
+
+    private boolean isUserNotFoundOrPasswordNotMatch(UserLoginDto userLoginDto, Optional<User> userOptional) {
+        return userOptional.isEmpty() ||
+                !passwordEncoder.matches(userLoginDto.getPassword(), userOptional.get().getPassword());
     }
 }

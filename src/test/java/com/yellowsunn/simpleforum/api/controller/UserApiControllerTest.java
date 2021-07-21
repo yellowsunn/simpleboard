@@ -5,6 +5,7 @@ import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,14 +157,14 @@ class UserApiControllerTest {
                 .build();
 
         //mocking
-        doThrow(IllegalArgumentException.class).when(userService).login(dto);
+        doThrow(NotFoundException.class).when(userService).login(dto);
 
         //then
         mvc.perform(post("/api/users/login")
                 .content(objectMapper.writeValueAsString(dto))
                 .contentType(MediaType.APPLICATION_JSON)
         )
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(request().sessionAttributeDoesNotExist(SessionConst.LOGIN_ID));
     }
 }
