@@ -119,7 +119,7 @@ class UserApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
-                .andExpect(request().sessionAttribute(SessionConst.LOGIN_ID, 1L));
+                .andExpect(request().sessionAttribute(SessionConst.USER_ID, 1L));
     }
 
     @Test
@@ -143,7 +143,7 @@ class UserApiControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
             )
                     .andExpect(status().isBadRequest())
-                    .andExpect(request().sessionAttributeDoesNotExist(SessionConst.LOGIN_ID));
+                    .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
         }
     }
 
@@ -165,6 +165,6 @@ class UserApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isNotFound())
-                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.LOGIN_ID));
+                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
     }
 }

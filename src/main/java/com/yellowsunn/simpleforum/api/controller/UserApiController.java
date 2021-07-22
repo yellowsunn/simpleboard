@@ -21,7 +21,6 @@ import java.io.IOException;
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -33,15 +32,12 @@ public class UserApiController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void register(@Validated @RequestBody UserRegisterDto userDto, BindingResult bindingResult,
-                                      HttpServletResponse response) throws IOException {
+                         HttpServletResponse response) throws IOException {
         try {
-            checkValidation(bindingResult);
-            userService.register(userDto);
-        } catch(IllegalArgumentException e) {
-            log.error("error=", e);
+            checkValidationAndRegister(userDto, bindingResult);
+        } catch (IllegalArgumentException e) {
             response.sendError(SC_BAD_REQUEST, e.getMessage());
         } catch (DataIntegrityViolationException e) {
-            log.error("error=", e);
             response.sendError(SC_BAD_REQUEST, "이미 사용중인 아이디입니다.");
         }
     }
@@ -50,22 +46,33 @@ public class UserApiController {
     public void login(@Validated @RequestBody UserLoginDto userDto, BindingResult bindingResult,
                       HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            checkValidation(bindingResult);
-            Long userId = userService.login(userDto);
-            HttpSession session = request.getSession();
-            session.setAttribute(SessionConst.LOGIN_ID, userId);
-        } catch(IllegalArgumentException e) {
-            log.error("error=", e);
+            checkValidationAndLogin(userDto, bindingResult, request);
+        } catch (IllegalArgumentException e) {
             response.sendError(SC_BAD_REQUEST, e.getMessage());
         } catch (NotFoundException e) {
-            log.error("error=",e);
             response.sendError(SC_NOT_FOUND, e.getMessage());
         }
+    }
+
+    private void checkValidationAndRegister(UserRegisterDto userDto, BindingResult bindingResult) {
+        checkValidation(bindingResult);
+        userService.register(userDto);
     }
 
     private void checkValidation(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("validation error");
         }
+    }
+
+    private void checkValidationAndLogin(UserLoginDto userDto, BindingResult bindingResult, HttpServletRequest request) {
+        checkValidation(bindingResult);
+        Long userId = userService.login(userDto);
+        makeLoginSessionAttribute(request, userId);
+    }
+
+    private void makeLoginSessionAttribute(HttpServletRequest request, Long userId) {
+        HttpSession session = request.getSession();
+        session.setAttribute(SessionConst.USER_ID, userId);
     }
 }
