@@ -1,6 +1,7 @@
 package com.yellowsunn.simpleforum.api.controller;
 
 import com.yellowsunn.simpleforum.api.SessionConst;
+import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
@@ -54,6 +55,18 @@ public class UserApiController {
         }
     }
 
+    @GetMapping("/current")
+    public UserGetDto findCurrentLoggedInUser(@SessionAttribute(SessionConst.USER_ID) Long userId,
+                                              HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            return userService.findUserById(userId);
+        } catch (NotFoundException e) {
+            invalidateLoginSession(request);
+            response.sendError(SC_NOT_FOUND, e.getMessage());
+            return null;
+        }
+    }
+
     private void checkValidationAndRegister(UserRegisterDto userDto, BindingResult bindingResult) {
         checkValidation(bindingResult);
         userService.register(userDto);
@@ -74,5 +87,10 @@ public class UserApiController {
     private void makeLoginSessionAttribute(HttpServletRequest request, Long userId) {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.USER_ID, userId);
+    }
+
+    private void invalidateLoginSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) session.invalidate();
     }
 }

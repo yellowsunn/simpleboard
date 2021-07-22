@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.api.service;
 
+import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
@@ -14,8 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -85,6 +85,40 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(() -> userService.login(dto))
+                .isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("id로 유저 조회")
+    void findUserById() {
+        //given
+        User user = User.builder()
+                .username("username")
+                .password("password")
+                .nickname("nickname")
+                .build();
+
+        UserGetDto userDto = new UserGetDto(user);
+
+        //mocking
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+
+        //when
+        UserGetDto findUserDto = userService.findUserById(1L);
+
+        //then
+        assertThat(findUserDto).isNotNull();
+        assertThat(userDto).isEqualTo(findUserDto);
+    }
+
+    @Test
+    @DisplayName("id로 유저 조회 실패")
+    void failedToFindUserById() {
+        //mocking
+        given(userRepository.findById(1L)).willReturn(Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> userService.findUserById(1L))
                 .isInstanceOf(NotFoundException.class);
     }
 

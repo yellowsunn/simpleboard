@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.api.service;
 
+import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.domain.user.User;
@@ -33,6 +34,14 @@ public class UserService {
         }
 
         return userOptional.get().getId();
+    }
+
+    @Transactional(readOnly = true)
+    public UserGetDto findUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다."));
+
+        return new UserGetDto(user);
     }
 
     private User userRegisterDtoToUser(UserRegisterDto userDto) {

@@ -2,6 +2,7 @@ package com.yellowsunn.simpleforum.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.simpleforum.api.SessionConst;
+import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
@@ -21,9 +22,9 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserApiController.class)
 class UserApiControllerTest {
@@ -167,4 +168,55 @@ class UserApiControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
     }
+
+    @Test
+    @DisplayName("현재 로그인한 회원 조회(로그인 인증이 되어있을 때)")
+    void findCurrentLoggedInUser() throws Exception {
+        //given
+        UserGetDto userGetDto = new UserGetDto();
+        userGetDto.setId(1L);
+        userGetDto.setUsername("username");
+        userGetDto.setNickname("nickname");
+
+        //mocking
+        given(userService.findUserById(userGetDto.getId())).willReturn(userGetDto);
+
+        mvc.perform(get("/api/users/current")
+                .sessionAttr(SessionConst.USER_ID, userGetDto.getId())
+        )
+                .andExpect(status().isOk())
+                .andExpect(request().sessionAttribute(SessionConst.USER_ID, userGetDto.getId()))
+                .andExpect(content().string("{\"id\":1,\"username\":\"username\",\"nickname\":\"nickname\"}"));
+    }
+
+    @Test
+    @DisplayName("현재 로그인한 회원 조회 실패 및 세션 무효화(로그인 인증이 되어 있을 때)")
+    void FailedToFindCurrentLoggedInUser() throws Exception {
+        //given
+        UserGetDto userGetDto = new UserGetDto();
+        userGetDto.setId(1L);
+        userGetDto.setUsername("username");
+        userGetDto.setNickname("nickname");
+
+        //mocking
+        given(userService.findUserById(userGetDto.getId())).willThrow(NotFoundException.class);
+
+        //then
+        mvc.perform(get("/api/users/current")
+                .sessionAttr(SessionConst.USER_ID, userGetDto.getId())
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+    }
+
+    @Test
+    @DisplayName("인증 없이 현재 접속한 회원 조회")
+    void unauthorizedForFindCurrentUser() throws Exception {
+
+        //then
+        mvc.perform(get("/api/users/current"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+    }
+
 }
