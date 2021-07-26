@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
@@ -7,6 +8,8 @@ import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
+import com.yellowsunn.simpleforum.domain.user.Role;
+import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.exception.NotFoundUserException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import org.junit.jupiter.api.DisplayName;
@@ -17,14 +20,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,26 +44,23 @@ class UserApiControllerTest {
     @MockBean
     UserService userService;
 
+    @MockBean
+    User mockUser;
+
     ObjectMapper objectMapper = new ObjectMapper();
+
+    Long userId = 1L;
+    Role userRole = Role.USER;
 
     @Test
     @DisplayName("회원가입 성공")
     void register() throws Exception {
         //given
-        UserRegisterDto dto = UserRegisterDto.builder()
-                .username("username")
-                .password("12345678")
-                .nickname("nickname")
-                .build();
-
-        //mocking
-        doNothing().when(userService).register(dto);
-
+        UserRegisterDto dto = getTestUserRegisterDto();
+        MockHttpServletRequestBuilder request = registerRequest();
+        setJsonContent(request, dto);
         //then
-        mvc.perform(post("/api/users")
-                .content(objectMapper.writeValueAsString(dto))
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isCreated());
+        mvc.perform(request).andExpect(status().isCreated());
     }
 
     @Test
@@ -73,15 +76,12 @@ class UserApiControllerTest {
 
         dtos.add(UserRegisterDto.builder().username("username").password("12345678").nickname(" ").build());
 
+        MockHttpServletRequestBuilder request = registerRequest();
         //then
         for (UserRegisterDto dto : dtos) {
-            //mocking
-            doNothing().when(userService).register(dto);
-
-            mvc.perform(post("/api/users")
-                    .content(objectMapper.writeValueAsString(dto))
-                    .contentType(MediaType.APPLICATION_JSON)
-            ).andExpect(status().isBadRequest());
+            setJsonContent(request, dto);
+            mvc.perform(request)
+                    .andExpect(status().isBadRequest());
         }
     }
 
@@ -89,41 +89,37 @@ class UserApiControllerTest {
     @DisplayName("회원 가입 아이디 중복 에러")
     void duplicateRegistration() throws Exception {
         //given
-        UserRegisterDto dto = UserRegisterDto.builder()
-                .username("username")
-                .password("12345678")
-                .nickname("hello")
-                .build();
+        UserRegisterDto dto = getTestUserRegisterDto();
+
+        MockHttpServletRequestBuilder request = registerRequest();
+        setJsonContent(request, dto);
 
         //mocking
         doThrow(DataIntegrityViolationException.class).when(userService).register(dto);
 
         //then
-        mvc.perform(post("/api/users")
-                .content(objectMapper.writeValueAsString(dto))
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isBadRequest());
+        mvc.perform(request)
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     @DisplayName("로그인 성공(세션 생성)")
     void login() throws Exception {
         //given
-        UserLoginDto dto = UserLoginDto.builder()
-                .username("username")
-                .password("12345678")
-                .build();
+        UserLoginDto dto = getTestUserLoginDto();
+        MockHttpServletRequestBuilder request = loginRequest();
+        setJsonContent(request, dto);
 
         //mocking
-        given(userService.login(dto)).willReturn(1L);
+        given(mockUser.getId()).willReturn(userId);
+        given(mockUser.getRole()).willReturn(userRole);
+        given(userService.login(dto)).willReturn(mockUser);
 
         //then
-        mvc.perform(post("/api/users/login")
-                .content(objectMapper.writeValueAsString(dto))
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().isOk())
-                .andExpect(request().sessionAttribute(SessionConst.USER_ID, 1L));
+        ResultActions resultActions = mvc.perform(request)
+                .andExpect(status().isOk());
+
+        expectExistLoginSession(resultActions);
     }
 
     @Test
@@ -137,17 +133,15 @@ class UserApiControllerTest {
         dtos.add(UserLoginDto.builder().username("username").password("1234567").build());
         dtos.add(UserLoginDto.builder().username("username").password("12345678901234567").build());
 
-        for (UserLoginDto dto : dtos) {
-            //mocking
-            given(userService.login(dto)).willReturn(1L);
+        MockHttpServletRequestBuilder request = loginRequest();
 
+        for (UserLoginDto dto : dtos) {
+            setJsonContent(request, dto);
             //then
-            mvc.perform(post("/api/users/login")
-                    .content(objectMapper.writeValueAsString(dto))
-                    .contentType(MediaType.APPLICATION_JSON)
-            )
-                    .andExpect(status().isBadRequest())
-                    .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+            ResultActions resultActions = mvc.perform(request)
+                    .andExpect(status().isBadRequest());
+
+            expectNotExistLoginSession(resultActions);
         }
     }
 
@@ -155,40 +149,34 @@ class UserApiControllerTest {
     @DisplayName("로그인 실패 에러(세션 생성x)")
     void inValidUserLogin() throws Exception {
         //given
-        UserLoginDto dto = UserLoginDto.builder()
-                .username("username")
-                .password("12345678")
-                .build();
+        UserLoginDto dto = getTestUserLoginDto();
+        MockHttpServletRequestBuilder request = loginRequest();
+        setJsonContent(request, dto);
 
         //mocking
         doThrow(NotFoundUserException.class).when(userService).login(dto);
 
         //then
-        mvc.perform(post("/api/users/login")
-                .content(objectMapper.writeValueAsString(dto))
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().isNotFound())
-                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+        ResultActions resultActions = mvc.perform(request)
+                .andExpect(status().isNotFound());
+
+        expectNotExistLoginSession(resultActions);
     }
 
     @Test
     @DisplayName("현재 로그인한 회원 조회(로그인 인증이 되어있을 때)")
     void findCurrentLoggedInUser() throws Exception {
         //given
-        UserGetDto userGetDto = new UserGetDto();
-        userGetDto.setId(1L);
-        userGetDto.setUsername("username");
-        userGetDto.setNickname("nickname");
+        UserGetDto userGetDto = getTestUserGetDto();
+
+        MockHttpServletRequestBuilder request = getCurrentUserRequest();
+        setLoginSession(request);
 
         //mocking
         given(userService.findUserById(userGetDto.getId())).willReturn(userGetDto);
 
-        mvc.perform(get("/api/users/current")
-                .sessionAttr(SessionConst.USER_ID, userGetDto.getId())
-        )
+        mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(request().sessionAttribute(SessionConst.USER_ID, userGetDto.getId()))
                 .andExpect(content().string("{\"id\":1,\"username\":\"username\",\"nickname\":\"nickname\"}"));
     }
 
@@ -196,73 +184,72 @@ class UserApiControllerTest {
     @DisplayName("현재 로그인한 회원 조회 실패 및 세션 무효화(로그인 인증이 되어 있을 때)")
     void FailedToFindCurrentLoggedInUser() throws Exception {
         //given
-        UserGetDto userGetDto = new UserGetDto();
-        userGetDto.setId(1L);
-        userGetDto.setUsername("username");
-        userGetDto.setNickname("nickname");
+        MockHttpServletRequestBuilder request = getCurrentUserRequest();
+        setLoginSession(request);
 
         //mocking
-        given(userService.findUserById(userGetDto.getId())).willThrow(NotFoundUserException.class);
+        given(userService.findUserById(userId)).willThrow(NotFoundUserException.class);
 
         //then
-        mvc.perform(get("/api/users/current")
-                .sessionAttr(SessionConst.USER_ID, userGetDto.getId())
-        )
-                .andExpect(status().isNotFound())
-                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+        ResultActions resultActions = mvc.perform(request)
+                .andExpect(status().isNotFound());
+        expectNotExistLoginSession(resultActions);
     }
 
     @Test
     @DisplayName("현재 로그인한 회원 조회 인증 실패")
     void unauthorizedForFindCurrentUser() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = getCurrentUserRequest();
 
         //then
-        unauthorizedRequest(get("/api/users/current"));
+        ResultActions resultActions = mvc.perform(request);
+        expectUnauthorized(resultActions);
     }
 
     @Test
     @DisplayName("비밀번호 변경 성공")
     void changePassword() throws Exception {
         //given
-        Long userId = 1L;
-        UserPatchRequestDto dto = UserPatchRequestDto.builder()
-                .password("password")
-                .newPassword("password2")
-                .build();
+        UserPatchRequestDto dto = getTestUserPatchRequestDto();
+        MockHttpServletRequestBuilder request = patchCurrentUserRequest();
+        setLoginSession(request);
+        setJsonContent(request, dto);
 
         //then
-        mvc.perform(patch("/api/users/current")
-                .sessionAttr(SessionConst.USER_ID, userId)
-                .content(objectMapper.writeValueAsString(dto))
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
+        mvc.perform(request)
+                .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("비밀번호 변경 인증 실패")
     void unauthorizedForChangePassword() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = patchCurrentUserRequest();
+
         //then
-        unauthorizedRequest(patch("/api/users/current"));
+        ResultActions resultActions = mvc.perform(request);
+        expectUnauthorized(resultActions);
     }
 
     @Test
     @DisplayName("비밀번호 변경 검증 실패")
     void validationFailedForChangePassword() throws Exception {
         //given
-        Long userId = 1L;
         List<UserPatchRequestDto> dtos = new ArrayList<>();
         dtos.add(UserPatchRequestDto.builder().password("").newPassword("password2").build());
         dtos.add(UserPatchRequestDto.builder().password("password").newPassword("").build());
         dtos.add(UserPatchRequestDto.builder().password("password").newPassword("passwor").build());
         dtos.add(UserPatchRequestDto.builder().password("password").newPassword("passwordpasswordp").build());
 
-        //then
+        MockHttpServletRequestBuilder request = patchCurrentUserRequest();
+        setLoginSession(request);
+
         for (UserPatchRequestDto dto : dtos) {
-            mvc.perform(patch("/api/users/current")
-                    .sessionAttr(SessionConst.USER_ID, userId)
-                    .content(objectMapper.writeValueAsString(dto))
-                    .contentType(MediaType.APPLICATION_JSON)
-            ).andExpect(status().isBadRequest());
+            setJsonContent(request, dto);
+
+            mvc.perform(request)
+                    .andExpect(status().isBadRequest());
         }
     }
 
@@ -270,76 +257,157 @@ class UserApiControllerTest {
     @DisplayName("비밀번호 변경하려는 회원 조회 실패")
     void failedToFindUserWhoWantChangePassword() throws Exception {
         //given
-        Long userId = 1L;
-        UserPatchRequestDto dto = UserPatchRequestDto.builder()
-                .password("password").newPassword("password2").build();
+        UserPatchRequestDto dto = getTestUserPatchRequestDto();
+        MockHttpServletRequestBuilder request = patchCurrentUserRequest();
+        setLoginSession(request);
+        setJsonContent(request, dto);
+
         //mocking
         doThrow(NotFoundUserException.class).when(userService).changePassword(userId, dto);
 
         //then
-        mvc.perform(patch("/api/users/current")
-                .sessionAttr(SessionConst.USER_ID, userId)
-                .content(objectMapper.writeValueAsString(dto))
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNotFound());
+        ResultActions resultActions = mvc.perform(request)
+                .andExpect(status().isNotFound());
+
+        expectNotExistLoginSession(resultActions);
     }
 
     @Test
     @DisplayName("비밀번호 변경 요청시 기존 비밀번호 입력이 일치하지 않는 경우 에러")
     void invalidOldPassword() throws Exception {
         //given
-        Long userId = 1L;
-        UserPatchRequestDto dto = UserPatchRequestDto.builder()
-                .password("password").newPassword("password2").build();
+        UserPatchRequestDto dto = getTestUserPatchRequestDto();
+        MockHttpServletRequestBuilder request = patchCurrentUserRequest();
+        setLoginSession(request);
+        setJsonContent(request, dto);
 
         //mocking
         doThrow(PasswordMismatchException.class).when(userService).changePassword(userId, dto);
 
         //then
-        mvc.perform(patch("/api/users/current")
-                .sessionAttr(SessionConst.USER_ID, userId)
-                .content(objectMapper.writeValueAsString(dto))
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isForbidden());
+        mvc.perform(request)
+                .andExpect(status().isForbidden());
     }
 
     @Test
     @DisplayName("현재 로그인한 회원 삭제 성공")
     void deleteCurrentUser() throws Exception {
         //given
-        Long userId = 1L;
+        MockHttpServletRequestBuilder request = deleteCurrentUserRequest();
+        setLoginSession(request);
 
         //then
-        mvc.perform(delete("/api/users/current")
-                .sessionAttr(SessionConst.USER_ID, userId)
-        ).andExpect(status().isOk());
+        mvc.perform(request)
+                .andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("회원 삭제 인증 실패")
     void unauthorizedForDeleteUser() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = deleteCurrentUserRequest();
+
         //then
-        unauthorizedRequest(delete("/api/user/current"));
+        ResultActions resultActions = mvc.perform(request);
+        expectUnauthorized(resultActions);
     }
 
     @Test
     @DisplayName("삭제하려는 회원 조회 실패")
     void failedToFindUserWhoWantDelete() throws Exception {
         //given
-        Long userId = 1L;
+        MockHttpServletRequestBuilder request = deleteCurrentUserRequest();
+        setLoginSession(request);
 
         //mocking
         doThrow(NotFoundUserException.class).when(userService).deleteUserById(userId);
-
+        
         //then
-        mvc.perform(delete("/api/users/current")
-                .sessionAttr(SessionConst.USER_ID, userId)
-        ).andExpect(status().isNotFound());
+        mvc.perform(request)
+                .andExpect(status().isNotFound());
     }
 
-    private void unauthorizedRequest(MockHttpServletRequestBuilder builder) throws Exception {
-        mvc.perform(builder)
-                .andExpect(status().isUnauthorized())
-                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+    private MockHttpServletRequestBuilder registerRequest() {
+        return post("/api/users");
+    }
+
+    private MockHttpServletRequestBuilder loginRequest() {
+        return post("/api/users/login");
+    }
+
+    private MockHttpServletRequestBuilder getCurrentUserRequest() {
+        return get("/api/users/current");
+    }
+
+    private MockHttpServletRequestBuilder patchCurrentUserRequest() {
+        return patch("/api/users/current");
+    }
+
+    private MockHttpServletRequestBuilder deleteCurrentUserRequest() {
+        return delete("/api/users/current");
+    }
+
+    private void setLoginSession(MockHttpServletRequestBuilder builder) {
+        getSession().forEach((key, value) -> builder.sessionAttr(key, value));
+    }
+
+    private void setJsonContent(MockHttpServletRequestBuilder builder, Object object) throws JsonProcessingException {
+        builder
+                .content(objectMapper.writeValueAsString(object))
+                .contentType(MediaType.APPLICATION_JSON);
+    }
+
+    private void expectUnauthorized(ResultActions resultActions) throws Exception {
+        expectNotExistLoginSession(resultActions);
+        resultActions
+                .andExpect(status().isUnauthorized());
+    }
+
+    private void expectNotExistLoginSession(ResultActions resultActions) throws Exception {
+        for (String key : getSession().keySet()) {
+            resultActions.andExpect(request().sessionAttributeDoesNotExist(key));
+        }
+    }
+
+    private void expectExistLoginSession(ResultActions resultActions) throws Exception {
+        for (String key : getSession().keySet()) {
+            resultActions.andExpect(request().sessionAttribute(key, getSession().get(key)));
+        }
+    }
+
+    private Map<String, Object> getSession() {
+        Map<String, Object> session = new HashMap<>();
+        session.put(SessionConst.USER_ID, userId);
+        session.put(SessionConst.USER_ROLE, userRole);
+
+        return session;
+    }
+
+    private UserRegisterDto getTestUserRegisterDto() {
+        return UserRegisterDto.builder()
+                .username("username")
+                .password("12345678")
+                .nickname("hello")
+                .build();
+    }
+
+    private UserLoginDto getTestUserLoginDto() {
+        return UserLoginDto.builder()
+                .username("username")
+                .password("12345678")
+                .build();
+    }
+
+    private UserGetDto getTestUserGetDto() {
+        UserGetDto userGetDto = new UserGetDto();
+        userGetDto.setId(userId);
+        userGetDto.setUsername("username");
+        userGetDto.setNickname("nickname");
+        return userGetDto;
+    }
+
+    private UserPatchRequestDto getTestUserPatchRequestDto() {
+        return UserPatchRequestDto.builder()
+                .password("password").newPassword("password2").build();
     }
 }

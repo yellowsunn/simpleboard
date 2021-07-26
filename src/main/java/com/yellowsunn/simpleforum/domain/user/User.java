@@ -1,6 +1,7 @@
 package com.yellowsunn.simpleforum.domain.user;
 
 import com.yellowsunn.simpleforum.domain.BaseCreatedTimeEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "username_unique", columnNames = {"username"})
 })

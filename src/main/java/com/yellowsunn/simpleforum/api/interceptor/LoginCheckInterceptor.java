@@ -12,7 +12,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute(SessionConst.USER_ID) == null) {
+        if (session == null || session.getAttribute(SessionConst.USER_ID) == null || session.getAttribute(SessionConst.USER_ROLE) == null) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요한 접근입니다.");
             return false;
         }

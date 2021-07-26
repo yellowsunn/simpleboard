@@ -29,13 +29,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Long login(UserLoginDto userLoginDto) {
+    public User login(UserLoginDto userLoginDto) {
         Optional<User> userOptional = userRepository.findByUsername(userLoginDto.getUsername());
         if (isUserNotFoundOrPasswordNotMatch(userLoginDto.getPassword(), userOptional)) {
             throw new NotFoundUserException("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
         }
 
-        return userOptional.get().getId();
+        return userOptional.get();
     }
 
     @Transactional(readOnly = true)

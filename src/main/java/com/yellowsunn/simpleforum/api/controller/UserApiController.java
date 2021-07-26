@@ -6,6 +6,7 @@ import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
+import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.exception.NotFoundUserException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import lombok.RequiredArgsConstructor;
@@ -91,13 +92,14 @@ public class UserApiController {
     }
 
     private void doLogin(HttpServletRequest request, UserLoginDto userDto) {
-        Long userId = userService.login(userDto);
-        makeLoginSessionAttribute(request, userId);
+        User user = userService.login(userDto);
+        makeLoginSessionAttribute(request, user);
     }
 
-    private void makeLoginSessionAttribute(HttpServletRequest request, Long userId) {
+    private void makeLoginSessionAttribute(HttpServletRequest request, User user) {
         HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.USER_ID, userId);
+        session.setAttribute(SessionConst.USER_ID, user.getId());
+        session.setAttribute(SessionConst.USER_ROLE, user.getRole());
     }
 
     private void invalidateLoginSession(HttpServletRequest request) {
