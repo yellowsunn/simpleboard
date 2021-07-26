@@ -1,6 +1,5 @@
 package com.yellowsunn.simpleforum.api.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
@@ -8,10 +7,8 @@ import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
-import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.exception.NotFoundUserException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
-import org.apache.juli.logging.Log;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +26,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserApiController.class)
@@ -214,13 +213,11 @@ class UserApiControllerTest {
     }
 
     @Test
-    @DisplayName("현재 접속한 회원 조회 인증 실패")
+    @DisplayName("현재 로그인한 회원 조회 인증 실패")
     void unauthorizedForFindCurrentUser() throws Exception {
 
         //then
-        mvc.perform(get("/api/users/current"))
-                .andExpect(status().isUnauthorized())
-                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+        unauthorizedRequest(get("/api/users/current"));
     }
 
     @Test
@@ -245,9 +242,7 @@ class UserApiControllerTest {
     @DisplayName("비밀번호 변경 인증 실패")
     void unauthorizedForChangePassword() throws Exception {
         //then
-        mvc.perform(patch("/api/users/current"))
-                .andExpect(status().isUnauthorized())
-                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+        unauthorizedRequest(patch("/api/users/current"));
     }
 
     @Test
@@ -306,5 +301,45 @@ class UserApiControllerTest {
                 .content(objectMapper.writeValueAsString(dto))
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("현재 로그인한 회원 삭제 성공")
+    void deleteCurrentUser() throws Exception {
+        //given
+        Long userId = 1L;
+
+        //then
+        mvc.perform(delete("/api/users/current")
+                .sessionAttr(SessionConst.USER_ID, userId)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("회원 삭제 인증 실패")
+    void unauthorizedForDeleteUser() throws Exception {
+        //then
+        unauthorizedRequest(delete("/api/user/current"));
+    }
+
+    @Test
+    @DisplayName("삭제하려는 회원 조회 실패")
+    void failedToFindUserWhoWantDelete() throws Exception {
+        //given
+        Long userId = 1L;
+
+        //mocking
+        doThrow(NotFoundUserException.class).when(userService).deleteUserById(userId);
+
+        //then
+        mvc.perform(delete("/api/users/current")
+                .sessionAttr(SessionConst.USER_ID, userId)
+        ).andExpect(status().isNotFound());
+    }
+
+    private void unauthorizedRequest(MockHttpServletRequestBuilder builder) throws Exception {
+        mvc.perform(builder)
+                .andExpect(status().isUnauthorized())
+                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
     }
 }

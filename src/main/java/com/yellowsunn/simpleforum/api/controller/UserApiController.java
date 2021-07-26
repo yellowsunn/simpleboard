@@ -79,6 +79,11 @@ public class UserApiController {
         userService.changePassword(userId, userPatchRequestDto);
     }
 
+    @DeleteMapping("/current")
+    public void deleteCurrentUser(@SessionAttribute(SessionConst.USER_ID) Long userId) {
+        userService.deleteUserById(userId);
+    }
+
     private void checkValidation(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("validation error");

@@ -163,14 +163,41 @@ class UserServiceTest {
         assertThat(user.getPassword()).isNotEqualTo(userDto.getNewPassword());
     }
 
-    private UserLoginDto getTestUserLoginDto() {
+    @Test
+    @DisplayName("회원 삭제 성공")
+    void deleteById() {
+        //given
+        User user = getTestUser();
+        Long userId = 1L;
+
+        //mocking
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        //then
+        assertThatNoException().isThrownBy(() -> userService.deleteUserById(userId));
+    }
+
+    @Test
+    @DisplayName("삭제하려는 회원 조회 실패")
+    void failedToFindDeleteUser() {
+        //given
+        Long userId = 1L;
+
+        //mocking
+        given(userRepository.findById(userId)).willThrow(NotFoundUserException.class);
+
+        //then
+        assertThatThrownBy(() -> userService.deleteUserById(userId)).isInstanceOf(NotFoundUserException.class);
+    }
+
+    UserLoginDto getTestUserLoginDto() {
         return UserLoginDto.builder()
                 .username("username")
                 .password("password")
                 .build();
     }
 
-    private User getTestUser() {
+    User getTestUser() {
         return User.builder()
                 .username("username")
                 .password("password")

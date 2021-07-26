@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.domain.user;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,22 @@ class UserRepositoryTest {
         User findUser = userRepository.findById(user.getId()).orElse(null);
         assertThat(findUser).isNotNull();
         assertThat(findUser.getPassword()).isEqualTo(newPassword);
+    }
+
+    @Test
+    @DisplayName("유저 삭제")
+    void deleteUser() {
+        //given
+        User user = getTestUser();
+        userRepository.saveAndFlush(user);
+
+        //when
+        userRepository.delete(user);
+        em.flush();
+        em.clear();
+
+        //then
+        assertThat(userRepository.findById(user.getId()).isEmpty()).isTrue();
     }
 
     private User getTestUser() {
