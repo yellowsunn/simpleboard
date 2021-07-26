@@ -1,12 +1,17 @@
 package com.yellowsunn.simpleforum.api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
+import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
-import com.yellowsunn.simpleforum.exception.NotFoundException;
+import com.yellowsunn.simpleforum.domain.user.User;
+import com.yellowsunn.simpleforum.exception.NotFoundUserException;
+import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
+import org.apache.juli.logging.Log;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +27,7 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserApiController.class)
@@ -158,7 +162,7 @@ class UserApiControllerTest {
                 .build();
 
         //mocking
-        doThrow(NotFoundException.class).when(userService).login(dto);
+        doThrow(NotFoundUserException.class).when(userService).login(dto);
 
         //then
         mvc.perform(post("/api/users/login")
@@ -199,7 +203,7 @@ class UserApiControllerTest {
         userGetDto.setNickname("nickname");
 
         //mocking
-        given(userService.findUserById(userGetDto.getId())).willThrow(NotFoundException.class);
+        given(userService.findUserById(userGetDto.getId())).willThrow(NotFoundUserException.class);
 
         //then
         mvc.perform(get("/api/users/current")
@@ -210,7 +214,7 @@ class UserApiControllerTest {
     }
 
     @Test
-    @DisplayName("인증 없이 현재 접속한 회원 조회")
+    @DisplayName("현재 접속한 회원 조회 인증 실패")
     void unauthorizedForFindCurrentUser() throws Exception {
 
         //then
@@ -219,4 +223,88 @@ class UserApiControllerTest {
                 .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
     }
 
+    @Test
+    @DisplayName("비밀번호 변경 성공")
+    void changePassword() throws Exception {
+        //given
+        Long userId = 1L;
+        UserPatchRequestDto dto = UserPatchRequestDto.builder()
+                .password("password")
+                .newPassword("password2")
+                .build();
+
+        //then
+        mvc.perform(patch("/api/users/current")
+                .sessionAttr(SessionConst.USER_ID, userId)
+                .content(objectMapper.writeValueAsString(dto))
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 인증 실패")
+    void unauthorizedForChangePassword() throws Exception {
+        //then
+        mvc.perform(patch("/api/users/current"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(request().sessionAttributeDoesNotExist(SessionConst.USER_ID));
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 검증 실패")
+    void validationFailedForChangePassword() throws Exception {
+        //given
+        Long userId = 1L;
+        List<UserPatchRequestDto> dtos = new ArrayList<>();
+        dtos.add(UserPatchRequestDto.builder().password("").newPassword("password2").build());
+        dtos.add(UserPatchRequestDto.builder().password("password").newPassword("").build());
+        dtos.add(UserPatchRequestDto.builder().password("password").newPassword("passwor").build());
+        dtos.add(UserPatchRequestDto.builder().password("password").newPassword("passwordpasswordp").build());
+
+        //then
+        for (UserPatchRequestDto dto : dtos) {
+            mvc.perform(patch("/api/users/current")
+                    .sessionAttr(SessionConst.USER_ID, userId)
+                    .content(objectMapper.writeValueAsString(dto))
+                    .contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(status().isBadRequest());
+        }
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경하려는 회원 조회 실패")
+    void failedToFindUserWhoWantChangePassword() throws Exception {
+        //given
+        Long userId = 1L;
+        UserPatchRequestDto dto = UserPatchRequestDto.builder()
+                .password("password").newPassword("password2").build();
+        //mocking
+        doThrow(NotFoundUserException.class).when(userService).changePassword(userId, dto);
+
+        //then
+        mvc.perform(patch("/api/users/current")
+                .sessionAttr(SessionConst.USER_ID, userId)
+                .content(objectMapper.writeValueAsString(dto))
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 요청시 기존 비밀번호 입력이 일치하지 않는 경우 에러")
+    void invalidOldPassword() throws Exception {
+        //given
+        Long userId = 1L;
+        UserPatchRequestDto dto = UserPatchRequestDto.builder()
+                .password("password").newPassword("password2").build();
+
+        //mocking
+        doThrow(PasswordMismatchException.class).when(userService).changePassword(userId, dto);
+
+        //then
+        mvc.perform(patch("/api/users/current")
+                .sessionAttr(SessionConst.USER_ID, userId)
+                .content(objectMapper.writeValueAsString(dto))
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isForbidden());
+    }
 }

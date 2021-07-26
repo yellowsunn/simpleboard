@@ -39,4 +39,8 @@ public class User extends BaseCreatedTimeEntity {
         this.nickname = nickname;
         this.role = Role.USER;
     }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
 }

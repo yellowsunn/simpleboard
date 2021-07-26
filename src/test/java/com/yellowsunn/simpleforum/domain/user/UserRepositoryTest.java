@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -77,6 +79,25 @@ class UserRepositoryTest {
 
         //then
         assertThat(userRepository.findByUsername("test").isEmpty()).isTrue();
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경")
+    void changePassword() {
+        //given
+        User user = getTestUser();
+        userRepository.saveAndFlush(user);
+        String newPassword = "password2";
+
+        //when
+        user.changePassword(newPassword);
+        em.flush();
+        em.clear();
+
+        //then
+        User findUser = userRepository.findById(user.getId()).orElse(null);
+        assertThat(findUser).isNotNull();
+        assertThat(findUser.getPassword()).isEqualTo(newPassword);
     }
 
     private User getTestUser() {

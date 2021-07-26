@@ -2,9 +2,11 @@ package com.yellowsunn.simpleforum.api.service;
 
 import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
+import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
-import com.yellowsunn.simpleforum.exception.NotFoundException;
+import com.yellowsunn.simpleforum.exception.NotFoundUserException;
+import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,7 +65,7 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(NotFoundException.class);
+                .isInstanceOf(NotFoundUserException.class);
     }
 
     @Test
@@ -85,19 +87,14 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(NotFoundException.class);
+                .isInstanceOf(NotFoundUserException.class);
     }
 
     @Test
     @DisplayName("id로 유저 조회")
     void findUserById() {
         //given
-        User user = User.builder()
-                .username("username")
-                .password("password")
-                .nickname("nickname")
-                .build();
-
+        User user = getTestUser();
         UserGetDto userDto = new UserGetDto(user);
 
         //mocking
@@ -112,20 +109,72 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("id로 유저 조회 실패")
+    @DisplayName("id로 유저 조회 실패시 에러")
     void failedToFindUserById() {
         //mocking
         given(userRepository.findById(1L)).willReturn(Optional.empty());
 
         //then
         assertThatThrownBy(() -> userService.findUserById(1L))
-                .isInstanceOf(NotFoundException.class);
+                .isInstanceOf(NotFoundUserException.class);
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 성공")
+    void changePassword() {
+        //given
+        User user = getTestUser();
+        Long userId = 1L;
+        UserPatchRequestDto userDto = new UserPatchRequestDto();
+        userDto.setPassword(user.getPassword());
+        userDto.setNewPassword("password2");
+
+        //mocking
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+        given(passwordEncoder.matches(userDto.getPassword(), user.getPassword())).willReturn(true);
+        given(passwordEncoder.encode(userDto.getNewPassword())).willReturn(userDto.getNewPassword());
+
+        //when
+        userService.changePassword(userId, userDto);
+
+        //then
+        assertThat(user.getPassword()).isEqualTo(userDto.getNewPassword());
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 요청시 기존 비밀번호 입력이 일치하지 않는 경우 에러")
+    void invalidOldPassword() {
+        //given
+        User user = getTestUser();
+        Long userId = 1L;
+        UserPatchRequestDto userDto = new UserPatchRequestDto();
+        userDto.setPassword("passssss");
+        userDto.setNewPassword("password2");
+
+        //mocking
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+        given(passwordEncoder.matches(userDto.getPassword(), user.getPassword())).willReturn(false);
+
+        //when
+        assertThatThrownBy(() -> userService.changePassword(userId, userDto))
+                .isInstanceOf(PasswordMismatchException.class);
+
+        //then
+        assertThat(user.getPassword()).isNotEqualTo(userDto.getNewPassword());
     }
 
     private UserLoginDto getTestUserLoginDto() {
         return UserLoginDto.builder()
                 .username("username")
                 .password("password")
+                .build();
+    }
+
+    private User getTestUser() {
+        return User.builder()
+                .username("username")
+                .password("password")
+                .nickname("nickname")
                 .build();
     }
 }
