@@ -10,6 +10,7 @@ import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
+import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundUserException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +31,6 @@ import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -320,11 +320,62 @@ class UserApiControllerTest {
         setLoginSession(request);
 
         //mocking
-        doThrow(NotFoundUserException.class).when(userService).deleteUserById(userId);
+        doThrow(NotFoundUserException.class).when(userService).deleteCurrentUser(userId);
         
         //then
         mvc.perform(request)
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("아이디로 회원 삭제 성공")
+    void deleteById() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = deleteByIdRequest(userId);
+        setLoginSession(request);
+        request.sessionAttr(SessionConst.USER_ROLE, Role.ADMIN);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("아이디로 회원 삭제 인증 실패")
+    void unauthorizedForDeleteById() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = deleteByIdRequest(userId);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isUnauthorized());
+    }
+    @Test
+    @DisplayName("아이디로 회원 삭제 실패 - 권한 부족")
+    void forbiddenDeleteById() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = deleteByIdRequest(userId);
+        setLoginSession(request);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("아이디로 회원 삭제 실패 - 관리자는 삭제할 수 없다")
+    void failedToDeleteById() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = deleteByIdRequest(userId);
+        setLoginSession(request);
+        request.sessionAttr(SessionConst.USER_ROLE, Role.ADMIN);
+
+        //mocking
+        doThrow(ForbiddenException.class).when(userService).deleteById(userId);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isForbidden());
     }
 
     private MockHttpServletRequestBuilder registerRequest() {
@@ -345,6 +396,10 @@ class UserApiControllerTest {
 
     private MockHttpServletRequestBuilder deleteCurrentUserRequest() {
         return delete("/api/users/current");
+    }
+
+    private MockHttpServletRequestBuilder deleteByIdRequest(Long id) {
+        return delete("/api/users/" + id);
     }
 
     private void setLoginSession(MockHttpServletRequestBuilder builder) {

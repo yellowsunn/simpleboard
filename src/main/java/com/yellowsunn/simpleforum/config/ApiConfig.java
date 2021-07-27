@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.config;
 
+import com.yellowsunn.simpleforum.api.interceptor.AdminCheckInterceptor;
 import com.yellowsunn.simpleforum.api.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,5 +15,9 @@ public class ApiConfig implements WebMvcConfigurer {
                 .order(1)
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/users", "/api/users/login");
+
+        registry.addInterceptor(new AdminCheckInterceptor())
+                .order(2)
+                .addPathPatterns("/api/users/{userId:\\d+}");
     }
 }

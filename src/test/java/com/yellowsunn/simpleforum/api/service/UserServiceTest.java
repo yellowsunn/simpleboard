@@ -3,8 +3,10 @@ package com.yellowsunn.simpleforum.api.service;
 import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
+import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
+import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundUserException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
@@ -31,6 +33,11 @@ class UserServiceTest {
 
     @Mock
     PasswordEncoder passwordEncoder;
+
+    @Mock
+    User mockUser;
+
+    Long userId = 1L;
 
     @Test
     @DisplayName("로그인 성공")
@@ -164,8 +171,8 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("회원 삭제 성공")
-    void deleteById() {
+    @DisplayName("현재 로그인되어 있는 회원 삭제 성공")
+    void deleteCurrentUser() {
         //given
         User user = getTestUser();
         Long userId = 1L;
@@ -174,7 +181,7 @@ class UserServiceTest {
         given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
         //then
-        assertThatNoException().isThrownBy(() -> userService.deleteUserById(userId));
+        assertThatNoException().isThrownBy(() -> userService.deleteCurrentUser(userId));
     }
 
     @Test
@@ -187,7 +194,30 @@ class UserServiceTest {
         given(userRepository.findById(userId)).willThrow(NotFoundUserException.class);
 
         //then
-        assertThatThrownBy(() -> userService.deleteUserById(userId)).isInstanceOf(NotFoundUserException.class);
+        assertThatThrownBy(() -> userService.deleteCurrentUser(userId)).isInstanceOf(NotFoundUserException.class);
+    }
+
+    @Test
+    @DisplayName("아이디로 회원 삭제 성공")
+    void deleteById() {
+        //mocking
+        given(mockUser.getRole()).willReturn(Role.USER);
+        given(userRepository.findById(userId)).willReturn(Optional.of(mockUser));
+
+        //then
+        assertThatNoException().isThrownBy(() -> userService.deleteById(userId));
+    }
+
+    @Test
+    @DisplayName("아이디로 회원 삭제 실패 에러 - 관리자는 삭제할 수 없다")
+    void failedToDeleteById() {
+        //mocking
+        given(mockUser.getRole()).willReturn(Role.ADMIN);
+        given(userRepository.findById(userId)).willReturn(Optional.of(mockUser));
+
+        //then
+        assertThatThrownBy(() -> userService.deleteById(userId))
+                .isInstanceOf(ForbiddenException.class);
     }
 
     UserLoginDto getTestUserLoginDto() {

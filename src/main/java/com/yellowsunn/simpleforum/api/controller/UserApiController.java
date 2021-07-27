@@ -7,6 +7,7 @@ import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
 import com.yellowsunn.simpleforum.domain.user.User;
+import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundUserException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import lombok.RequiredArgsConstructor;
@@ -48,8 +49,8 @@ public class UserApiController {
         response.sendError(SC_NOT_FOUND, e.getMessage());
     }
 
-    @ExceptionHandler(PasswordMismatchException.class)
-    public void passwordMismatch(HttpServletResponse response, PasswordMismatchException e) throws IOException {
+    @ExceptionHandler(value = {PasswordMismatchException.class, ForbiddenException.class})
+    public void forbidden(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(SC_FORBIDDEN, e.getMessage());
     }
 
@@ -67,6 +68,11 @@ public class UserApiController {
         doLogin(request, userDto);
     }
 
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        invalidateLoginSession(request);
+    }
+
     @GetMapping("/current")
     public UserGetDto findCurrentLoggedInUser(@SessionAttribute(SessionConst.USER_ID) Long userId) {
         return userService.findUserById(userId);
@@ -81,8 +87,15 @@ public class UserApiController {
     }
 
     @DeleteMapping("/current")
-    public void deleteCurrentUser(@SessionAttribute(SessionConst.USER_ID) Long userId) {
-        userService.deleteUserById(userId);
+    public void deleteCurrentUser(@SessionAttribute(SessionConst.USER_ID) Long userId,
+                                  HttpServletRequest request) {
+        userService.deleteCurrentUser(userId);
+        invalidateLoginSession(request);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+        userService.deleteById(userId);
     }
 
     private void checkValidation(BindingResult bindingResult) {

@@ -4,8 +4,10 @@ import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
+import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
+import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundUserException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
@@ -52,8 +54,15 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUserById(Long id) {
+    public void deleteCurrentUser(Long id) {
         User user = findUser(id);
+        userRepository.delete(user);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        User user = findUser(id);
+        checkRoleIsNotAdmin(user);
         userRepository.delete(user);
     }
 
@@ -85,6 +94,12 @@ public class UserService {
     private void checkPasswordMatched(String password, User user) {
         if (hasPasswordNotMatched(password, user)) {
             throw new PasswordMismatchException();
+        }
+    }
+
+    private void checkRoleIsNotAdmin(User user) {
+        if (user.getRole() == Role.ADMIN) {
+            throw new ForbiddenException("관리자는 탈퇴 처리 시킬 수 없습니다.");
         }
     }
 }
