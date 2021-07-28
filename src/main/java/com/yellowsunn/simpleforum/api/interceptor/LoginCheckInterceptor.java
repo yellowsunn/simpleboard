@@ -1,6 +1,7 @@
 package com.yellowsunn.simpleforum.api.interceptor;
 
 import com.yellowsunn.simpleforum.api.SessionConst;
+import com.yellowsunn.simpleforum.exception.UnauthorizedException;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +14,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute(SessionConst.USER_ID) == null || session.getAttribute(SessionConst.USER_ROLE) == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요한 접근입니다.");
-            return false;
+            throw new UnauthorizedException();
         }
 
         return true;
