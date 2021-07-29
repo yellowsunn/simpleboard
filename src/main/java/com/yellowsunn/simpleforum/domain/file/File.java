@@ -19,16 +19,16 @@ public class File {
     private String uploadName;
 
     @Column(nullable = false)
-    private String downloadName;
+    private String storeName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Posts post;
 
     @Builder
-    public File(String uploadName, String downloadName, Posts post) {
+    public File(String uploadName, String storeName, Posts post) {
         this.uploadName = uploadName;
-        this.downloadName = downloadName;
+        this.storeName = storeName;
         this.post = post;
     }
 }

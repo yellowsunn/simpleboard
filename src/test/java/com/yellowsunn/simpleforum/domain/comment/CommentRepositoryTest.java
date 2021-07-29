@@ -32,7 +32,6 @@ class CommentRepositoryTest {
         post = Posts.builder()
                 .title("title")
                 .content("content")
-                .ip("0.0.0.0")
                 .type(Type.General)
                 .build();
 

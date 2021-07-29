@@ -41,7 +41,6 @@ class PostsRepositoryTest {
         assertThat(findPost).isNotNull();
         assertThat(findPost.getTitle()).isEqualTo(post.getTitle());
         assertThat(findPost.getContent()).isEqualTo(post.getContent());
-        assertThat(findPost.getIp()).isEqualTo(post.getIp());
         assertThat(findPost.getType()).isEqualTo(post.getType());
         assertThat(findPost.getHit()).isEqualTo(0L);
         assertThat(findPost.getCreatedDate()).isBefore(LocalDateTime.now());
@@ -61,7 +60,7 @@ class PostsRepositoryTest {
 
         File file = File.builder()
                 .uploadName("uploadName")
-                .downloadName("downloadName")
+                .storeName("downloadName")
                 .post(post)
                 .build();
 
@@ -87,7 +86,6 @@ class PostsRepositoryTest {
         return Posts.builder()
                 .title("title")
                 .content("content")
-                .ip("0.0.0.0")
                 .type(Type.General)
                 .build();
     }

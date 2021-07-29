@@ -2,6 +2,7 @@ package com.yellowsunn.simpleforum.security;
 
 import com.yellowsunn.simpleforum.SimpleForumApplication;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
+import com.yellowsunn.simpleforum.security.encoder.SHA256PasswordEncoder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,9 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringJUnitConfig(SimpleForumApplication.class)
-class PasswordEncoderTest {
+class SHA256PasswordEncoderTest {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder = new SHA256PasswordEncoder();
 
     @Test
     void encodeAndMatch() {

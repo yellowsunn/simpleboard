@@ -29,7 +29,6 @@ class FileRepositoryTest {
     void setUp() {
         post = Posts.builder().title("title")
                 .content("content")
-                .ip("0.0.0.0")
                 .type(Type.General)
                 .build();
 
@@ -41,7 +40,7 @@ class FileRepositoryTest {
         String uuid = UUID.randomUUID().toString();
         File file = File.builder()
                 .uploadName("uploadName")
-                .downloadName(uuid)
+                .storeName(uuid)
                 .post(post)
                 .build();
 
@@ -53,7 +52,7 @@ class FileRepositoryTest {
 
         assertThat(findFile).isNotNull();
         assertThat(findFile.getUploadName()).isEqualTo(file.getUploadName());
-        assertThat(findFile.getDownloadName()).isEqualTo(file.getDownloadName());
+        assertThat(findFile.getStoreName()).isEqualTo(file.getStoreName());
         assertThat(findFile.getPost()).isNotNull();
     }
 
@@ -64,7 +63,7 @@ class FileRepositoryTest {
         String uuid = UUID.randomUUID().toString();
         File file = File.builder()
                 .uploadName("uploadName")
-                .downloadName(uuid)
+                .storeName(uuid)
                 .build();
 
         //then

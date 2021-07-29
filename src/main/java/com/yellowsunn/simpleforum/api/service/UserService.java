@@ -66,7 +66,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    private User findUser(Long id) {
+    @Transactional(readOnly = true)
+    public User findUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundUserException("회원을 찾을 수 없습니다."));
     }

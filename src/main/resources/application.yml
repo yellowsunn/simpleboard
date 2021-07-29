@@ -14,9 +14,11 @@ spring:
 server:
   error:
     include-stacktrace: never
+    include-binding-errors: never
 
 logging.level:
   org.hibernate:
     SQL: debug
     type: trace
 
+file.dir: /Users/yellowsunn/Desktop/file/

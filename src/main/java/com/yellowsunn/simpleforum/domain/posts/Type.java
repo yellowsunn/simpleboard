@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Type {
 
-    Notice("공지사항"), General("일반게시글");
+    NOTICE("공지사항"), GENERAL("일반게시글");
 
     private String value;
 }

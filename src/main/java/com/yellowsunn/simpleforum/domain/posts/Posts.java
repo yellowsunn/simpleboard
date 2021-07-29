@@ -27,9 +27,6 @@ public class Posts extends BaseTimeEntity {
     @Column(columnDefinition = "text", nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private String ip;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
@@ -41,16 +38,15 @@ public class Posts extends BaseTimeEntity {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<File> files = new ArrayList<>();
+    private List<File> imageFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Posts(String title, String content, String ip, Type type, User user) {
+    public Posts(String title, String content, Type type, User user) {
         this.title = title;
         this.content = content;
-        this.ip = ip;
         this.type = type;
         this.user = user;
     }
