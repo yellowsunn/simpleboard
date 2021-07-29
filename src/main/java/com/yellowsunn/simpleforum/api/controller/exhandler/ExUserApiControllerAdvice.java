@@ -28,20 +28,8 @@ public class ExUserApiControllerAdvice {
         }
     }
 
-    @ExceptionHandler(NotFoundUserException.class)
-    public void notFoundUserException(HttpServletRequest request, HttpServletResponse response,
-                                      NotFoundUserException e) throws IOException {
-        invalidateLoginSession(request);
-        response.sendError(SC_NOT_FOUND, e.getMessage());
-    }
-
     @ExceptionHandler(value = {PasswordMismatchException.class, ForbiddenException.class})
     public void forbidden(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(SC_FORBIDDEN, e.getMessage());
-    }
-
-    private void invalidateLoginSession(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) session.invalidate();
     }
 }
