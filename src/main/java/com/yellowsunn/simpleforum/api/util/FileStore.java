@@ -1,8 +1,8 @@
-package com.yellowsunn.simpleforum.api.service;
+package com.yellowsunn.simpleforum.api.util;
 
 import com.yellowsunn.simpleforum.api.dto.file.FileUploadDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Service
-public class FileStoreService {
+@Component
+public class FileStore {
 
     @Value("${file.dir}")
     private String fileDir;
