@@ -29,7 +29,7 @@ public class Posts extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Type type;
+    private PostType type;
 
     private long hit;
 
@@ -44,7 +44,7 @@ public class Posts extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Posts(String title, String content, Type type, User user) {
+    public Posts(String title, String content, PostType type, User user) {
         this.title = title;
         this.content = content;
         this.type = type;

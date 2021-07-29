@@ -86,7 +86,7 @@ class PostsRepositoryTest {
         return Posts.builder()
                 .title("title")
                 .content("content")
-                .type(Type.General)
+                .type(PostType.GENERAL)
                 .build();
     }
 }

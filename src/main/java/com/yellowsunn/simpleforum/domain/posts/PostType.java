@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Type {
+public enum PostType {
 
     NOTICE("공지사항"), GENERAL("일반게시글");
 

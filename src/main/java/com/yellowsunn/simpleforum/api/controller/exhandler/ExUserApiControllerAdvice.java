@@ -27,9 +27,4 @@ public class ExUserApiControllerAdvice {
             response.sendError(SC_BAD_REQUEST, e.getMessage());
         }
     }
-
-    @ExceptionHandler(value = {PasswordMismatchException.class, ForbiddenException.class})
-    public void forbidden(HttpServletResponse response, Exception e) throws IOException {
-        response.sendError(SC_FORBIDDEN, e.getMessage());
-    }
 }

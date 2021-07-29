@@ -1,7 +1,7 @@
 package com.yellowsunn.simpleforum.domain.comment;
 
 import com.yellowsunn.simpleforum.domain.posts.Posts;
-import com.yellowsunn.simpleforum.domain.posts.Type;
+import com.yellowsunn.simpleforum.domain.posts.PostType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class CommentRepositoryTest {
         post = Posts.builder()
                 .title("title")
                 .content("content")
-                .type(Type.General)
+                .type(PostType.GENERAL)
                 .build();
 
         em.persist(post);

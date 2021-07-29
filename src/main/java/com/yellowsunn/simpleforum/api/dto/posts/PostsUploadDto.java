@@ -1,7 +1,7 @@
 package com.yellowsunn.simpleforum.api.dto.posts;
 
 import com.yellowsunn.simpleforum.domain.posts.Posts;
-import com.yellowsunn.simpleforum.domain.posts.Type;
+import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 public class PostsUploadDto {
 
-    private Type type;
+    private PostType type;
     private String title;
     private String content;
     private List<MultipartFile> imageFiles;
