@@ -15,6 +15,7 @@ import javax.validation.constraints.Size;
 public class UserRegisterDto {
 
     @NotBlank
+    @Size(max = 16)
     private String username;
 
     @NotBlank
@@ -22,5 +23,6 @@ public class UserRegisterDto {
     private String password;
 
     @NotBlank
+    @Size(max = 16)
     private String nickname;
 }
