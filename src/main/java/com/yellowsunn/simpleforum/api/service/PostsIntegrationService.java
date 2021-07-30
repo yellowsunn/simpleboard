@@ -22,10 +22,12 @@ public class PostsIntegrationService {
     private final FileStore fileStore;
 
     @Transactional
-    public void upload(Long userId, PostsUploadDto postsUploadDto) throws IOException {
+    public Long upload(Long userId, PostsUploadDto postsUploadDto) throws IOException {
         User user = userService.findUser(userId);
         Posts post = postsService.save(user, postsUploadDto);
         storeAndSaveAllFiles(post, postsUploadDto);
+
+        return post.getId();
     }
 
     private void storeAndSaveAllFiles(Posts post, PostsUploadDto postsUploadDto) throws IOException {
