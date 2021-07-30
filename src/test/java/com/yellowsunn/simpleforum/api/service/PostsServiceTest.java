@@ -14,6 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,7 +42,7 @@ class PostsServiceTest {
         given(user.getRole()).willReturn(Role.USER);
 
         //then
-        Assertions.assertThatNoException()
+        assertThatNoException()
                 .isThrownBy(() -> postsService.save(user, dto));
     }
 
@@ -52,7 +56,7 @@ class PostsServiceTest {
         given(user.getRole()).willReturn(Role.ADMIN);
 
         //then
-        Assertions.assertThatNoException()
+        assertThatNoException()
                 .isThrownBy(() -> postsService.save(user, dto));
     }
 
@@ -66,7 +70,7 @@ class PostsServiceTest {
         given(user.getRole()).willReturn(Role.USER);
 
         //then
-        Assertions.assertThatThrownBy(() -> postsService.save(user, dto))
+        assertThatThrownBy(() -> postsService.save(user, dto))
                 .isInstanceOf(ForbiddenException.class);
     }
 

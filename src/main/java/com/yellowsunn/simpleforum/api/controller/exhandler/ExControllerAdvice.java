@@ -34,6 +34,11 @@ public class ExControllerAdvice {
         response.sendError(SC_FORBIDDEN, e.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void badRequest(HttpServletResponse response, IllegalArgumentException e) throws IOException {
+        response.sendError(SC_BAD_REQUEST, e.getMessage());
+    }
+
     private void invalidateLoginSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) session.invalidate();
