@@ -9,9 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Builder
@@ -24,9 +22,11 @@ public class PostsUploadDto {
     private PostType type;
 
     @NotBlank
+    @Size(max = 512)
     private String title;
 
     @NotBlank
+    @Size(max = 65535)
     private String content;
 
     private List<MultipartFile> imageFiles;
