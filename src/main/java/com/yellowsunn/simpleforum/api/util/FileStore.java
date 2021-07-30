@@ -2,6 +2,7 @@ package com.yellowsunn.simpleforum.api.util;
 
 import com.yellowsunn.simpleforum.api.dto.file.FileUploadDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,6 +46,13 @@ public class FileStore {
                 .uploadFileName(originalFileName)
                 .storeFileName(storeFileName)
                 .build();
+    }
+
+    public MediaType getImageContentType(String fileName) {
+        String ext = extractExt(fileName);
+        if ("gif".equalsIgnoreCase(ext)) return MediaType.IMAGE_GIF;
+        else if ("png".equalsIgnoreCase(ext)) return MediaType.IMAGE_PNG;
+        else return MediaType.IMAGE_JPEG;
     }
 
     private String createStoreFileName(String originalFileName) {
