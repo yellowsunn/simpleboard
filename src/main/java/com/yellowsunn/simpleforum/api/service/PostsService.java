@@ -29,7 +29,7 @@ public class PostsService {
     }
 
     @Transactional
-    public PostsGetDto findById(Long id) {
+    public PostsGetDto findPost(Long id) {
         return postsRepository.findPostAndUpdateHit(id)
                 .map(PostsGetDto::new)
                 .orElseThrow(NotFoundUserException::new);

@@ -2,10 +2,12 @@ package com.yellowsunn.simpleforum.api.service;
 
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
+import com.yellowsunn.simpleforum.domain.posts.Posts;
 import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
+import com.yellowsunn.simpleforum.exception.NotFoundUserException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,6 +31,8 @@ class PostsServiceTest {
 
     @Mock
     User user;
+
+    Long postId = 1L;
 
     @Test
     @DisplayName("게시글 저장 성공 - 일반 게시글")
@@ -71,6 +76,30 @@ class PostsServiceTest {
                 .isInstanceOf(ForbiddenException.class);
     }
 
+    @Test
+    @DisplayName("게시글 조회 성공")
+    void findPost() {
+        //given
+        Posts post = getTestPosts(PostType.GENERAL);
+
+        //mocking
+        given(postsRepository.findPostAndUpdateHit(postId)).willReturn(Optional.ofNullable(post));
+
+        //then
+        assertThat(postsService.findPost(postId)).isNotNull();
+    }
+
+    @Test
+    @DisplayName("게시글 조회 실패 - 찾을 수 없음")
+    void notFoundFindPost() {
+        //mocking
+        given(postsRepository.findPostAndUpdateHit(postId)).willReturn(Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> postsService.findPost(postId))
+                .isInstanceOf(NotFoundUserException.class);
+    }
+
     PostsUploadDto getTestPostsUploadDto(PostType type) {
         return PostsUploadDto.builder()
                 .title("title")
@@ -79,4 +108,11 @@ class PostsServiceTest {
                 .build();
     }
 
+    Posts getTestPosts(PostType type) {
+        return Posts.builder()
+                .title("title")
+                .content("content")
+                .type(type)
+                .build();
+    }
 }
