@@ -1,23 +1,19 @@
 package com.yellowsunn.simpleforum.api.controller;
 
 import com.yellowsunn.simpleforum.api.SessionConst;
-import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
+import com.yellowsunn.simpleforum.api.service.PostsService;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PostsController.class)
@@ -28,6 +24,9 @@ class PostsControllerTest {
 
     @MockBean
     PostsIntegrationService postsIntegrationService;
+
+    @MockBean
+    PostsService postsService;
 
     Long userId = 1L;
 

@@ -3,11 +3,11 @@ package com.yellowsunn.simpleforum.domain.posts;
 import com.yellowsunn.simpleforum.domain.BaseTimeEntity;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.file.File;
+import com.yellowsunn.simpleforum.domain.postHit.PostHit;
 import com.yellowsunn.simpleforum.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,11 +32,12 @@ public class Posts extends BaseTimeEntity {
     @Column(nullable = false)
     private PostType type;
 
-    private long hit;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PostHit hit;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> imageFiles = new ArrayList<>();
@@ -50,5 +51,10 @@ public class Posts extends BaseTimeEntity {
         this.content = content;
         this.type = type;
         this.user = user;
+        this.hit = new PostHit(this);
+    }
+
+    public Long getHit() {
+        return hit != null ? hit.getHit() : null;
     }
 }
