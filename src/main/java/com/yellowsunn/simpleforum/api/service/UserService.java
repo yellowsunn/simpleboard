@@ -8,7 +8,7 @@ import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
-import com.yellowsunn.simpleforum.exception.NotFoundUserException;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class UserService {
     public User login(UserLoginDto userLoginDto) {
         Optional<User> userOptional = userRepository.findByUsername(userLoginDto.getUsername());
         if (isUserNotFoundOrPasswordNotMatch(userLoginDto.getPassword(), userOptional)) {
-            throw new NotFoundUserException("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
+            throw new NotFoundException("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
         }
 
         return userOptional.get();
@@ -69,7 +69,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User findUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundUserException("회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다."));
     }
 
     private User userRegisterDtoToUser(UserRegisterDto userDto) {

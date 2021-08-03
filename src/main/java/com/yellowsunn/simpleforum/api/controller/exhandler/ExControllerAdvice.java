@@ -1,7 +1,7 @@
 package com.yellowsunn.simpleforum.api.controller.exhandler;
 
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
-import com.yellowsunn.simpleforum.exception.NotFoundUserException;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import com.yellowsunn.simpleforum.exception.UnauthorizedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,9 +22,9 @@ public class ExControllerAdvice {
         response.sendError(SC_UNAUTHORIZED, e.getMessage());
     }
 
-    @ExceptionHandler(NotFoundUserException.class)
-    public void notFoundUserException(HttpServletRequest request, HttpServletResponse response,
-                                      NotFoundUserException e) throws IOException {
+    @ExceptionHandler(NotFoundException.class)
+    public void notFoundException(HttpServletRequest request, HttpServletResponse response,
+                                      NotFoundException e) throws IOException {
         invalidateLoginSession(request);
         response.sendError(SC_NOT_FOUND, e.getMessage());
     }

@@ -7,7 +7,7 @@ import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
-import com.yellowsunn.simpleforum.exception.NotFoundUserException;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -97,7 +97,7 @@ class PostsServiceTest {
 
         //then
         assertThatThrownBy(() -> postsService.findPost(postId))
-                .isInstanceOf(NotFoundUserException.class);
+                .isInstanceOf(NotFoundException.class);
     }
 
     PostsUploadDto getTestPostsUploadDto(PostType type) {

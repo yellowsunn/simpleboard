@@ -11,7 +11,7 @@ import com.yellowsunn.simpleforum.api.service.UserService;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
-import com.yellowsunn.simpleforum.exception.NotFoundUserException;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -154,7 +154,7 @@ class UserApiControllerTest {
         setJsonContent(request, dto);
 
         //mocking
-        doThrow(NotFoundUserException.class).when(userService).login(dto);
+        doThrow(NotFoundException.class).when(userService).login(dto);
 
         //then
         ResultActions resultActions = mvc.perform(request)
@@ -188,7 +188,7 @@ class UserApiControllerTest {
         setLoginSession(request);
 
         //mocking
-        given(userService.findUserById(userId)).willThrow(NotFoundUserException.class);
+        given(userService.findUserById(userId)).willThrow(NotFoundException.class);
 
         //then
         ResultActions resultActions = mvc.perform(request)
@@ -263,7 +263,7 @@ class UserApiControllerTest {
         setJsonContent(request, dto);
 
         //mocking
-        doThrow(NotFoundUserException.class).when(userService).changePassword(userId, dto);
+        doThrow(NotFoundException.class).when(userService).changePassword(userId, dto);
 
         //then
         ResultActions resultActions = mvc.perform(request)
@@ -320,7 +320,7 @@ class UserApiControllerTest {
         setLoginSession(request);
 
         //mocking
-        doThrow(NotFoundUserException.class).when(userService).deleteCurrentUser(userId);
+        doThrow(NotFoundException.class).when(userService).deleteCurrentUser(userId);
         
         //then
         mvc.perform(request)

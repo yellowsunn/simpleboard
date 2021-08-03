@@ -7,6 +7,7 @@ import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.time.ZoneId;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,13 +38,22 @@ public class PostsController {
     }
 
     @GetMapping("/{id}")
-    public PostsGetDto getPost(@PathVariable Long id) {
-        return postsService.findById(id);
+    public ResponseEntity<PostsGetDto> getPost(@PathVariable Long id) {
+        PostsGetDto postsGetDto = postsService.findPost(id);
+        return getNoCachePostsGetDtoEntity(postsGetDto);
     }
 
+    @GetMapping("/")
     private void checkValidation(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("validation error");
         }
+    }
+
+    private ResponseEntity<PostsGetDto> getNoCachePostsGetDtoEntity(PostsGetDto postsGetDto) {
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noCache())
+                .lastModified(postsGetDto.getLastModifiedDate().atZone(ZoneId.of("UTC")))
+                .body(postsGetDto);
     }
 }

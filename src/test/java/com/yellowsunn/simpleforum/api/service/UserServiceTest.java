@@ -7,7 +7,7 @@ import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
-import com.yellowsunn.simpleforum.exception.NotFoundUserException;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
 import org.junit.jupiter.api.DisplayName;
@@ -72,7 +72,7 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(NotFoundUserException.class);
+                .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -94,7 +94,7 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(NotFoundUserException.class);
+                .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -123,7 +123,7 @@ class UserServiceTest {
 
         //then
         assertThatThrownBy(() -> userService.findUserById(1L))
-                .isInstanceOf(NotFoundUserException.class);
+                .isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -191,10 +191,10 @@ class UserServiceTest {
         Long userId = 1L;
 
         //mocking
-        given(userRepository.findById(userId)).willThrow(NotFoundUserException.class);
+        given(userRepository.findById(userId)).willThrow(NotFoundException.class);
 
         //then
-        assertThatThrownBy(() -> userService.deleteCurrentUser(userId)).isInstanceOf(NotFoundUserException.class);
+        assertThatThrownBy(() -> userService.deleteCurrentUser(userId)).isInstanceOf(NotFoundException.class);
     }
 
     @Test
