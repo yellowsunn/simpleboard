@@ -1,6 +1,7 @@
 package com.yellowsunn.simpleforum.domain.posts;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
@@ -15,13 +16,19 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    @Transactional
     @Override
-    public Optional<Posts> findByIdWithUser(Long id) {
+    public Optional<Posts> findPostAndUpdateHit(Long id) {
         Posts findPost = queryFactory
                 .selectFrom(posts)
-                .join(posts.user).fetchJoin()
+                .leftJoin(posts.user).fetchJoin()
+                .leftJoin(posts.hit).fetchJoin()
                 .where(posts.id.eq(id))
                 .fetchFirst();
+
+        if (findPost != null) {
+            findPost.updateHit();
+        }
 
         return Optional.ofNullable(findPost);
     }

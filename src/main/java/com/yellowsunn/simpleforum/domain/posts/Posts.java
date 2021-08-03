@@ -57,4 +57,8 @@ public class Posts extends BaseTimeEntity {
     public Long getHit() {
         return hit != null ? hit.getHit() : null;
     }
+
+    public void updateHit() {
+        hit.updateHit();
+    }
 }

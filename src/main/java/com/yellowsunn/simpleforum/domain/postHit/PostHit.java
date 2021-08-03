@@ -23,4 +23,8 @@ public class PostHit {
     public PostHit(Posts post) {
         this.post = post;
     }
+
+    public void updateHit() {
+        hit += 1;
+    }
 }

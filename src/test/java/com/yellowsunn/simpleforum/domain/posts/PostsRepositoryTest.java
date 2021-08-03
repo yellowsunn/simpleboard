@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.domain.posts;
 
+import com.yellowsunn.simpleforum.api.service.PostsService;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.file.File;
 import org.junit.jupiter.api.DisplayName;
@@ -80,6 +81,22 @@ class PostsRepositoryTest {
         assertThat(findPosts.size()).isEqualTo(0);
         assertThat(em.find(Comment.class, comment.getId())).isNull();
         assertThat(em.find(File.class, file.getId())).isNull();
+    }
+
+    @DisplayName("게시글 조회 및 조회수 증가")
+    @Test
+    void findPostAndUpdateHit() {
+        //given
+        Posts post = getSamplePost();
+        em.persistAndFlush(post);
+        em.clear();
+
+        //given
+        Posts findPost = postsRepository.findPostAndUpdateHit(post.getId()).orElse(null);
+
+        //then
+        assertThat(findPost).isNotNull();
+        assertThat(findPost.getHit()).isEqualTo(1L);
     }
 
     Posts getSamplePost() {

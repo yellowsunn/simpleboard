@@ -4,5 +4,5 @@ import java.util.Optional;
 
 public interface PostsRepositoryCustom {
 
-    Optional<Posts> findByIdWithUser(Long id);
+    Optional<Posts> findPostAndUpdateHit(Long id);
 }
