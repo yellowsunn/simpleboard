@@ -5,6 +5,8 @@ import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
+import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.CacheControl;
@@ -25,6 +27,7 @@ public class PostsController {
 
     private final PostsIntegrationService postsIntegrationService;
     private final PostsService postsService;
+    private final PostHitRepository postHitRepository;
 
     @PostMapping
     public ResponseEntity<Void> upload(@LoginId Long userId,
@@ -43,7 +46,12 @@ public class PostsController {
         return getNoCachePostsGetDtoEntity(postsGetDto);
     }
 
-    @GetMapping("/")
+    @GetMapping("/{id}/hit")
+    public Long getPostHit(@PathVariable Long id) {
+        return postHitRepository.findHitByPostId(id)
+                .orElseThrow(NotFoundException::new);
+    }
+
     private void checkValidation(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("validation error");
