@@ -18,7 +18,7 @@ public class Comment extends BaseCreatedTimeEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    @Column(columnDefinition = "text", nullable = false)
+    @Column(length = 1000, nullable = false)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
