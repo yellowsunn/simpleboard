@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.api.service;
 
+import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.posts.Posts;
@@ -30,9 +31,13 @@ class PostsServiceTest {
     PostsRepository postsRepository;
 
     @Mock
-    User user;
+    User mockUser;
 
-    Long postId = 1L;
+    @Mock
+    Posts mockPost;
+
+    Long userId = 1L;
+    Long postId = 2L;
 
     @Test
     @DisplayName("게시글 저장 성공 - 일반 게시글")
@@ -41,11 +46,11 @@ class PostsServiceTest {
         PostsUploadDto dto = getTestPostsUploadDto(PostType.GENERAL);
 
         //mocking
-        given(user.getRole()).willReturn(Role.USER);
+        given(mockUser.getRole()).willReturn(Role.USER);
 
         //then
         assertThatNoException()
-                .isThrownBy(() -> postsService.save(user, dto));
+                .isThrownBy(() -> postsService.save(mockUser, dto));
     }
 
     @Test
@@ -55,11 +60,11 @@ class PostsServiceTest {
         PostsUploadDto dto = getTestPostsUploadDto(PostType.NOTICE);
 
         //mocking
-        given(user.getRole()).willReturn(Role.ADMIN);
+        given(mockUser.getRole()).willReturn(Role.ADMIN);
 
         //then
         assertThatNoException()
-                .isThrownBy(() -> postsService.save(user, dto));
+                .isThrownBy(() -> postsService.save(mockUser, dto));
     }
 
     @Test
@@ -69,10 +74,10 @@ class PostsServiceTest {
         PostsUploadDto dto = getTestPostsUploadDto(PostType.NOTICE);
 
         //mocking
-        given(user.getRole()).willReturn(Role.USER);
+        given(mockUser.getRole()).willReturn(Role.USER);
 
         //then
-        assertThatThrownBy(() -> postsService.save(user, dto))
+        assertThatThrownBy(() -> postsService.save(mockUser, dto))
                 .isInstanceOf(ForbiddenException.class);
     }
 
@@ -100,6 +105,72 @@ class PostsServiceTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
+    @Test
+    @DisplayName("게시글 수정 성공")
+    void edit() {
+        //given
+        PostsEditDto dto = getTestPostsEditDto(PostType.GENERAL);
+
+        //mocking
+        given(postsRepository.findById(postId)).willReturn(Optional.ofNullable(mockPost));
+        given(mockPost.getUser()).willReturn(mockUser);
+        given(mockUser.getId()).willReturn(userId);
+        given(mockUser.getRole()).willReturn(Role.USER);
+
+        //then
+        assertThatNoException().isThrownBy(() -> postsService.edit(postId, userId, dto));
+    }
+
+    @Test
+    @DisplayName("게시글 수정 성공 - 공지사항")
+    void noticeEdit() {
+        //given
+        PostsEditDto dto = getTestPostsEditDto(PostType.NOTICE);
+
+        //mocking
+        given(postsRepository.findById(postId)).willReturn(Optional.ofNullable(mockPost));
+        given(mockPost.getUser()).willReturn(mockUser);
+        given(mockUser.getId()).willReturn(userId);
+        given(mockUser.getRole()).willReturn(Role.ADMIN);
+
+        //then
+        assertThatNoException().isThrownBy(() -> postsService.edit(postId, userId, dto));
+    }
+
+    @Test
+    @DisplayName("게시글 수정 실패 - 관리자만 공지사항으로 변경할 수 있다.")
+    void failedToNoticeEdit() {
+        //given
+        PostsEditDto dto = getTestPostsEditDto(PostType.NOTICE);
+
+        //mocking
+        given(postsRepository.findById(postId)).willReturn(Optional.ofNullable(mockPost));
+        given(mockPost.getUser()).willReturn(mockUser);
+        given(mockUser.getId()).willReturn(userId);
+        given(mockUser.getRole()).willReturn(Role.USER);
+
+        //then
+        assertThatThrownBy(() -> postsService.edit(postId, userId, dto))
+                .isInstanceOf(ForbiddenException.class);
+    }
+
+    @Test
+    @DisplayName("게시글 수정 실패 - 작성자가 일치하지 않음")
+    void forbiddenEdit() {
+        //given
+        PostsEditDto dto = getTestPostsEditDto(PostType.GENERAL);
+        Long otherUserId = 333L;
+
+        //mocking
+        given(postsRepository.findById(postId)).willReturn(Optional.ofNullable(mockPost));
+        given(mockPost.getUser()).willReturn(mockUser);
+        given(mockUser.getId()).willReturn(userId);
+
+        //then
+        assertThatThrownBy(() -> postsService.edit(postId, otherUserId, dto))
+                .isInstanceOf(ForbiddenException.class);
+    }
+
     PostsUploadDto getTestPostsUploadDto(PostType type) {
         return PostsUploadDto.builder()
                 .title("title")
@@ -114,5 +185,14 @@ class PostsServiceTest {
                 .content("content")
                 .type(type)
                 .build();
+    }
+
+    PostsEditDto getTestPostsEditDto(PostType type) {
+        PostsEditDto postsEditDto = new PostsEditDto();
+        postsEditDto.setTitle("title");
+        postsEditDto.setContent("content");
+        postsEditDto.setType(type);
+
+        return postsEditDto;
     }
 }

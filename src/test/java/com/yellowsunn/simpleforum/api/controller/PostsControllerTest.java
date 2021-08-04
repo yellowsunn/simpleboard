@@ -4,6 +4,7 @@ import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
+import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
@@ -33,6 +34,9 @@ class PostsControllerTest {
     @MockBean
     PostsService postsService;
 
+    @MockBean
+    PostHitRepository postHitRepository;
+
     Long userId = 1L;
     Long postId = 2L;
 
@@ -42,7 +46,7 @@ class PostsControllerTest {
         //given
         MockHttpServletRequestBuilder request = uploadRequest();
         setLoginSession(request, Role.USER);
-        setUploadParameters(request, "title", "content", PostType.GENERAL);
+        setParameters(request, "title", "content", PostType.GENERAL);
 
         //then
         mvc.perform(request)
@@ -54,7 +58,7 @@ class PostsControllerTest {
     void unauthorizedForUpload() throws Exception {
         //given
         MockHttpServletRequestBuilder request = uploadRequest();
-        setUploadParameters(request, "title", "content", PostType.GENERAL);
+        setParameters(request, "title", "content", PostType.GENERAL);
 
         //then
         mvc.perform(request)
@@ -67,7 +71,7 @@ class PostsControllerTest {
         //given
         MockHttpServletRequestBuilder request = uploadRequest();
         setLoginSession(request, Role.USER);
-        setUploadParameters(request, " ", " ", null);
+        setParameters(request, " ", " ", null);
 
         //then
         mvc.perform(request)
@@ -118,8 +122,47 @@ class PostsControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    private void setUploadParameters(MockHttpServletRequestBuilder request,
-                                     String title, String content, PostType type) {
+    @Test
+    @DisplayName("업로드 성공")
+    void edit() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = editRequest(postId);
+        setLoginSession(request, Role.USER);
+        setParameters(request, "title", "content", PostType.GENERAL);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("업로드 실패 - 인증 실패")
+    void unauthorizedForEdit() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = editRequest(postId);
+        setParameters(request, "title", "content", PostType.GENERAL);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("업로드 실패 - 검증 실패")
+    void validationFailedForEdit() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = editRequest(postId);
+        setLoginSession(request, Role.USER);
+        setParameters(request, " ", " ", null);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isBadRequest());
+    }
+
+
+    private void setParameters(MockHttpServletRequestBuilder request,
+                               String title, String content, PostType type) {
         request.param("title", title);
         request.param("content", content);
         request.param("type", type != null ? type.name() : null);
@@ -136,5 +179,9 @@ class PostsControllerTest {
 
     private MockHttpServletRequestBuilder findPost(Long id) {
         return get("/api/posts/" + id);
+    }
+
+    private MockHttpServletRequestBuilder editRequest(Long id) {
+        return put("/api/posts/" + id);
     }
 }

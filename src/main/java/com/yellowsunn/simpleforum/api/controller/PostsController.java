@@ -1,6 +1,7 @@
 package com.yellowsunn.simpleforum.api.controller;
 
 import com.yellowsunn.simpleforum.api.argumentresolver.LoginId;
+import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
@@ -50,6 +51,14 @@ public class PostsController {
     public Long getPostHit(@PathVariable Long id) {
         return postHitRepository.findHitByPostId(id)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    @PutMapping("/{id}")
+    public void edit(@PathVariable Long id, @LoginId Long userId,
+                     @Validated @ModelAttribute PostsEditDto postsEditDto,
+                     BindingResult bindingResult) {
+        checkValidation(bindingResult);
+        postsService.edit(id, userId, postsEditDto);
     }
 
     private void checkValidation(BindingResult bindingResult) {

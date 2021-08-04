@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.api.service;
 
+import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
@@ -35,8 +36,22 @@ public class PostsService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    @Transactional
+    public void edit(Long id, Long userId, PostsEditDto postsEditDto) {
+        Posts post = postsRepository.findById(id).orElseThrow(NotFoundException::new);
+        checkSameUser(post, userId);
+        checkAuthorityForType(post.getUser(), postsEditDto.getType());
+        postsEditDto.editPost(post);
+    }
+
     private void checkAuthorityForType(User user, PostType type) {
         if (user.getRole() != Role.ADMIN && type == PostType.NOTICE) {
+            throw new ForbiddenException();
+        }
+    }
+
+    private void checkSameUser(Posts post, Long userId) {
+        if (userId == null || !userId.equals(post.getUser().getId())) {
             throw new ForbiddenException();
         }
     }

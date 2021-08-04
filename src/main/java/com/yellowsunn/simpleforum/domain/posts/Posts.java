@@ -4,12 +4,14 @@ import com.yellowsunn.simpleforum.domain.BaseTimeEntity;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.file.File;
 import com.yellowsunn.simpleforum.domain.postHit.PostHit;
+import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,5 +62,17 @@ public class Posts extends BaseTimeEntity {
 
     public void updateHit() {
         hit.updateHit();
+    }
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
+    public void changeType(PostType type) {
+        this.type = type;
     }
 }
