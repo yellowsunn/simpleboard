@@ -61,6 +61,11 @@ public class PostsController {
         postsService.edit(id, userId, postsEditDto);
     }
 
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id, @LoginId Long userId) {
+        postsService.delete(id, userId);
+    }
+
     private void checkValidation(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("validation error");

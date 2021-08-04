@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 
@@ -160,6 +161,29 @@ class PostsControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    @DisplayName("삭제 성공")
+    void successDelete() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = deleteRequest(postId);
+        setLoginSession(request, Role.USER);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("업로드 실패 - 인증 실패")
+    void unauthorizedForDelete() throws Exception {
+        //given
+        MockHttpServletRequestBuilder request = deleteRequest(postId);
+
+        //then
+        mvc.perform(request)
+                .andExpect(status().isUnauthorized());
+    }
+
 
     private void setParameters(MockHttpServletRequestBuilder request,
                                String title, String content, PostType type) {
@@ -183,5 +207,9 @@ class PostsControllerTest {
 
     private MockHttpServletRequestBuilder editRequest(Long id) {
         return put("/api/posts/" + id);
+    }
+
+    private MockHttpServletRequestBuilder deleteRequest(Long id) {
+        return delete("/api/posts/" + id);
     }
 }

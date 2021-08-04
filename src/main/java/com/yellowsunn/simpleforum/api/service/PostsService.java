@@ -8,6 +8,7 @@ import com.yellowsunn.simpleforum.domain.posts.Posts;
 import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
+import com.yellowsunn.simpleforum.domain.user.UserRepository;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class PostsService {
 
     private final PostsRepository postsRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Posts save(User user, PostsUploadDto postsUploadDto) throws IOException {
@@ -44,6 +46,14 @@ public class PostsService {
         postsEditDto.editPost(post);
     }
 
+    @Transactional
+    public void delete(Long id, Long userId) {
+        User loginUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다."));
+        Posts post = postsRepository.findById(id).orElseThrow(NotFoundException::new);
+        checkDeleteAuthority(post, loginUser);
+        postsRepository.delete(post);
+    }
+
     private void checkAuthorityForType(User user, PostType type) {
         if (user.getRole() != Role.ADMIN && type == PostType.NOTICE) {
             throw new ForbiddenException();
@@ -51,8 +61,22 @@ public class PostsService {
     }
 
     private void checkSameUser(Posts post, Long userId) {
-        if (userId == null || !userId.equals(post.getUser().getId())) {
+        if (!isSameUser(post, userId)) {
             throw new ForbiddenException();
         }
+    }
+
+    private void checkDeleteAuthority(Posts post, User loginUser) {
+        if (!(isAdmin(loginUser) || isSameUser(post, loginUser.getId()))) {
+            throw new ForbiddenException();
+        }
+    }
+
+    private boolean isSameUser(Posts post, Long userId) {
+        return userId != null && userId.equals(post.getUser().getId());
+    }
+
+    private boolean isAdmin(User user) {
+        return Role.ADMIN.equals(user.getRole());
     }
 }

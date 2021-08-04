@@ -7,6 +7,7 @@ import com.yellowsunn.simpleforum.domain.posts.Posts;
 import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
+import com.yellowsunn.simpleforum.domain.user.UserRepository;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +32,13 @@ class PostsServiceTest {
     PostsRepository postsRepository;
 
     @Mock
+    UserRepository userRepository;
+
+    @Mock
     User mockUser;
+
+    @Mock
+    User mockUser2;
 
     @Mock
     Posts mockPost;
@@ -169,6 +176,75 @@ class PostsServiceTest {
         //then
         assertThatThrownBy(() -> postsService.edit(postId, otherUserId, dto))
                 .isInstanceOf(ForbiddenException.class);
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 성공")
+    void delete() {
+        //mocking
+        given(userRepository.findById(userId)).willReturn(Optional.of(mockUser));
+        given(postsRepository.findById(postId)).willReturn(Optional.of(mockPost));
+        given(mockPost.getUser()).willReturn(mockUser);
+        given(mockUser.getId()).willReturn(userId);
+        given(mockUser.getRole()).willReturn(Role.USER);
+
+        //then
+        assertThatNoException().isThrownBy(() -> postsService.delete(postId, userId));
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 실패 - 사용자를 찾을 수 없음")
+    void notFoundUserDelete() {
+        //mocking
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> postsService.delete(postId, userId))
+                .isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 실패 - 게시글을 찾을 수 없음")
+    void notFoundPostDelete() {
+        //mocking
+        given(userRepository.findById(userId)).willReturn(Optional.of(mockUser));
+        given(postsRepository.findById(postId)).willReturn(Optional.empty());
+
+        //then
+        assertThatThrownBy(() -> postsService.delete(postId, userId))
+                .isInstanceOf(NotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 실패 - 작성자가 아니면 삭제 불가 (USER 권한인 경우)")
+    void forbiddenDelete() {
+        //given
+        Long otherUserId = 333L;
+
+        //mocking
+        given(userRepository.findById(userId)).willReturn(Optional.of(mockUser));
+        given(postsRepository.findById(postId)).willReturn(Optional.of(mockPost));
+        given(mockPost.getUser()).willReturn(mockUser2);
+        given(mockUser2.getId()).willReturn(otherUserId);
+        given(mockUser.getId()).willReturn(userId);
+        given(mockUser.getRole()).willReturn(Role.USER);
+
+        //then
+        assertThatThrownBy(() -> postsService.delete(postId, userId))
+                .isInstanceOf(ForbiddenException.class);
+
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 성공 - 작성자가 아니어도 삭제 가능 (ADMIN 권한인 경우)")
+    void adminDelete() {
+        //mocking
+        given(userRepository.findById(userId)).willReturn(Optional.of(mockUser));
+        given(postsRepository.findById(postId)).willReturn(Optional.of(mockPost));
+        given(mockUser.getRole()).willReturn(Role.ADMIN);
+
+        //then
+        assertThatNoException().isThrownBy(() -> postsService.delete(postId, userId));
     }
 
     PostsUploadDto getTestPostsUploadDto(PostType type) {
