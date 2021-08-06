@@ -140,8 +140,6 @@ class UserApiControllerTest {
             //then
             ResultActions resultActions = mvc.perform(request)
                     .andExpect(status().isBadRequest());
-
-            expectNotExistLoginSession(resultActions);
         }
     }
 
@@ -159,8 +157,6 @@ class UserApiControllerTest {
         //then
         ResultActions resultActions = mvc.perform(request)
                 .andExpect(status().isNotFound());
-
-        expectNotExistLoginSession(resultActions);
     }
 
     @Test
@@ -193,7 +189,6 @@ class UserApiControllerTest {
         //then
         ResultActions resultActions = mvc.perform(request)
                 .andExpect(status().isNotFound());
-        expectNotExistLoginSession(resultActions);
     }
 
     @Test
@@ -268,8 +263,6 @@ class UserApiControllerTest {
         //then
         ResultActions resultActions = mvc.perform(request)
                 .andExpect(status().isNotFound());
-
-        expectNotExistLoginSession(resultActions);
     }
 
     @Test
@@ -413,15 +406,8 @@ class UserApiControllerTest {
     }
 
     private void expectUnauthorized(ResultActions resultActions) throws Exception {
-        expectNotExistLoginSession(resultActions);
         resultActions
                 .andExpect(status().isUnauthorized());
-    }
-
-    private void expectNotExistLoginSession(ResultActions resultActions) throws Exception {
-        for (String key : getSession().keySet()) {
-            resultActions.andExpect(request().sessionAttributeDoesNotExist(key));
-        }
     }
 
     private void expectExistLoginSession(ResultActions resultActions) throws Exception {
