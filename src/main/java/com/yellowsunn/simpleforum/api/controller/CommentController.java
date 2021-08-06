@@ -33,7 +33,7 @@ public class CommentController {
     }
 
     @GetMapping
-    public Page<CommentGetDto> comments(@RequestParam Long postId, Pageable pageable) {
+    public Page<CommentGetDto> getComments(@RequestParam Long postId, Pageable pageable) {
         return commentService.getCommentsByPostId(postId, pageable);
     }
 

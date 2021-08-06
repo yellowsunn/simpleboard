@@ -2,14 +2,18 @@ package com.yellowsunn.simpleforum.api.controller;
 
 import com.yellowsunn.simpleforum.api.argumentresolver.LoginId;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
+import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
 import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
+import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -28,6 +32,7 @@ public class PostsController {
 
     private final PostsIntegrationService postsIntegrationService;
     private final PostsService postsService;
+    private final PostsRepository postsRepository;
     private final PostHitRepository postHitRepository;
 
     @PostMapping
@@ -39,6 +44,11 @@ public class PostsController {
 
         return ResponseEntity.created(URI.create("/api/posts/" + postId))
                 .body(null);
+    }
+
+    @GetMapping
+    public Page<PostsGetAllDto> getPosts(Pageable pageable) {
+        return postsRepository.findDtoAll(pageable);
     }
 
     @GetMapping("/{id}")
