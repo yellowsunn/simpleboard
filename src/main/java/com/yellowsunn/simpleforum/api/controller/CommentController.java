@@ -1,16 +1,16 @@
 package com.yellowsunn.simpleforum.api.controller;
 
 import com.yellowsunn.simpleforum.api.argumentresolver.LoginId;
+import com.yellowsunn.simpleforum.api.dto.comment.CommentGetDto;
 import com.yellowsunn.simpleforum.api.dto.comment.CommentUploadDto;
 import com.yellowsunn.simpleforum.api.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -30,6 +30,11 @@ public class CommentController {
         Long id = commentService.upload(userId, commentUploadDto);
         return ResponseEntity.created(URI.create("/api/comments/" + id))
                 .body(null);
+    }
+
+    @GetMapping
+    public Page<CommentGetDto> comments(@RequestParam Long postId, Pageable pageable) {
+        return commentService.getCommentsByPostId(postId, pageable);
     }
 
     private void checkValidation(BindingResult bindingResult) {

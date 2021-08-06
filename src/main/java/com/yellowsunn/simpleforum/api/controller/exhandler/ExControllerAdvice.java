@@ -25,7 +25,6 @@ public class ExControllerAdvice {
     @ExceptionHandler(NotFoundException.class)
     public void notFoundException(HttpServletRequest request, HttpServletResponse response,
                                       NotFoundException e) throws IOException {
-        invalidateLoginSession(request);
         response.sendError(SC_NOT_FOUND, e.getMessage());
     }
 

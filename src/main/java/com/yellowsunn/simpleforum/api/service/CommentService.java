@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.api.service;
 
+import com.yellowsunn.simpleforum.api.dto.comment.CommentGetDto;
 import com.yellowsunn.simpleforum.api.dto.comment.CommentUploadDto;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.comment.CommentRepository;
@@ -9,6 +10,8 @@ import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +41,12 @@ public class CommentService {
 
         Comment saveComment = commentRepository.save(comment);
         return saveComment.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CommentGetDto> getCommentsByPostId(Long postId, Pageable pageable) {
+        return commentRepository.findByPostId(postId, pageable)
+                .map(CommentGetDto::new);
     }
 
     private Comment getParentComment(Long parentCommentId) {
