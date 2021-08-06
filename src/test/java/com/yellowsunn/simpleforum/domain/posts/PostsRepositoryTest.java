@@ -1,6 +1,5 @@
 package com.yellowsunn.simpleforum.domain.posts;
 
-import com.yellowsunn.simpleforum.api.service.PostsService;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.file.File;
 import org.junit.jupiter.api.DisplayName;

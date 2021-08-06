@@ -1,7 +1,7 @@
 package com.yellowsunn.simpleforum.domain.comment;
 
-import com.yellowsunn.simpleforum.domain.posts.Posts;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
+import com.yellowsunn.simpleforum.domain.posts.Posts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,9 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -103,5 +107,30 @@ class CommentRepositoryTest {
                 .isEqualTo(parentComment.getId());
         assertThat(findChildComment.getParent().getContent())
                 .isEqualTo(parentComment.getContent());
+    }
+
+    @Test
+    void findByPostId() {
+        //given
+        List<Comment> comments = new ArrayList<>();
+        for (int i = 0; i < 47; i++) {
+            Comment saveComment = commentRepository.save(Comment.builder().content("content" + i).post(post).build());
+            comments.add(saveComment);
+        }
+        commentRepository.save(Comment.builder().content("content47").parent(comments.get(20)).post(post).build());
+        commentRepository.save(Comment.builder().content("content48").parent(comments.get(20)).post(post).build());
+        commentRepository.save(Comment.builder().content("content49").parent(comments.get(23)).post(post).build());
+
+        //when
+        Page<Comment> commentPage = commentRepository.findByPostId(post.getId(), PageRequest.of(1, 20));
+
+        //then
+        assertThat(commentPage.getTotalElements()).isEqualTo(50);
+        assertThat(commentPage.getTotalPages()).isEqualTo(3);
+        assertThat(commentPage.getContent().get(0).getContent()).isEqualTo("content20");
+        assertThat(commentPage.getContent().get(1).getContent()).isEqualTo("content47");
+        assertThat(commentPage.getContent().get(2).getContent()).isEqualTo("content48");
+        assertThat(commentPage.getContent().get(5).getContent()).isEqualTo("content23");
+        assertThat(commentPage.getContent().get(6).getContent()).isEqualTo("content49");
     }
 }
