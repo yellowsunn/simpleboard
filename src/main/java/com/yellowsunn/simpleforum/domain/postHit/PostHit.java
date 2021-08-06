@@ -15,7 +15,7 @@ public class PostHit {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "posts_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Posts post;
 
     private long hit;
