@@ -68,13 +68,11 @@ class UserApiControllerTest {
     void validationFailForRegistration() throws Exception {
         //given
         List<UserRegisterDto> dtos = new ArrayList<>();
-        dtos.add(UserRegisterDto.builder().username(" ").password("12345678").nickname("nickname").build());
+        dtos.add(UserRegisterDto.builder().username(" ").password("12345678").build());
 
-        dtos.add(UserRegisterDto.builder().username("username").password("").nickname("nickname").build());
-        dtos.add(UserRegisterDto.builder().username("username").password("1234567").nickname("nickname").build());
-        dtos.add(UserRegisterDto.builder().username("username").password("12345678901234567").nickname("nickname").build());
-
-        dtos.add(UserRegisterDto.builder().username("username").password("12345678").nickname(" ").build());
+        dtos.add(UserRegisterDto.builder().username("username").password("").build());
+        dtos.add(UserRegisterDto.builder().username("username").password("1234567").build());
+        dtos.add(UserRegisterDto.builder().username("username").password("12345678901234567").build());
 
         MockHttpServletRequestBuilder request = registerRequest();
         //then
@@ -173,7 +171,7 @@ class UserApiControllerTest {
 
         mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"id\":1,\"username\":\"username\",\"nickname\":\"nickname\"}"));
+                .andExpect(content().string("{\"id\":1,\"username\":\"username\",\"role\":\"USER\"}"));
     }
 
     @Test
@@ -428,7 +426,6 @@ class UserApiControllerTest {
         return UserRegisterDto.builder()
                 .username("username")
                 .password("12345678")
-                .nickname("hello")
                 .build();
     }
 
@@ -443,7 +440,8 @@ class UserApiControllerTest {
         UserGetDto userGetDto = new UserGetDto();
         userGetDto.setId(userId);
         userGetDto.setUsername("username");
-        userGetDto.setNickname("nickname");
+        userGetDto.setRole(Role.USER);
+
         return userGetDto;
     }
 

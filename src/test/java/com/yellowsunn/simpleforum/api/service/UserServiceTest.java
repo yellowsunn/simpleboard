@@ -48,7 +48,6 @@ class UserServiceTest {
                 User.builder()
                         .username(dto.getUsername())
                         .password(dto.getPassword())
-                        .nickname("nickname")
                         .build()
         );
 
@@ -84,7 +83,6 @@ class UserServiceTest {
                 User.builder()
                         .username(dto.getUsername())
                         .password("password2")
-                        .nickname("nickname")
                         .build()
         );
 
@@ -231,7 +229,6 @@ class UserServiceTest {
         return User.builder()
                 .username("username")
                 .password("password")
-                .nickname("nickname")
                 .build();
     }
 }

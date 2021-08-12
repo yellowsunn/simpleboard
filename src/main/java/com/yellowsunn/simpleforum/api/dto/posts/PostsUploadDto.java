@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -29,7 +30,7 @@ public class PostsUploadDto {
     @Size(max = 65535)
     private String content;
 
-    private List<MultipartFile> imageFiles;
+    private List<MultipartFile> imageFiles = new ArrayList<>();
 
     public Posts covertToPosts(User user) {
         return Posts.builder()

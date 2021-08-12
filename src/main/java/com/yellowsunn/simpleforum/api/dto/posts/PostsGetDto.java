@@ -19,7 +19,6 @@ public class PostsGetDto {
     private Long id;
     private PostType type;
     private String username;
-    private String nickname;
     private String title;
     private String content;
 
@@ -33,7 +32,6 @@ public class PostsGetDto {
         this.id = post.getId();
         this.type = post.getType();
         this.username = post.getUser() != null ? post.getUser().getUsername() : null;
-        this.nickname = post.getUser() != null ? post.getUser().getNickname() : null;
         this.title = post.getTitle();
         this.content = post.getContent();
         this.createdDate = post.getCreatedDate();

@@ -39,7 +39,6 @@ class UserRepositoryTest {
         assertThat(findUser.getId()).isEqualTo(user.getId());
         assertThat(findUser.getUsername()).isEqualTo(user.getUsername());
         assertThat(findUser.getPassword()).isEqualTo(user.getPassword());
-        assertThat(findUser.getNickname()).isEqualTo(user.getNickname());
         assertThat(findUser.getRole()).isEqualTo(Role.USER);
     }
 
@@ -47,7 +46,7 @@ class UserRepositoryTest {
     @DisplayName("동일한 아이디로 중복 등록될 수 없다")
     void duplicateUsernameFail() {
         User user1 = getTestUser();
-        User user2 = User.builder().username("username").password("drowssap").nickname("emankcin").build();
+        User user2 = User.builder().username("username").password("drowssap").build();
         userRepository.saveAndFlush(user1);
 
         assertThatThrownBy(() -> userRepository.saveAndFlush(user2))
@@ -121,7 +120,6 @@ class UserRepositoryTest {
         return User.builder()
                 .username("username")
                 .password("password")
-                .nickname("nickname")
                 .build();
     }
 

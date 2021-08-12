@@ -75,7 +75,6 @@ public class UserService {
     private User userRegisterDtoToUser(UserRegisterDto userDto) {
         return User.builder()
                 .username(userDto.getUsername())
-                .nickname(userDto.getNickname())
                 .password(encodedPassword(userDto.getPassword()))
                 .build();
     }

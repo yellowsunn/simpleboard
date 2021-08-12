@@ -21,8 +21,4 @@ public class UserRegisterDto {
     @NotBlank
     @Size(min = 8, max = 16)
     private String password;
-
-    @NotBlank
-    @Size(max = 16)
-    private String nickname;
 }

@@ -22,3 +22,4 @@ logging.level:
     type: trace
 
 file.dir: /Users/yellowsunn/Desktop/file/
+allow.origin: http://localhost

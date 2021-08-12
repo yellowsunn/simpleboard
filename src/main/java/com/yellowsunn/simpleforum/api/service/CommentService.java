@@ -30,7 +30,7 @@ public class CommentService {
         Posts post = postsRepository.findById(commentUploadDto.getPostId())
                 .orElseThrow(() -> new NotFoundException("게시글을 찾을 수 없습니다."));
 
-        Comment parent = getParentComment(commentUploadDto.getParentCommentId());
+        Comment parent = getParentComment(commentUploadDto.getParentId());
 
         Comment comment = Comment.builder()
                 .user(user)

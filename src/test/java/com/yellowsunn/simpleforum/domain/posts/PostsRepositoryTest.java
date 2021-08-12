@@ -1,6 +1,5 @@
 package com.yellowsunn.simpleforum.domain.posts;
 
-import com.querydsl.core.Tuple;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.file.File;
@@ -108,7 +107,7 @@ class PostsRepositoryTest {
     void findCustomAll() {
 
         //given
-        User user = User.builder().username("username").nickname("nickname").password("password").build();
+        User user = User.builder().username("username").password("password").build();
         Posts post = Posts.builder().title("title").content("content").user(user).type(PostType.GENERAL).build();
         PostHit postHit = new PostHit(post);
         post.updateHit();
@@ -131,8 +130,6 @@ class PostsRepositoryTest {
         assertThat(dto.getCommentSize()).isEqualTo(5);
         assertThat(dto.isHasImage()).isTrue();
         assertThat(dto.getUsername()).isEqualTo("username");
-        assertThat(dto.getNickname()).isEqualTo("nickname");
-
     }
 
     Posts getSamplePost() {

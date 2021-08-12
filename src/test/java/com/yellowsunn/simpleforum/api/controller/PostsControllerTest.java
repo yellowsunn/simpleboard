@@ -6,6 +6,7 @@ import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
 import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
+import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 
@@ -37,6 +37,9 @@ class PostsControllerTest {
 
     @MockBean
     PostHitRepository postHitRepository;
+
+    @MockBean
+    PostsRepository postsRepository;
 
     Long userId = 1L;
     Long postId = 2L;

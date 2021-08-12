@@ -50,7 +50,7 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
         List<PostsGetAllDto> content = queryFactory
                 .select(
                         new QPostsGetAllDto(posts.id, posts.type, posts.title, posts.createdDate,
-                                user.username, user.nickname, postHit.hit,
+                                user.username, postHit.hit,
                                 select(comment.count()).from(comment),
                                 select(file.count()).from(file)))
                 .from(posts)

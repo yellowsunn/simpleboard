@@ -16,5 +16,5 @@ public class CommentUploadDto {
     @NotNull
     private Long postId;
 
-    private Long parentCommentId;
+    private Long parentId;
 }

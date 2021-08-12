@@ -115,7 +115,7 @@ class CommentServiceTest {
         CommentUploadDto dto = new CommentUploadDto();
         dto.setPostId(postId);
         dto.setContent("content");
-        dto.setParentCommentId(parentCommentId);
+        dto.setParentId(parentCommentId);
 
         return dto;
     }
