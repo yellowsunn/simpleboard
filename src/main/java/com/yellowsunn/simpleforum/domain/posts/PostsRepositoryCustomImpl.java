@@ -51,8 +51,8 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
                 .select(
                         new QPostsGetAllDto(posts.id, posts.type, posts.title, posts.createdDate,
                                 user.username, postHit.hit,
-                                select(comment.count()).from(comment),
-                                select(file.count()).from(file)))
+                                select(comment.count()).from(comment).where(comment.post.eq(posts)),
+                                select(file.count()).from(file).where(file.post.eq(posts))))
                 .from(posts)
                 .leftJoin(posts.hit, postHit)
                 .leftJoin(posts.user, user)

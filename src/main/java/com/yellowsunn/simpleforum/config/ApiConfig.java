@@ -15,6 +15,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+import static org.springframework.http.HttpMethod.*;
+
 @Configuration
 public class ApiConfig implements WebMvcConfigurer {
 
@@ -25,7 +27,8 @@ public class ApiConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
                 .allowedOrigins(allowOrigin)
-                .allowCredentials(true);
+                .allowCredentials(true)
+                .allowedMethods(POST.name(), DELETE.name(), PATCH.name(), PUT.name());
     }
 
     @Override
