@@ -8,8 +8,10 @@ import com.yellowsunn.simpleforum.domain.posts.Posts;
 import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.domain.user.UserRepository;
+import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,23 @@ public class CommentService {
     public Page<CommentGetDto> getCommentsByPostId(Long postId, Pageable pageable) {
         return commentRepository.findByPostId(postId, pageable)
                 .map(CommentGetDto::new);
+    }
+
+    @Transactional
+    public void delete(Long userId, Long commentId) {
+        Comment comment = commentRepository.findByIdQuery(commentId)
+                .orElseThrow(NotFoundException::new);
+
+        checkSameUser(userId, comment);
+
+        commentRepository.deleteAllByParentIdQuery(commentId);
+        commentRepository.delete(comment);
+    }
+
+    private void checkSameUser(Long userId, Comment comment) {
+        if (comment.getUser() == null || !userId.equals(comment.getUser().getId())) {
+            throw new ForbiddenException();
+        }
     }
 
     private Comment getParentComment(Long parentCommentId) {

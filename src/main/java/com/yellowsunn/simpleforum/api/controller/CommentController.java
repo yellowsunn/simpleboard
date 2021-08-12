@@ -37,6 +37,11 @@ public class CommentController {
         return commentService.getCommentsByPostId(postId, pageable);
     }
 
+    @DeleteMapping("/{commentId}")
+    public void delete(@LoginId Long userId, @PathVariable Long commentId) {
+        commentService.delete(userId, commentId);
+    }
+
     private void checkValidation(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException("validation error");
