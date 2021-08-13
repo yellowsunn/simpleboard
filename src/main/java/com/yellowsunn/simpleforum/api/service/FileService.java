@@ -23,7 +23,7 @@ public class FileService {
     private final FileRepository fileRepository;
 
     @Transactional
-    public void saveAll(Posts post, List<FileUploadDto> fileUploadDtos) {
+    public void storeAndSaveAll(Posts post, List<FileUploadDto> fileUploadDtos) {
         List<File> files = fileUploadDtos.stream()
                 .map(dto -> dto.convertToFileEntity(post))
                 .collect(Collectors.toList());

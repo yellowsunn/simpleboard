@@ -47,8 +47,10 @@ public class PostsController {
     }
 
     @GetMapping
-    public Page<PostsGetAllDto> getPosts(Pageable pageable) {
-        return postsRepository.findDtoAll(pageable);
+    public Page<PostsGetAllDto> getPosts(Pageable pageable,
+                                         @RequestParam(required = false) String title,
+                                         @RequestParam(required = false) String username) {
+        return postsRepository.findDtoAll(pageable, title, username);
     }
 
     @GetMapping("/{id}")
@@ -66,9 +68,9 @@ public class PostsController {
     @PutMapping("/{id}")
     public void edit(@PathVariable Long id, @LoginId Long userId,
                      @Validated @ModelAttribute PostsEditDto postsEditDto,
-                     BindingResult bindingResult) {
+                     BindingResult bindingResult) throws IOException {
         checkValidation(bindingResult);
-        postsService.edit(id, userId, postsEditDto);
+        postsIntegrationService.edit(id, userId, postsEditDto);
     }
 
     @DeleteMapping("/{id}")

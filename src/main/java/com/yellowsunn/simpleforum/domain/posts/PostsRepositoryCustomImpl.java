@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.domain.posts;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleforum.api.dto.posts.QPostsGetAllDto;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -46,7 +48,7 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<PostsGetAllDto> findDtoAll(Pageable pageable) {
+    public Page<PostsGetAllDto> findDtoAll(Pageable pageable, String title, String username) {
         List<PostsGetAllDto> content = queryFactory
                 .select(
                         new QPostsGetAllDto(posts.id, posts.type, posts.title, posts.createdDate,
@@ -56,13 +58,24 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
                 .from(posts)
                 .leftJoin(posts.hit, postHit)
                 .leftJoin(posts.user, user)
+                .where(containsTitle(title), containsUsername(username))
                 .orderBy(posts.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        long total = queryFactory.selectFrom(posts).fetchCount();
+        long total = queryFactory.selectFrom(posts)
+                .where(containsTitle(title), containsUsername(username))
+                .fetchCount();
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+    private BooleanExpression containsUsername(String username) {
+        return StringUtils.hasText(username) ? user.username.contains(username) : null;
+    }
+
+    private BooleanExpression containsTitle(String title) {
+        return StringUtils.hasText(title) ? posts.title.contains(title) : null;
     }
 }

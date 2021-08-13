@@ -3,6 +3,8 @@ package com.yellowsunn.simpleforum.api.service;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
+import com.yellowsunn.simpleforum.domain.comment.CommentRepository;
+import com.yellowsunn.simpleforum.domain.file.FileRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.posts.Posts;
 import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
@@ -23,6 +25,8 @@ public class PostsService {
 
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
+    private final FileRepository fileRepository;
 
     @Transactional
     public Posts save(User user, PostsUploadDto postsUploadDto) throws IOException {
@@ -39,11 +43,12 @@ public class PostsService {
     }
 
     @Transactional
-    public void edit(Long id, Long userId, PostsEditDto postsEditDto) {
+    public Posts edit(Long id, Long userId, PostsEditDto postsEditDto) {
         Posts post = postsRepository.findById(id).orElseThrow(NotFoundException::new);
         checkSameUser(post, userId);
         checkAuthorityForType(post.getUser(), postsEditDto.getType());
         postsEditDto.editPost(post);
+        return post;
     }
 
     @Transactional
@@ -51,6 +56,9 @@ public class PostsService {
         User loginUser = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("회원을 찾을 수 없습니다."));
         Posts post = postsRepository.findById(id).orElseThrow(NotFoundException::new);
         checkDeleteAuthority(post, loginUser);
+
+        commentRepository.deleteAllByPostQuery(post);
+        fileRepository.deleteAllByPost(post);
         postsRepository.delete(post);
     }
 

@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.domain.comment;
 
+import com.yellowsunn.simpleforum.domain.posts.Posts;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -10,5 +10,5 @@ public interface PostsRepositoryCustom {
 
     Optional<Posts> findPostAndUpdateHit(Long id);
 
-    Page<PostsGetAllDto> findDtoAll(Pageable pageable);
+    Page<PostsGetAllDto> findDtoAll(Pageable pageable, String title, String username);
 }

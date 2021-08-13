@@ -1,7 +1,7 @@
 package com.yellowsunn.simpleforum.domain.comment;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import com.yellowsunn.simpleforum.domain.posts.Posts;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +33,19 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
     public void deleteAllByParentIdQuery(Long parentId) {
         queryFactory.delete(comment)
                 .where(comment.parent.id.eq(parentId))
+                .execute();
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public void deleteAllByPostQuery(Posts post) {
+        queryFactory.delete(comment)
+                .where(comment.parent.id.isNotNull(), comment.post.eq(post))
+                .execute();
+
+        queryFactory.delete(comment)
+                .where(comment.post.eq(post))
                 .execute();
     }
 }

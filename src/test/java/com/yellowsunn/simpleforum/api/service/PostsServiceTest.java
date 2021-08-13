@@ -2,6 +2,8 @@ package com.yellowsunn.simpleforum.api.service;
 
 import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
+import com.yellowsunn.simpleforum.domain.comment.CommentRepository;
+import com.yellowsunn.simpleforum.domain.file.FileRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.posts.Posts;
 import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
@@ -33,6 +35,12 @@ class PostsServiceTest {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    CommentRepository commentRepository;
+
+    @Mock
+    FileRepository fileRepository;
 
     @Mock
     User mockUser;

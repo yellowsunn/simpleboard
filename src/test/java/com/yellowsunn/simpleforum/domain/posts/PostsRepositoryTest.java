@@ -1,6 +1,7 @@
 package com.yellowsunn.simpleforum.domain.posts;
 
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
+import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.file.File;
 import com.yellowsunn.simpleforum.domain.postHit.PostHit;
@@ -53,24 +54,12 @@ class PostsRepositoryTest {
     }
 
     @Test
-    @DisplayName("게시글 삭제시 게시글 내의 댓글, 파일 모두 삭제")
+    @DisplayName("게시글 삭제")
     void deletePost() {
         //given
         Posts post = getSamplePost();
 
-        Comment comment = Comment.builder()
-                .content("content")
-                .post(post)
-                .build();
-
-        File file = File.builder()
-                .storeName("downloadName")
-                .post(post)
-                .build();
-
         postsRepository.save(post);
-        em.persist(comment);
-        em.persist(file);
 
         em.flush();
         em.clear();
@@ -82,8 +71,6 @@ class PostsRepositoryTest {
         //then
         List<Posts> findPosts = postsRepository.findAll();
         assertThat(findPosts.size()).isEqualTo(0);
-        assertThat(em.find(Comment.class, comment.getId())).isNull();
-        assertThat(em.find(File.class, file.getId())).isNull();
     }
 
     @DisplayName("게시글 조회 및 조회수 증가")
@@ -120,7 +107,7 @@ class PostsRepositoryTest {
         em.persist(imageFile);
 
         //when
-        Page<PostsGetAllDto> page = postsRepository.findDtoAll(PageRequest.of(0, 30));
+        Page<PostsGetAllDto> page = postsRepository.findDtoAll(PageRequest.of(0, 30), "title", "username");
 
         //then
         PostsGetAllDto dto = page.getContent().get(0);

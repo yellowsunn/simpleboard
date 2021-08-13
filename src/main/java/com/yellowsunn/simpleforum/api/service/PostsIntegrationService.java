@@ -1,6 +1,6 @@
 package com.yellowsunn.simpleforum.api.service;
 
-import com.yellowsunn.simpleforum.api.dto.file.FileUploadDto;
+import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.api.util.FileStore;
 import com.yellowsunn.simpleforum.domain.posts.Posts;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,13 +24,14 @@ public class PostsIntegrationService {
     public Long upload(Long userId, PostsUploadDto postsUploadDto) throws IOException {
         User user = userService.findUser(userId);
         Posts post = postsService.save(user, postsUploadDto);
-        storeAndSaveAllFiles(post, postsUploadDto);
+        fileService.storeAndSaveAll(post, fileStore.storeFiles(postsUploadDto.getImageFiles()));
 
         return post.getId();
     }
 
-    private void storeAndSaveAllFiles(Posts post, PostsUploadDto postsUploadDto) throws IOException {
-        List<FileUploadDto> dtos = fileStore.storeFiles(postsUploadDto.getImageFiles());
-        fileService.saveAll(post, dtos);
+    @Transactional
+    public void edit(Long postId, Long userId, PostsEditDto postsEditDto) throws IOException {
+        Posts post = postsService.edit(postId, userId, postsEditDto);
+        fileService.storeAndSaveAll(post, fileStore.storeFiles(postsEditDto.getImageFiles()));
     }
 }
