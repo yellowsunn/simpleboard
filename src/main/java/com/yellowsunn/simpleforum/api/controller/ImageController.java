@@ -17,7 +17,7 @@ import java.time.Duration;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/images/")
+@RequestMapping("/images")
 public class ImageController {
 
     private final FileStore fileStore;

@@ -38,12 +38,10 @@ public class FileStore {
             return null;
         }
 
-        String originalFileName = multipartFile.getOriginalFilename();
-        String storeFileName = createStoreFileName(originalFileName);
+        String storeFileName = multipartFile.getOriginalFilename();
         multipartFile.transferTo(new File(getFullPath(storeFileName)));
 
         return FileUploadDto.builder()
-                .uploadFileName(originalFileName)
                 .storeFileName(storeFileName)
                 .build();
     }
@@ -53,12 +51,6 @@ public class FileStore {
         if ("gif".equalsIgnoreCase(ext)) return MediaType.IMAGE_GIF;
         else if ("png".equalsIgnoreCase(ext)) return MediaType.IMAGE_PNG;
         else return MediaType.IMAGE_JPEG;
-    }
-
-    private String createStoreFileName(String originalFileName) {
-        String ext = extractExt(originalFileName);
-        String uuid = UUID.randomUUID().toString();
-        return uuid + "." + ext;
     }
 
     private String extractExt(String originalFileName) {

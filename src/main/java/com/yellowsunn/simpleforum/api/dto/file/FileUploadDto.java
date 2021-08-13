@@ -9,12 +9,10 @@ import lombok.Data;
 @Data
 public class FileUploadDto {
 
-    private String uploadFileName;
     private String storeFileName;
 
     public File convertToFileEntity(Posts post) {
         return File.builder()
-                .uploadName(uploadFileName)
                 .storeName(storeFileName)
                 .post(post)
                 .build();

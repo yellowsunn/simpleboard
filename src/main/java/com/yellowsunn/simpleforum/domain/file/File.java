@@ -16,9 +16,6 @@ public class File {
     private Long id;
 
     @Column(nullable = false)
-    private String uploadName;
-
-    @Column(nullable = false)
     private String storeName;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,8 +23,7 @@ public class File {
     private Posts post;
 
     @Builder
-    public File(String uploadName, String storeName, Posts post) {
-        this.uploadName = uploadName;
+    public File(String storeName, Posts post) {
         this.storeName = storeName;
         this.post = post;
     }

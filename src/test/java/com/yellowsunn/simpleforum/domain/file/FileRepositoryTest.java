@@ -39,7 +39,6 @@ class FileRepositoryTest {
     void saveAndFind() {
         String uuid = UUID.randomUUID().toString();
         File file = File.builder()
-                .uploadName("uploadName")
                 .storeName(uuid)
                 .post(post)
                 .build();
@@ -51,7 +50,6 @@ class FileRepositoryTest {
         File findFile = fileRepository.findById(file.getId()).orElse(null);
 
         assertThat(findFile).isNotNull();
-        assertThat(findFile.getUploadName()).isEqualTo(file.getUploadName());
         assertThat(findFile.getStoreName()).isEqualTo(file.getStoreName());
         assertThat(findFile.getPost()).isNotNull();
     }
@@ -62,7 +60,6 @@ class FileRepositoryTest {
         //given
         String uuid = UUID.randomUUID().toString();
         File file = File.builder()
-                .uploadName("uploadName")
                 .storeName(uuid)
                 .build();
 

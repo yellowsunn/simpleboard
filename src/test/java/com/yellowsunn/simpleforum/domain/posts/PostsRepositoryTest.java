@@ -64,7 +64,6 @@ class PostsRepositoryTest {
                 .build();
 
         File file = File.builder()
-                .uploadName("uploadName")
                 .storeName("downloadName")
                 .post(post)
                 .build();
@@ -117,7 +116,7 @@ class PostsRepositoryTest {
             Comment comment = Comment.builder().content("content" + i).user(user).post(post).build();
             em.persist(comment);
         }
-        File imageFile = File.builder().post(post).uploadName("uploadName").storeName("storeName").build();
+        File imageFile = File.builder().post(post).storeName("storeName").build();
         em.persist(imageFile);
 
         //when
