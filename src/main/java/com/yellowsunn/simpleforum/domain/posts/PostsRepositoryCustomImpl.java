@@ -59,7 +59,7 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
                 .leftJoin(posts.hit, postHit)
                 .leftJoin(posts.user, user)
                 .where(containsTitle(title), containsUsername(username))
-                .orderBy(posts.id.desc())
+                .orderBy(posts.type.desc(), posts.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
