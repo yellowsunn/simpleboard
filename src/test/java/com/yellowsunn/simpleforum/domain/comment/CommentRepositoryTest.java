@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
@@ -122,11 +122,10 @@ class CommentRepositoryTest {
         commentRepository.save(Comment.builder().content("content49").parent(comments.get(23)).post(post).build());
 
         //when
-        Page<Comment> commentPage = commentRepository.findByPostId(post.getId(), PageRequest.of(1, 20));
+        Slice<Comment> commentPage = commentRepository.findCursorBasedSliceByPostId(post.getId(), String.format("%020d", comments.get(19).getParent().getId()) + String.format("%020d", comments.get(19).getId()), PageRequest.of(0, 20));
 
         //then
-        assertThat(commentPage.getTotalElements()).isEqualTo(50);
-        assertThat(commentPage.getTotalPages()).isEqualTo(3);
+        assertThat(commentPage.hasNext()).isTrue();
         assertThat(commentPage.getContent().get(0).getContent()).isEqualTo("content20");
         assertThat(commentPage.getContent().get(1).getContent()).isEqualTo("content47");
         assertThat(commentPage.getContent().get(2).getContent()).isEqualTo("content48");

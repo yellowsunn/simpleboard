@@ -11,9 +11,9 @@ import com.yellowsunn.simpleforum.domain.user.UserRepository;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,8 +46,8 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<CommentGetDto> getCommentsByPostId(Long postId, Pageable pageable) {
-        return commentRepository.findByPostId(postId, pageable)
+    public Slice<CommentGetDto> getCursorBasedComments(Long postId, String cursor, Pageable pageable) {
+        return commentRepository.findCursorBasedSliceByPostId(postId, cursor, pageable)
                 .map(CommentGetDto::new);
     }
 
@@ -58,8 +58,15 @@ public class CommentService {
 
         checkSameUser(userId, comment);
 
-        commentRepository.deleteAllByParentIdQuery(commentId);
-        commentRepository.delete(comment);
+        if (isNotReply(comment)) {
+            commentRepository.deleteAllByParentIdQuery(commentId);
+        } else {
+            commentRepository.delete(comment);
+        }
+    }
+
+    private boolean isNotReply(Comment comment) {
+        return comment.getId().equals(comment.getParent().getId());
     }
 
     private void checkSameUser(Long userId, Comment comment) {
@@ -71,7 +78,7 @@ public class CommentService {
     private Comment getParentComment(Long parentCommentId) {
         if (parentCommentId != null) {
             Comment parentComment = commentRepository.findById(parentCommentId)
-                    .orElseThrow(() -> new NotFoundException("부모 댓글을 찾을 수 없습니다."));
+                    .orElseThrow(() -> new NotFoundException("댓글을 찾을 수 없습니다."));
 
             checkParentIsValid(parentComment);
 
@@ -81,7 +88,7 @@ public class CommentService {
     }
 
     private void checkParentIsValid(Comment parentComment) {
-        if (parentComment.getParent() != null) {
+        if (!parentComment.getId().equals(parentComment.getParent().getId())) {
             throw new IllegalArgumentException("대댓글에는 답글을 달 수 없습니다.");
         }
     }

@@ -39,5 +39,9 @@ public class Comment extends BaseCreatedTimeEntity {
         this.parent = parent;
         this.user = user;
         this.post = post;
+
+        if (this.parent == null) {
+            this.parent = this;
+        }
     }
 }

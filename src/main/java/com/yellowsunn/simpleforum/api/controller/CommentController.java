@@ -7,6 +7,7 @@ import com.yellowsunn.simpleforum.api.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,8 +34,8 @@ public class CommentController {
     }
 
     @GetMapping
-    public Page<CommentGetDto> getComments(@RequestParam Long postId, Pageable pageable) {
-        return commentService.getCommentsByPostId(postId, pageable);
+    public Slice<CommentGetDto> getComments(@RequestParam Long postId, @RequestParam(required = false) String cursor, Pageable pageable) {
+        return commentService.getCursorBasedComments(postId, cursor, pageable);
     }
 
     @DeleteMapping("/{commentId}")
