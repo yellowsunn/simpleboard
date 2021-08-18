@@ -68,6 +68,10 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
     @Override
     public void deleteAllByPostQuery(Posts post) {
         queryFactory.delete(comment)
+                .where(comment.id.ne(comment.parent.id), comment.post.eq(post))
+                .execute();
+
+        queryFactory.delete(comment)
                 .where(comment.post.eq(post))
                 .execute();
     }
