@@ -1,12 +1,13 @@
 package com.yellowsunn.simpleforum.api.controller;
 
 import com.yellowsunn.simpleforum.api.SessionConst;
-import com.yellowsunn.simpleforum.api.annotation.LoginId;
+import com.yellowsunn.simpleforum.api.argumentresolver.LoginId;
 import com.yellowsunn.simpleforum.api.dto.user.UserGetDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
+import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +26,12 @@ import javax.servlet.http.HttpSession;
 public class UserApiController {
 
     private final UserService userService;
+    private final RefererFilter refererFilter;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void register(@Validated @RequestBody UserRegisterDto userDto, BindingResult bindingResult) {
+        refererFilter.check("/register");
         checkValidation(bindingResult);
         userService.register(userDto);
     }
@@ -54,6 +57,7 @@ public class UserApiController {
     public void changePassword(@LoginId Long userId,
                                @Validated @RequestBody UserPatchRequestDto userPatchRequestDto,
                                BindingResult bindingResult) {
+        refererFilter.check("/users/myinfo/change");
         checkValidation(bindingResult);
         userService.changePassword(userId, userPatchRequestDto);
     }

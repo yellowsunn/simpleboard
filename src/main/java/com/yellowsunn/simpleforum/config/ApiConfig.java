@@ -1,7 +1,7 @@
 package com.yellowsunn.simpleforum.config;
 
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
-import com.yellowsunn.simpleforum.api.annotation.argumentresolver.LoginIdArgumentResolver;
+import com.yellowsunn.simpleforum.api.argumentresolver.LoginIdArgumentResolver;
 import com.yellowsunn.simpleforum.api.interceptor.AdminCheckInterceptor;
 import com.yellowsunn.simpleforum.api.interceptor.LoginCheckInterceptor;
 import org.springframework.beans.factory.annotation.Value;

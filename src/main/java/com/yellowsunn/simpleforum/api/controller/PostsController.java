@@ -1,12 +1,13 @@
 package com.yellowsunn.simpleforum.api.controller;
 
-import com.yellowsunn.simpleforum.api.annotation.LoginId;
+import com.yellowsunn.simpleforum.api.argumentresolver.LoginId;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
+import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
@@ -34,11 +35,13 @@ public class PostsController {
     private final PostsService postsService;
     private final PostsRepository postsRepository;
     private final PostHitRepository postHitRepository;
+    private final RefererFilter refererFilter;
 
     @PostMapping
     public ResponseEntity<Void> upload(@LoginId Long userId,
                                  @Validated @ModelAttribute PostsUploadDto postsUploadDto,
                                  BindingResult bindingResult) throws IOException {
+        refererFilter.check("/posts/write");
         checkValidation(bindingResult);
         Long postId = postsIntegrationService.upload(userId, postsUploadDto);
 
@@ -69,12 +72,14 @@ public class PostsController {
     public void edit(@PathVariable Long id, @LoginId Long userId,
                      @Validated @ModelAttribute PostsEditDto postsEditDto,
                      BindingResult bindingResult) throws IOException {
+        refererFilter.check("/posts/" + id + "/edit");
         checkValidation(bindingResult);
         postsIntegrationService.edit(id, userId, postsEditDto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id, @LoginId Long userId) {
+        refererFilter.check("/posts/" + id);
         postsService.delete(id, userId);
     }
 
