@@ -1,6 +1,6 @@
 package com.yellowsunn.simpleforum.api.controller;
 
-import com.yellowsunn.simpleforum.api.argumentresolver.LoginId;
+import com.yellowsunn.simpleforum.api.annotation.LoginId;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;

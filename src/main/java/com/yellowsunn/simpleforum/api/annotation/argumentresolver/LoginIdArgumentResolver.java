@@ -1,6 +1,7 @@
-package com.yellowsunn.simpleforum.api.argumentresolver;
+package com.yellowsunn.simpleforum.api.annotation.argumentresolver;
 
 import com.yellowsunn.simpleforum.api.SessionConst;
+import com.yellowsunn.simpleforum.api.annotation.LoginId;
 import com.yellowsunn.simpleforum.exception.UnauthorizedException;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

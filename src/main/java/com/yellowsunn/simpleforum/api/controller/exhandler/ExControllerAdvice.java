@@ -1,9 +1,6 @@
 package com.yellowsunn.simpleforum.api.controller.exhandler;
 
-import com.yellowsunn.simpleforum.exception.ForbiddenException;
-import com.yellowsunn.simpleforum.exception.NotFoundException;
-import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
-import com.yellowsunn.simpleforum.exception.UnauthorizedException;
+import com.yellowsunn.simpleforum.exception.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -33,8 +30,8 @@ public class ExControllerAdvice {
         response.sendError(SC_FORBIDDEN, e.getMessage());
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public void badRequest(HttpServletResponse response, IllegalArgumentException e) throws IOException {
+    @ExceptionHandler(value = {IllegalArgumentException.class, InvalidReferException.class})
+    public void badRequest(HttpServletResponse response, Exception e) throws IOException {
         response.sendError(SC_BAD_REQUEST, e.getMessage());
     }
 
