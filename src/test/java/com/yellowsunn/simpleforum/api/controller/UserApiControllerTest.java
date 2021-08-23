@@ -8,6 +8,7 @@ import com.yellowsunn.simpleforum.api.dto.user.UserLoginDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserPatchRequestDto;
 import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
+import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
@@ -46,6 +47,9 @@ class UserApiControllerTest {
 
     @MockBean
     User mockUser;
+
+    @MockBean
+    RefererFilter refererFilter;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -170,8 +174,7 @@ class UserApiControllerTest {
         given(userService.findUserById(userGetDto.getId())).willReturn(userGetDto);
 
         mvc.perform(request)
-                .andExpect(status().isOk())
-                .andExpect(content().string("{\"id\":1,\"username\":\"username\",\"role\":\"USER\"}"));
+                .andExpect(status().isOk());
     }
 
     @Test

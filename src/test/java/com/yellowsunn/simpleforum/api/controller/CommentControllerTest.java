@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.api.dto.comment.CommentUploadDto;
 import com.yellowsunn.simpleforum.api.service.CommentService;
+import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,10 @@ class CommentControllerTest {
     MockMvc mvc;
 
     @MockBean
-    private CommentService commentService;
+    CommentService commentService;
+
+    @MockBean
+    RefererFilter refererFilter;
 
     ObjectMapper objectMapper = new ObjectMapper();
 

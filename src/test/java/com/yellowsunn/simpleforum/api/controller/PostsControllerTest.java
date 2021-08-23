@@ -4,6 +4,7 @@ import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
+import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
@@ -40,6 +41,9 @@ class PostsControllerTest {
 
     @MockBean
     PostsRepository postsRepository;
+
+    @MockBean
+    RefererFilter refererFilter;
 
     Long userId = 1L;
     Long postId = 2L;
