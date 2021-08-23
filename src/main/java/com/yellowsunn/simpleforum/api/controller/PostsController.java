@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -57,7 +59,12 @@ public class PostsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostsGetDto> getPost(@PathVariable Long id) {
+    public ResponseEntity<PostsGetDto> getPost(@PathVariable Long id,
+                                               @RequestHeader(name = HttpHeaders.IF_MODIFIED_SINCE, required = false) String ifModifiedSince) {
+        if (postsService.hasNotModified(id, ifModifiedSince)) {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+
         PostsGetDto postsGetDto = postsService.findPost(id);
         return getNoCachePostsGetDtoEntity(postsGetDto);
     }

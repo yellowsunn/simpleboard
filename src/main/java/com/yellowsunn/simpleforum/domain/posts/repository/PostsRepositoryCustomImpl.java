@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,6 +71,16 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
                 .fetchCount();
 
         return new PageImpl<>(content, pageable, total);
+    }
+
+    @Override
+    public Optional<LocalDateTime> findLastModifiedById(Long id) {
+        LocalDateTime content = queryFactory.select(posts.lastModifiedDate)
+                .from(posts)
+                .where(posts.id.eq(id))
+                .fetchOne();
+
+        return Optional.ofNullable(content);
     }
 
     private BooleanExpression containsUsername(String username) {

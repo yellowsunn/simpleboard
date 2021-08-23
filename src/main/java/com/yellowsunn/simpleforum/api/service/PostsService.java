@@ -14,10 +14,15 @@ import com.yellowsunn.simpleforum.domain.user.repository.UserRepository;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -60,6 +65,17 @@ public class PostsService {
         commentRepository.deleteAllByPostQuery(post);
         fileRepository.deleteAllByPost(post);
         postsRepository.delete(post);
+    }
+
+    public boolean hasNotModified(Long id, String ifModifiedSince) {
+        if (ifModifiedSince != null) {
+            String lastModified = postsRepository.findLastModifiedById(id)
+                    .map(lm -> lm.atZone(ZoneId.of("UTC")).format(DateTimeFormatter.RFC_1123_DATE_TIME))
+                    .orElse(null);
+
+            return ifModifiedSince.equals(lastModified);
+        }
+        return false;
     }
 
     private void checkAuthorityForType(User user, PostType type) {
