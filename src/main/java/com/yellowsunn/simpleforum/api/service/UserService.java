@@ -12,6 +12,8 @@ import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -43,11 +45,15 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Slice<UserGetDto> findUsers(Long userId, String searchUsername, Long cursor, Pageable pageable) {
+    public Page<UserGetDto> findUsers(Long userId, String searchUsername, Long cursor, Pageable pageable) {
         User user = findUser(userId);
         checkIsAdmin(user);
-        return userRepository.findCursorBasedSlice(searchUsername, cursor, pageable)
+
+        Slice<UserGetDto> slice = userRepository.findCursorBasedSlice(searchUsername, cursor, pageable)
                 .map(UserGetDto::new);
+        long total = userRepository.findCursorBasedTotal(searchUsername);
+
+        return new PageImpl<>(slice.getContent(), pageable, total);
     }
 
     @Transactional(readOnly = true)

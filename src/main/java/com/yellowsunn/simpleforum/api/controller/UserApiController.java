@@ -9,8 +9,11 @@ import com.yellowsunn.simpleforum.api.dto.user.UserRegisterDto;
 import com.yellowsunn.simpleforum.api.service.UserService;
 import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.user.User;
+import com.yellowsunn.simpleforum.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ import javax.servlet.http.HttpSession;
 public class UserApiController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final RefererFilter refererFilter;
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,10 +43,10 @@ public class UserApiController {
     }
 
     @GetMapping
-    public Slice<UserGetDto> users(@LoginId Long userId,
-                                   @RequestParam(required = false) String search,
-                                   @RequestParam(required = false) Long cursor,
-                                   Pageable pageable) {
+    public Page<UserGetDto> users(@LoginId Long userId,
+                                  @RequestParam(required = false) String search,
+                                  @RequestParam(required = false) Long cursor,
+                                  Pageable pageable) {
         return userService.findUsers(userId, search, cursor, pageable);
     }
 

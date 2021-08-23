@@ -7,4 +7,6 @@ import org.springframework.data.domain.Slice;
 public interface UserRepositoryCustom {
 
     Slice<User> findCursorBasedSlice(String username, Long cursor, Pageable pageable);
+
+    long findCursorBasedTotal(String username);
 }

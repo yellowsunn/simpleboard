@@ -39,6 +39,13 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         }
     }
 
+    @Override
+    public long findCursorBasedTotal(String username) {
+        return queryFactory.selectFrom(user)
+                .where(user.username.isNotNull(), startsWithUsername(username))
+                .fetchCount();
+    }
+
     private BooleanExpression startsWithUsername(String username) {
         return StringUtils.hasText(username) ? user.username.startsWith(username) : null;
     }
