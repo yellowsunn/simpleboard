@@ -19,7 +19,7 @@ public class PostsEditDto {
     private PostType type;
 
     @NotBlank
-    @Size(max = 512)
+    @Size(max = 300)
     private String title;
 
     @NotBlank

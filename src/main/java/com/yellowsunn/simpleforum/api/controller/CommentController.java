@@ -48,7 +48,7 @@ public class CommentController {
 
     private void checkValidation(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("validation error");
+            throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
     }
 }
