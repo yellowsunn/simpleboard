@@ -11,6 +11,7 @@ import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +35,11 @@ public class UserApiController {
         refererFilter.check("/register");
         checkValidation(bindingResult);
         userService.register(userDto);
+    }
+
+    @GetMapping
+    public Slice<UserGetDto> users() {
+
     }
 
     @PostMapping("/login")

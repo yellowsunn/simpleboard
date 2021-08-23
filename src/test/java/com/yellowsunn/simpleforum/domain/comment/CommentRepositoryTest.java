@@ -1,5 +1,6 @@
 package com.yellowsunn.simpleforum.domain.comment;
 
+import com.yellowsunn.simpleforum.domain.comment.repository.CommentRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.posts.Posts;
 import org.junit.jupiter.api.BeforeEach;

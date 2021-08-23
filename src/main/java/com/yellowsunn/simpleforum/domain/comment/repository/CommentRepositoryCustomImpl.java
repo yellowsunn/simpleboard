@@ -1,7 +1,8 @@
-package com.yellowsunn.simpleforum.domain.comment;
+package com.yellowsunn.simpleforum.domain.comment.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.posts.Posts;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

@@ -1,10 +1,10 @@
 package com.yellowsunn.simpleforum.domain.posts;
 
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
-import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
 import com.yellowsunn.simpleforum.domain.file.File;
 import com.yellowsunn.simpleforum.domain.postHit.PostHit;
+import com.yellowsunn.simpleforum.domain.posts.repository.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

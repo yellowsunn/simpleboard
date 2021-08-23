@@ -7,7 +7,7 @@ import com.yellowsunn.simpleforum.api.service.PostsService;
 import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
-import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
+import com.yellowsunn.simpleforum.domain.posts.repository.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import org.junit.jupiter.api.DisplayName;

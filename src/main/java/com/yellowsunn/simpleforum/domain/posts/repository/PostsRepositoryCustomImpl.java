@@ -1,9 +1,10 @@
-package com.yellowsunn.simpleforum.domain.posts;
+package com.yellowsunn.simpleforum.domain.posts.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleforum.api.dto.posts.QPostsGetAllDto;
+import com.yellowsunn.simpleforum.domain.posts.Posts;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

@@ -2,11 +2,11 @@ package com.yellowsunn.simpleforum.api.service;
 
 import com.yellowsunn.simpleforum.api.dto.comment.CommentUploadDto;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
-import com.yellowsunn.simpleforum.domain.comment.CommentRepository;
+import com.yellowsunn.simpleforum.domain.comment.repository.CommentRepository;
 import com.yellowsunn.simpleforum.domain.posts.Posts;
-import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
+import com.yellowsunn.simpleforum.domain.posts.repository.PostsRepository;
 import com.yellowsunn.simpleforum.domain.user.User;
-import com.yellowsunn.simpleforum.domain.user.UserRepository;
+import com.yellowsunn.simpleforum.domain.user.repository.UserRepository;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

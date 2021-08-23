@@ -9,7 +9,7 @@ import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
 import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
-import com.yellowsunn.simpleforum.domain.posts.PostsRepository;
+import com.yellowsunn.simpleforum.domain.posts.repository.PostsRepository;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
