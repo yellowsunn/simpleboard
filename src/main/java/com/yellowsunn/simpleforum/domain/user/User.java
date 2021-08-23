@@ -20,7 +20,6 @@ public class User extends BaseCreatedTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -39,5 +38,9 @@ public class User extends BaseCreatedTimeEntity {
 
     public void changePassword(String password) {
         this.password = password;
+    }
+
+    public void deleteUsername() {
+        username = null;
     }
 }

@@ -56,14 +56,14 @@ public class UserService {
     @Transactional
     public void deleteCurrentUser(Long id) {
         User user = findUser(id);
-        userRepository.delete(user);
+        user.deleteUsername();
     }
 
     @Transactional
     public void deleteById(Long id) {
         User user = findUser(id);
         checkRoleIsNotAdmin(user);
-        userRepository.delete(user);
+        user.deleteUsername();
     }
 
     @Transactional(readOnly = true)
