@@ -12,6 +12,8 @@ import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
 import com.yellowsunn.simpleforum.security.encoder.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +43,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public Slice<UserGetDto> findUsers(Long userId, String searchUsername, Long cursor, Pageable pageable) {
+        User user = findUser(userId);
+        checkIsAdmin(user);
+        return userRepository.findCursorBasedSlice(searchUsername, cursor, pageable)
+                .map(UserGetDto::new);
+    }
+
+    @Transactional(readOnly = true)
     public UserGetDto findUserById(Long id) {
         User user = findUser(id);
         return new UserGetDto(user);
@@ -62,7 +72,7 @@ public class UserService {
     @Transactional
     public void deleteById(Long id) {
         User user = findUser(id);
-        checkRoleIsNotAdmin(user);
+        checkDeleteUserIsNotAdmin(user);
         user.deleteUsername();
     }
 
@@ -97,9 +107,15 @@ public class UserService {
         }
     }
 
-    private void checkRoleIsNotAdmin(User user) {
+    private void checkDeleteUserIsNotAdmin(User user) {
         if (user.getRole() == Role.ADMIN) {
             throw new ForbiddenException("관리자는 탈퇴 처리 시킬 수 없습니다.");
+        }
+    }
+
+    private void checkIsAdmin(User user) {
+        if (user.getRole() != Role.ADMIN) {
+            throw new ForbiddenException();
         }
     }
 }

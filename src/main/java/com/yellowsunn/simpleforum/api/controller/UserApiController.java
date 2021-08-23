@@ -11,6 +11,7 @@ import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -38,8 +39,11 @@ public class UserApiController {
     }
 
     @GetMapping
-    public Slice<UserGetDto> users() {
-
+    public Slice<UserGetDto> users(@LoginId Long userId,
+                                   @RequestParam(required = false) String search,
+                                   @RequestParam(required = false) Long cursor,
+                                   Pageable pageable) {
+        return userService.findUsers(userId, search, cursor, pageable);
     }
 
     @PostMapping("/login")
