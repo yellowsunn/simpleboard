@@ -13,9 +13,7 @@ import com.yellowsunn.simpleforum.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -78,12 +76,14 @@ public class UserApiController {
 
     @DeleteMapping("/current")
     public void deleteCurrentUser(@LoginId Long userId, HttpServletRequest request) {
+        refererFilter.check("/users/myinfo", "/users");
         userService.deleteCurrentUser(userId);
         invalidateLoginSession(request);
     }
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
+        refererFilter.check("/users");
         userService.deleteById(userId);
     }
 
