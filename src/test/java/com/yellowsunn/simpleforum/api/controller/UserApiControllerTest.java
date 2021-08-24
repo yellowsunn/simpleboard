@@ -11,6 +11,7 @@ import com.yellowsunn.simpleforum.api.service.UserService;
 import com.yellowsunn.simpleforum.api.util.RefererFilter;
 import com.yellowsunn.simpleforum.domain.user.Role;
 import com.yellowsunn.simpleforum.domain.user.User;
+import com.yellowsunn.simpleforum.domain.user.repository.UserRepository;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
@@ -44,6 +45,9 @@ class UserApiControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    UserRepository userRepository;
 
     @MockBean
     User mockUser;
