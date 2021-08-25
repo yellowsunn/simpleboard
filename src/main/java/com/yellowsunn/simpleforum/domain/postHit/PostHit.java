@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class PostHit {
 
     @Id @GeneratedValue
+    @Column(name = "post_hit_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)

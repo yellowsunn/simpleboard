@@ -15,7 +15,7 @@ public class File {
     @Column(name = "file_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 500)
     private String storeName;
 
     @ManyToOne(fetch = FetchType.LAZY)

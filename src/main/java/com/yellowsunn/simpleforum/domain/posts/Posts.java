@@ -22,14 +22,14 @@ public class Posts extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long id;
 
-    @Column(nullable = false, length = 300)
+    @Column(nullable = false, length = 1000)
     private String title;
 
     @Column(columnDefinition = "text", nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private PostType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
