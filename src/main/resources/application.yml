@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/h2/dbfiles/forum
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://db:3306/simpleforum?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
@@ -21,6 +21,7 @@ server:
   error:
     include-stacktrace: never
     include-binding-errors: never
+    include-message: always
 
 logging.level:
   org.hibernate:
@@ -28,5 +29,5 @@ logging.level:
     type: trace
 
 
-file.dir: /Users/yellowsunn/Desktop/file/
-allow.origin: http://localhost
+file.dir: /file/
+allow.origin: http://yellowsunn.com
