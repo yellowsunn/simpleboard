@@ -103,7 +103,7 @@ class PostsServiceTest {
         Posts post = getTestPosts(PostType.GENERAL);
 
         //mocking
-        given(postsRepository.findPostAndUpdateHit(postId)).willReturn(Optional.ofNullable(post));
+        given(postsRepository.findPost(postId)).willReturn(Optional.ofNullable(post));
 
         //then
         assertThat(postsService.findPost(postId)).isNotNull();
@@ -113,7 +113,7 @@ class PostsServiceTest {
     @DisplayName("게시글 조회 실패 - 찾을 수 없음")
     void notFoundFindPost() {
         //mocking
-        given(postsRepository.findPostAndUpdateHit(postId)).willReturn(Optional.empty());
+        given(postsRepository.findPost(postId)).willReturn(Optional.empty());
 
         //then
         assertThatThrownBy(() -> postsService.findPost(postId))

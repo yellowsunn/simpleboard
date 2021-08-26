@@ -5,12 +5,11 @@ import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
+import com.yellowsunn.simpleforum.api.service.PostHitService;
 import com.yellowsunn.simpleforum.api.service.PostsIntegrationService;
 import com.yellowsunn.simpleforum.api.service.PostsService;
 import com.yellowsunn.simpleforum.api.util.RefererFilter;
-import com.yellowsunn.simpleforum.domain.postHit.PostHitRepository;
 import com.yellowsunn.simpleforum.domain.posts.repository.PostsRepository;
-import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,8 +34,8 @@ public class PostsController {
 
     private final PostsIntegrationService postsIntegrationService;
     private final PostsService postsService;
+    private final PostHitService postHitService;
     private final PostsRepository postsRepository;
-    private final PostHitRepository postHitRepository;
     private final RefererFilter refererFilter;
 
     @PostMapping
@@ -71,8 +70,7 @@ public class PostsController {
 
     @GetMapping("/{id}/hit")
     public Long getPostHit(@PathVariable Long id) {
-        return postHitRepository.findHitByPostId(id)
-                .orElseThrow(NotFoundException::new);
+        return postHitService.findAndUpdatePostHit(id);
     }
 
     @PutMapping("/{id}")

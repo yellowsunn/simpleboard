@@ -14,15 +14,12 @@ import com.yellowsunn.simpleforum.domain.user.repository.UserRepository;
 import com.yellowsunn.simpleforum.exception.ForbiddenException;
 import com.yellowsunn.simpleforum.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -40,9 +37,9 @@ public class PostsService {
         return postsRepository.save(post);
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public PostsGetDto findPost(Long id) {
-        return postsRepository.findPostAndUpdateHit(id)
+        return postsRepository.findPost(id)
                 .map(PostsGetDto::new)
                 .orElseThrow(NotFoundException::new);
     }

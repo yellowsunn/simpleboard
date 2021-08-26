@@ -16,13 +16,13 @@ import javax.persistence.*;
 @Entity
 public class User extends BaseCreatedTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", length = 50)
     private Long id;
 
     private String username;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 512)
     private String password;
 
     @Enumerated(EnumType.STRING)

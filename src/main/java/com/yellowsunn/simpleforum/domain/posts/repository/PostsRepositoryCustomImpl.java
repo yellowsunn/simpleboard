@@ -33,17 +33,13 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
 
     @Transactional
     @Override
-    public Optional<Posts> findPostAndUpdateHit(Long id) {
+    public Optional<Posts> findPost(Long id) {
         Posts findPost = queryFactory
                 .selectFrom(posts)
                 .leftJoin(posts.user).fetchJoin()
                 .leftJoin(posts.hit).fetchJoin()
                 .where(posts.id.eq(id))
                 .fetchFirst();
-
-        if (findPost != null) {
-            findPost.updateHit();
-        }
 
         return Optional.ofNullable(findPost);
     }

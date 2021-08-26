@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 public class PostHit {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_hit_id")
     private Long id;
 

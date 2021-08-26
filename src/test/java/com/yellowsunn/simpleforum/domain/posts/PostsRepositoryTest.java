@@ -73,7 +73,7 @@ class PostsRepositoryTest {
         assertThat(findPosts.size()).isEqualTo(0);
     }
 
-    @DisplayName("게시글 조회 및 조회수 증가")
+    @DisplayName("게시글 조회")
     @Test
     void findPostAndUpdateHit() {
         //given
@@ -82,11 +82,12 @@ class PostsRepositoryTest {
         em.clear();
 
         //given
-        Posts findPost = postsRepository.findPostAndUpdateHit(post.getId()).orElse(null);
+        Posts findPost = postsRepository.findPost(post.getId()).orElse(null);
 
         //then
         assertThat(findPost).isNotNull();
-        assertThat(findPost.getHit()).isEqualTo(1L);
+        assertThat(findPost.getTitle()).isEqualTo("title");
+        assertThat(findPost.getContent()).isEqualTo("content");
     }
 
     @Test

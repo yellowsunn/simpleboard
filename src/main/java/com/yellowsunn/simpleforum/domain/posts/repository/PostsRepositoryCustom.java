@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface PostsRepositoryCustom {
 
-    Optional<Posts> findPostAndUpdateHit(Long id);
+    Optional<Posts> findPost(Long id);
 
     Page<PostsGetAllDto> findDtoAll(Pageable pageable, String title, String username);
 
