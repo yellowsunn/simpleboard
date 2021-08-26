@@ -58,9 +58,11 @@ export const router = new VueRouter({
       beforeEnter: async (to, from, next) => {
         try {
           await redirectLoginPage(to, from, next);
-          await store.dispatch('GET_POST_DATA', to.params.postId);
-          await store.dispatch('GET_POST_HIT', to.params.postId);
-          await store.dispatch('GET_COMMENT_DATA', { postId: to.params.postId });
+          await Promise.all([
+            store.dispatch('GET_POST_DATA', to.params.postId),
+            store.dispatch('GET_POST_HIT', to.params.postId),
+            store.dispatch('GET_COMMENT_DATA', { postId: to.params.postId })
+          ]);
           next();
         } catch (error) {
           next('/');
