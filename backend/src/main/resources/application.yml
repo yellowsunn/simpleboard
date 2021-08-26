@@ -30,4 +30,4 @@ logging.level:
 
 
 file.dir: /file/
-allow.origin: http://yellowsunn.com
+allow.origin: https://yellowsunn.com
