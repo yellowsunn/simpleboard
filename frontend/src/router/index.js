@@ -57,8 +57,8 @@ export const router = new VueRouter({
       component: PostView,
       beforeEnter: async (to, from, next) => {
         try {
+          await redirectLoginPage(to, from, next);
           await Promise.all([
-            redirectLoginPage(to, from, next),
             store.dispatch('GET_POST_DATA', to.params.postId),
             store.dispatch('GET_POST_HIT', to.params.postId),
             store.dispatch('GET_COMMENT_DATA', { postId: to.params.postId })
