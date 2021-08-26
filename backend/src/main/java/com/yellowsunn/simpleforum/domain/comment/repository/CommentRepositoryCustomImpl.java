@@ -3,11 +3,9 @@ package com.yellowsunn.simpleforum.domain.comment.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
-import com.yellowsunn.simpleforum.domain.posts.Posts;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -54,26 +52,10 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
     }
 
     @Override
-    public void deleteAllByParentIdQuery(Long parentId) {
-        queryFactory.delete(comment)
-                .where(comment.id.ne(comment.parent.id), comment.parent.id.eq(parentId))
-                .execute();
-
-        queryFactory.delete(comment)
-                .where(comment.parent.id.eq(parentId))
-                .execute();
-    }
-
-    @Modifying
-    @Transactional
-    @Override
-    public void deleteAllByPostQuery(Posts post) {
-        queryFactory.delete(comment)
-                .where(comment.id.ne(comment.parent.id), comment.post.eq(post))
-                .execute();
-
-        queryFactory.delete(comment)
-                .where(comment.post.eq(post))
+    public void updateAllParentToNullInBatch(List<Comment> comments) {
+        queryFactory.update(comment)
+                .set(comment.parent, (Comment) null)
+                .where(comment.in(comments))
                 .execute();
     }
 

@@ -16,6 +16,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -57,15 +59,21 @@ public class CommentService {
 
         checkSameUser(userId, comment);
 
-        if (isNotReply(comment)) {
-            commentRepository.deleteAllByParentIdQuery(commentId);
-        } else {
-            commentRepository.delete(comment);
-        }
+        List<Comment> comments = commentRepository.findByParent(comment);
+        comments.add(comment);
+
+        deleteAllComment(comments);
     }
 
-    private boolean isNotReply(Comment comment) {
-        return comment.getId().equals(comment.getParent().getId());
+    @Transactional
+    public void deleteByPost(Posts post) {
+        List<Comment> comments = commentRepository.findByPost(post);
+        deleteAllComment(comments);
+    }
+
+    private void deleteAllComment(List<Comment> comments) {
+        commentRepository.updateAllParentToNullInBatch(comments);
+        commentRepository.deleteAllInBatch(comments);
     }
 
     private void checkSameUser(Long userId, Comment comment) {

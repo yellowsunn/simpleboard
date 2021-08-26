@@ -1,10 +1,10 @@
 package com.yellowsunn.simpleforum.domain.comment.repository;
 
 import com.yellowsunn.simpleforum.domain.comment.Comment;
-import com.yellowsunn.simpleforum.domain.posts.Posts;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepositoryCustom {
@@ -13,7 +13,5 @@ public interface CommentRepositoryCustom {
 
     Slice<Comment> findCursorBasedSliceByPostId(Long postId, String cursor, Pageable pageable);
 
-    void deleteAllByParentIdQuery(Long parentId);
-
-    void deleteAllByPostQuery(Posts post);
+    void updateAllParentToNullInBatch(List<Comment> comments);
 }

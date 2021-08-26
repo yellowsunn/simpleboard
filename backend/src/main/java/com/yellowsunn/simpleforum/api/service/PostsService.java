@@ -3,7 +3,6 @@ package com.yellowsunn.simpleforum.api.service;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleforum.api.dto.posts.PostsUploadDto;
-import com.yellowsunn.simpleforum.domain.comment.repository.CommentRepository;
 import com.yellowsunn.simpleforum.domain.file.FileRepository;
 import com.yellowsunn.simpleforum.domain.posts.PostType;
 import com.yellowsunn.simpleforum.domain.posts.Posts;
@@ -25,9 +24,9 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class PostsService {
 
+    private final CommentService commentService;
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
-    private final CommentRepository commentRepository;
     private final FileRepository fileRepository;
 
     @Transactional
@@ -59,7 +58,7 @@ public class PostsService {
         Posts post = postsRepository.findById(id).orElseThrow(NotFoundException::new);
         checkDeleteAuthority(post, loginUser);
 
-        commentRepository.deleteAllByPostQuery(post);
+        commentService.deleteByPost(post);
         fileRepository.deleteAllByPost(post);
         postsRepository.delete(post);
     }
