@@ -19,10 +19,25 @@
 기존 프로젝트는 클라이언트의 에디터가 적절하게 태그를 필터링해주나 서버에는 전혀 필터링을 하지 않는다.   
 악의적인 사용자가 우회해서 태그를 삽입해 요청하면 속수무책으로 당하고 만다.
 
-### 4. XSRF 문제점
-기존 프로젝트는 XSRF를 방지하기 위해 스프링 시큐리티의 CSRF 방지 토큰 기능을 사용했었다.
+### 4. XSRF 문제점   
+* CSRF 토큰
+<img src="/readme_file/csrf_token.png" width="35%">
+
 ```java
 protected void configure(HttpSecurity http) throws Exception {
 	http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 }
 ```
+기존 프로젝트는 XSRF를 방지하기 위해 다음과 같은 스프링 시큐리티의 CSRF 토큰 기능을 사용했었다.   
+서버는 세션별로 UUID 값을 가진 토큰을 쿠키로 발급해주고, 클라이언트에서는 요청에 X-XSRF-TOKEN 헤더에 토큰으로 받은 UUID값을 전달해야만 서버가 요청을 받아들인다.
+<br><br>
+
+* 문제점
+<img src="/readme_file/csrf_failed.png" width="90%">
+<img src="/readme_file/csrf_success.png" width="90%">
+문제점은 CSRF 토큰을 쿠키 방식으로 사용하는데 있다.<br>
+
+해당 쿠키는 '**HttpOnly**' 속성이 없으므로 같은 도메인 내에서는 스크립트 코드에서 읽을 수 있다.   
+따라서 위의 예시처럼 순진한 사용자가 _http://hacker.com_ 에 접근하면 쿠키의 값을 읽어오지 못해 요청이 무시되지만,  
+같은 도메인인 _https://yellowsunn.com/posts/10_ 에 접근하면 쿠키의 값을 읽어 CSRF 공격에 성공하게 된다.
+
