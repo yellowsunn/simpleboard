@@ -137,3 +137,20 @@ public void deleteUser(@PathVariable Long userId) {
 	* 여기서는 referer 헤더가 https://yellowsunn.com/users 여야 유효한 요청으로 받아들인다.
 * 일반적인 상황에서는 csrf 공격을 방지할 수 있으나, 예를 들어 패킷을 도중에 탈취해 referer 헤더를 변조해서 요청하는 등의 상황을 가정하면 완벽한 해결책은 아니다.
 * Same-Site에서 CSRF를 방지하는 더 좋은 방법은 CSRF를 야기하는 XSS를 막는것이다.
+
+## XSS 방어
+### XSS Filter
+직접 input으로 들어오는 html 태그를 필터링하는 방법도 있겠으나 네이버에서 오픈소스로 만든 `lucy-xss-servlet-filter`를 사용하면 안정적인 XSS 방어를 할 수 있다.
+
+> https://github.com/naver/lucy-xss-servlet-filter
+
+### 예시 
+```html
+<script>alert("xss")</script>
+```
+위와 같이 스크립트 코드를 서버에 전달하게 되면
+
+```html
+&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;
+```
+기호를 HTML 특수 코드로 변경해 XSS를 방어할 수 있다.
