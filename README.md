@@ -96,8 +96,7 @@ protected void configure(HttpSecurity http) throws Exception {
 	``` sh
 	* 4 * * * /home/yellowsunn/simpleforum/docker/renew-ssl.sh
 	```
-	<br>
 	
-	> * 재발급 자동화 명령으로 해결   
-	> Linux crontab에 위와 같은 명령어를 등록해 매일 04시마다 SSL인증서를 재발급을 요청하도록 했다.  
-	> _(Let's Encrpyt의 인증서는 만료 기간이 30일 이내일 때만 재발급이 가능하므로 그전까지는 재발급 요청이 무시된다.)_
+	* **재발급 자동화 명령으로 해결**   
+	Linux crontab에 위와 같은 명령어를 등록해 매일 04시마다 SSL인증서를 재발급을 요청하도록 했다.  
+	_(Let's Encrpyt의 인증서는 만료 기간이 30일 이내일 때만 재발급이 가능하므로 그전까지는 재발급 요청이 무시된다.)_
