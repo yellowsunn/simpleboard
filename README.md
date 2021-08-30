@@ -100,3 +100,40 @@ protected void configure(HttpSecurity http) throws Exception {
 	* **재발급 자동화 명령으로 해결**   
 	Linux crontab에 위와 같은 명령어를 등록해 매일 04시마다 SSL인증서를 재발급을 요청하도록 했다.  
 	_(Let's Encrpyt의 인증서는 만료 기간이 30일 이내일 때만 재발급이 가능하므로 그전까지는 재발급 요청이 무시된다.)_
+	
+
+## XSRF 문제 해결
+### 문제 상황: Cross-Site에서 쿠키가 전달되는 문제
+<img src="/readme_file/csrf.jpg" width="70%">
+
+* 다음과 같이 악의적인 요청을 하는 Cross-Site에 들어가면 쿠키가 전달되어 csrf 공격을 당할 수 있다.
+
+<br>
+
+### ‣ 해결책: Same-Site=Lax or Strict
+<img src="/readme_file/same-site_strict.jpg" width="70%">
+
+* 단순하지만 효과적인 방법인 Same-Site 옵션을 쿠키에 추가해서 CSRF 공격을 예방할 수 있다.
+* Cross-Site에서 쿠키가 전달되는 것을 방지할 수 있다.
+--------------------------
+### 문제 상황: Same-Site에서 쿠키가 전달되는 문제
+<img src="/readme_file/same_site.jpg" width="70%">
+
+* `Same-Site=Strict`옵션이 있더라도 다음과 같이 악의적인 사용자가 작성한 게시글에 접근하면 Same-Site에서는 쿠키가 전달된다.
+<br>
+
+### ‣ 해결책: Referer 헤더 체크
+<img src="/readme_file/refer_check.jpg" width="70%">
+
+```java
+@DeleteMapping("api/users/{userId}")
+public void deleteUser(@PathVariable Long userId) {
+	refererFilter.check("/users");
+	userService.deleteById(userId);
+}
+```
+
+* 다음과 같이 서버에서는 `refererFilter` 라는 객체로 유효한 referer 헤더인지 사전에 체크를 한다.
+	* 여기서는 referer 헤더가 https://yellowsunn.com/users 여야 유효한 요청으로 받아들인다.
+* 일반적인 상황에서는 csrf 공격을 방지할 수 있으나, 예를 들어 패킷을 도중에 탈취해 referer 헤더를 변조해서 요청하는 등의 상황을 가정하면 완벽한 해결책은 아니다.
+* Same-Site에서 CSRF를 방지하는 더 좋은 방법은 CSRF를 야기하는 XSS를 막는것이다.
