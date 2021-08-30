@@ -154,3 +154,27 @@ public void deleteUser(@PathVariable Long userId) {
 &lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;
 ```
 기호를 HTML 특수 코드로 변경해 XSS를 방어할 수 있다.
+
+## 웹 캐시 사용
+### 이미지와 게시글을 불러오는데 웹 캐시를 사용
+* 이미지 조회 코드
+```java
+@GetMapping("/{fileName}")
+public ResponseEntity<Resource> downloadImage(@PathVariable String fileName) throws IOException {
+	Resource resource = new UrlResource("file:" + fileStore.getFullPath(fileName));
+	if (!resource.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+	return ResponseEntity.ok()
+		.cacheControl(CacheControl.maxAge(Duration.ofDays(7L)))
+		.lastModified(resource.lastModified())
+		.contentType(fileStore.getImageContentType(resource.getFilename()))
+		.body(resource);
+}
+```
+
+* HTTP 응답 헤더 예시
+```
+Cache-Control: max-age=604800
+Content-Type: image/jpeg
+Last-Modified: Mon, 30 Aug 2021 15:32:45 GMT
+```
