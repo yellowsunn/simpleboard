@@ -87,3 +87,17 @@ protected void configure(HttpSecurity http) throws Exception {
 * 각 서버는 도커 컨테이너로 구성되어 있고 같은 네트워크에 연결되어 있다.
 * Nginx의 reverse proxy 기능을 이용하여 클라이언트가 API나 이미지를 요청하는 경우에는 백엔드 서버를 호출하고,  
 뷰페이지를 요청하는 경우에는 프론트엔드 서버를 호출한다.
+
+### SSL
+<img src="/readme_file/lets_encrypt.png" width="60%">
+
+* HTTPS를 사용하기 위해서는 SSL인증서가 필요하므로 무료 SSL 발급 인증 기관인 Let's Encrypt에서 제공하는 Certbot Docker image를 이용하여 SSL 인증서를 발급했다.
+* Let's Encrpyt에서 발급한 인증서의 유효기간은 90일이다. **따라서 90일마다 인증서를 재발급해야한다.**
+	``` sh
+	* 4 * * * /home/yellowsunn/simpleforum/docker/renew-ssl.sh
+	```
+	<br>
+	
+	> * 재발급 자동화 명령으로 해결   
+	> Linux crontab에 위와 같은 명령어를 등록해 매일 04시마다 SSL인증서를 재발급을 요청하도록 했다.  
+	> _(Let's Encrpyt의 인증서는 만료 기간이 30일 이내일 때만 재발급이 가능하므로 그전까지는 재발급 요청이 무시된다.)_
