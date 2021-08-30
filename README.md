@@ -10,7 +10,9 @@
 기존에 제작했던 간단한 게시판 프로젝트의 문제점을 개선하여 다시 제작한 프로젝트이다.   
 (기존 프로젝트: https://github.com/yellowsunn/security-project)<br/>   
 
-개선된 프로젝트는 유효성 검사, xss, xsrf 에 초점을 맞춰 제작되었다. 
+개선된 프로젝트는 유효성 검사, xss, xsrf 에 초점을 맞춰 제작되었다.  
+<br>
+테스트 사이트: https://yellowsunn.com
 
 ## 기존 프로젝트의 문제점
 ### 1. 서버에서 유효성 검사 부재
@@ -76,3 +78,12 @@ protected void configure(HttpSecurity http) throws Exception {
 ## 데이터베이스 모델
 
 <img src="/readme_file/database_model.png" width="80%">
+
+## 서버 구조
+<img src="/readme_file/server_structure.jpg" width="80%">  
+<br>
+
+* 테스트 사이트 주소: https://yellowsunn.com
+* 각 서버는 도커 컨테이너로 구성되어 있고 같은 네트워크에 연결되어 있다.
+* Nginx의 reverse proxy 기능을 이용하여 클라이언트가 API나 이미지를 요청하는 경우에는 백엔드 서버를 호출하고,  
+뷰페이지를 요청하는 경우에는 프론트엔드 서버를 호출한다.
