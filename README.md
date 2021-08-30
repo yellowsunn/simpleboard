@@ -156,8 +156,8 @@ public void deleteUser(@PathVariable Long userId) {
 기호를 HTML 특수 코드로 변경해 XSS를 방어할 수 있다.
 
 ## 웹 캐시 사용
-### 이미지와 게시글을 불러오는데 웹 캐시를 사용
-* 이미지 조회 코드
+### 이미지를 조회하는데 웹 캐시를 사용
+* 코드
 ```java
 @GetMapping("/{fileName}")
 public ResponseEntity<Resource> downloadImage(@PathVariable String fileName) throws IOException {
