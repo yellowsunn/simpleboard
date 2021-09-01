@@ -42,7 +42,11 @@ export const router = new VueRouter({
     {
       path: '/posts',
       component: UserView,
-      beforeEnter: redirectLoginPage
+      beforeEnter: async (to, from, next) => {
+        await redirectLoginPage(to, from, next),
+        await store.dispatch('FETCH_BOARD', { page: 0 });
+        next();
+      }
     },
     {
       path: '/posts/write',
@@ -85,6 +89,7 @@ export const router = new VueRouter({
       component: AdminView,
       beforeEnter: async (to, from, next) => {
         await redirectLoginPage(to, from, next);
+        next();
       }
     },
     {
@@ -98,6 +103,7 @@ export const router = new VueRouter({
       component: MyInfoView,
       beforeEnter: async (to, from, next) => {
         await redirectLoginPage(to, from, next);
+        next();
       }
     }
   ]
@@ -122,7 +128,5 @@ async function redirectLoginPage(to, from, next) {
         nextUrl: to.fullPath
       }
     });
-  } else {
-    next();
   }
 }

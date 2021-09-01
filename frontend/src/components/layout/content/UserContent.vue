@@ -116,7 +116,6 @@ export default {
     this.mql.addEventListener("change", e => {
       this.isMobile = e.matches;
     });
-    this.$store.dispatch('FETCH_BOARD', { page: 0 });
   },
   methods: {
     firstPage() {
