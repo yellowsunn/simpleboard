@@ -45,7 +45,7 @@ services:
 #  ssl 인증서 최초 등록시 사용
 #  certbot:
 #    image: certbot/certbot:latest
-#    command: certonly --webroot --webroot-path=/var/www/certbot --email chohankook95@gmail.com --agree-tos --no-eff-email -d yellowsunn.com
+#    command: certonly --webroot --webroot-path=/var/www/certbot --email chohankook95@gmail.com --agree-tos --no-eff-email -d yellowsunn.com,blog.yellowsunn.com
 #    volumes:
 #      - ./volume/certbot/conf:/etc/letsencrypt
 #      - ./volume/certbot/logs:/var/log/letsencrypt
