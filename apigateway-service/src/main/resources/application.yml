@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    default: local
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/api/**]':
+            allowed-origin-patterns: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+---
+spring.config.activate.on-profile: local
+server:
+  port: 8000
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: login
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/login
+            - Method=POST, OPTIONS
+          filters:
+            - RewritePath=/api/login, /api/users/login
