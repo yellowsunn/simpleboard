@@ -2,14 +2,14 @@ package com.yellowsunn.simpleforum.api.controller.exhandler;
 
 
 import com.yellowsunn.simpleforum.api.controller.UserApiController;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
 @RestControllerAdvice(assignableTypes = UserApiController.class)
 public class ExUserApiControllerAdvice {

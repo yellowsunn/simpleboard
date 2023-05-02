@@ -1,11 +1,7 @@
-import com.ewerk.gradle.plugins.QuerydslPluginExtension
-import com.ewerk.gradle.plugins.tasks.QuerydslCompile
-
 plugins {
     java
-    id("org.springframework.boot") version "2.5.2"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("com.ewerk.gradle.plugins.querydsl") version "1.0.10"
+    id("org.springframework.boot") version "3.0.6"
+    id("io.spring.dependency-management") version "1.1.0"
 }
 
 group = "com.yellowsunn"
@@ -15,10 +11,6 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
-    }
-
-    named("querydsl") {
-        extendsFrom(configurations.compileClasspath.get())
     }
 }
 
@@ -31,30 +23,21 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.navercorp.lucy:lucy-xss-servlet:2.0.1")
-    implementation("com.querydsl:querydsl-jpa")
+
+    // querydsl
+    implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+    annotationProcessor("com.querydsl:querydsl-apt:5.0.0:jakarta")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+
+    annotationProcessor("org.projectlombok:lombok")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
-    runtimeOnly("mysql:mysql-connector-java")
-    annotationProcessor("org.projectlombok:lombok")
+    runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-val querydslDir = "$buildDir/generated/querydsl"
-
-configure<QuerydslPluginExtension> {
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-
-sourceSets.getByName("main") {
-    java.srcDir(querydslDir)
-}
-
-tasks.withType<QuerydslCompile> {
-    options.annotationProcessorPath = configurations.querydsl.get()
 }
