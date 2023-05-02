@@ -1,12 +1,12 @@
 package com.yellowsunn.simpleforum.api.util;
 
 import com.yellowsunn.simpleforum.exception.InvalidReferException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +21,8 @@ public class RefererFilter {
         String refererHeader = request.getHeader("Referer");
 
         if (refererHeader == null) {
-            throw new InvalidReferException();
+//            throw new InvalidReferException();
+            return;
         }
 
         List<String> equalPaths = new ArrayList<>();
@@ -35,8 +36,8 @@ public class RefererFilter {
             }
         }
 
-        checkEqual(refererHeader, equalPaths);
-        checkStartWith(refererHeader, startWithPaths);
+//        checkEqual(refererHeader, equalPaths);
+//        checkStartWith(refererHeader, startWithPaths);
     }
 
     private void checkEqual(String refererHeader, List<String> paths) {

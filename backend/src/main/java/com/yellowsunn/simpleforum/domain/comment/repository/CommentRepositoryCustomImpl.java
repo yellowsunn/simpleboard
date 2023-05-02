@@ -3,13 +3,13 @@ package com.yellowsunn.simpleforum.domain.comment.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yellowsunn.simpleforum.domain.comment.Comment;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 

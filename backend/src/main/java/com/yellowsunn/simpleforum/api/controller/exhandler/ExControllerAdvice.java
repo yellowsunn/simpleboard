@@ -1,15 +1,22 @@
 package com.yellowsunn.simpleforum.api.controller.exhandler;
 
-import com.yellowsunn.simpleforum.exception.*;
+import com.yellowsunn.simpleforum.exception.ForbiddenException;
+import com.yellowsunn.simpleforum.exception.InvalidReferException;
+import com.yellowsunn.simpleforum.exception.NotFoundException;
+import com.yellowsunn.simpleforum.exception.PasswordMismatchException;
+import com.yellowsunn.simpleforum.exception.UnauthorizedException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static javax.servlet.http.HttpServletResponse.*;
+import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static jakarta.servlet.http.HttpServletResponse.SC_FORBIDDEN;
+import static jakarta.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
 @RestControllerAdvice
 public class ExControllerAdvice {
@@ -21,7 +28,7 @@ public class ExControllerAdvice {
 
     @ExceptionHandler(NotFoundException.class)
     public void notFoundException(HttpServletRequest request, HttpServletResponse response,
-                                      NotFoundException e) throws IOException {
+                                  NotFoundException e) throws IOException {
         response.sendError(SC_NOT_FOUND, e.getMessage());
     }
 

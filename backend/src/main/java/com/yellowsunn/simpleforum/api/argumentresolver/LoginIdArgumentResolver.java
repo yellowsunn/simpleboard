@@ -2,14 +2,13 @@ package com.yellowsunn.simpleforum.api.argumentresolver;
 
 import com.yellowsunn.simpleforum.api.SessionConst;
 import com.yellowsunn.simpleforum.exception.UnauthorizedException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 public class LoginIdArgumentResolver implements HandlerMethodArgumentResolver {
 
