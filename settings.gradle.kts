@@ -1,5 +1,6 @@
-rootProject.name = "simpleforum"
+rootProject.name = "simpleboard"
 
 include(
-    "board-monolithic-service"
+    "board-monolithic-service",
+    "apigateway-service",
 )
