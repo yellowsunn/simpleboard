@@ -1,6 +1,7 @@
 package com.yellowsunn.simpleboard.api.argumentresolver;
 
-import com.yellowsunn.simpleboard.api.SessionConst;
+import com.yellowsunn.common.annotation.LoginId;
+import com.yellowsunn.common.constant.SessionConst;
 import com.yellowsunn.simpleboard.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

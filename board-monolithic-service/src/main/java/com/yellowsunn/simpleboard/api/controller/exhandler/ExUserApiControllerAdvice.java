@@ -1,7 +1,7 @@
 package com.yellowsunn.simpleboard.api.controller.exhandler;
 
 
-import com.yellowsunn.simpleboard.api.controller.UserApiController;
+import com.yellowsunn.simpleboard.userservice.controller.UserApiController;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

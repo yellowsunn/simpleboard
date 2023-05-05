@@ -1,15 +1,15 @@
 package com.yellowsunn.simpleboard.api.service;
 
+import com.yellowsunn.common.exception.ForbiddenException;
+import com.yellowsunn.common.exception.NotFoundException;
 import com.yellowsunn.simpleboard.api.dto.comment.CommentGetDto;
 import com.yellowsunn.simpleboard.api.dto.comment.CommentUploadDto;
 import com.yellowsunn.simpleboard.domain.comment.Comment;
 import com.yellowsunn.simpleboard.domain.comment.repository.CommentRepository;
 import com.yellowsunn.simpleboard.domain.posts.Posts;
 import com.yellowsunn.simpleboard.domain.posts.repository.PostsRepository;
-import com.yellowsunn.simpleboard.domain.user.User;
-import com.yellowsunn.simpleboard.domain.user.repository.UserRepository;
-import com.yellowsunn.simpleboard.exception.ForbiddenException;
-import com.yellowsunn.simpleboard.exception.NotFoundException;
+import com.yellowsunn.simpleboard.userservice.domain.user.User;
+import com.yellowsunn.simpleboard.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

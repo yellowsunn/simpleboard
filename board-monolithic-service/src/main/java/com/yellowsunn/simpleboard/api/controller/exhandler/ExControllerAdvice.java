@@ -1,9 +1,9 @@
 package com.yellowsunn.simpleboard.api.controller.exhandler;
 
-import com.yellowsunn.simpleboard.exception.ForbiddenException;
+import com.yellowsunn.common.exception.ForbiddenException;
 import com.yellowsunn.simpleboard.exception.InvalidReferException;
-import com.yellowsunn.simpleboard.exception.NotFoundException;
-import com.yellowsunn.simpleboard.exception.PasswordMismatchException;
+import com.yellowsunn.common.exception.NotFoundException;
+import com.yellowsunn.common.exception.PasswordMismatchException;
 import com.yellowsunn.simpleboard.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

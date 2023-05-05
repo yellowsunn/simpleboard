@@ -1,9 +1,9 @@
 package com.yellowsunn.simpleboard.api.service;
 
+import com.yellowsunn.simpleboard.domain.posts.Posts;
 import com.yellowsunn.simpleboard.api.dto.file.FileUploadDto;
 import com.yellowsunn.simpleboard.domain.file.File;
 import com.yellowsunn.simpleboard.domain.file.FileRepository;
-import com.yellowsunn.simpleboard.domain.posts.Posts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

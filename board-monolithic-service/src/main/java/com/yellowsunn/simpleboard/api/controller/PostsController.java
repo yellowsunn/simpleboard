@@ -1,6 +1,6 @@
 package com.yellowsunn.simpleboard.api.controller;
 
-import com.yellowsunn.simpleboard.api.argumentresolver.LoginId;
+import com.yellowsunn.common.annotation.LoginId;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsGetDto;

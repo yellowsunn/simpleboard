@@ -1,6 +1,6 @@
 package com.yellowsunn.simpleboard.api.controller;
 
-import com.yellowsunn.simpleboard.api.argumentresolver.LoginId;
+import com.yellowsunn.common.annotation.LoginId;
 import com.yellowsunn.simpleboard.api.dto.comment.CommentGetDto;
 import com.yellowsunn.simpleboard.api.dto.comment.CommentUploadDto;
 import com.yellowsunn.simpleboard.api.service.CommentService;

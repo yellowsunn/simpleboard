@@ -30,4 +30,19 @@ dependencies {
     runtimeOnly("com.h2database:h2")
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    implementation(project(":board-monolithic-service:common-library"))
+    implementation(project(":board-monolithic-service:user-service:user-api"))
+    implementation(project(":board-monolithic-service:user-service:user-core"))
+}
+
+subprojects {
+    apply(plugin = "org.springframework.boot")
+    apply(plugin = "io.spring.dependency-management")
+
+    dependencies {
+        annotationProcessor("org.projectlombok:lombok")
+        compileOnly("org.projectlombok:lombok")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+    }
 }

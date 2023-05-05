@@ -16,8 +16,8 @@ const config = {
 };
 
 const fetchLogin = async (account) => {
-  return await axios.post('/users/login', account, {
-    ...config,
+  return await axios.post('http://localhost:8000/api/login', account, {
+    withCredentials: false
   });
 };
 

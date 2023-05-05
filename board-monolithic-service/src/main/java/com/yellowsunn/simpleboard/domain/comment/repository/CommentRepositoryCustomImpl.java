@@ -27,7 +27,6 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
     @Override
     public Optional<Comment> findByIdQuery(Long id) {
         Comment findComment = queryFactory.selectFrom(comment)
-                .leftJoin(comment.user).fetchJoin()
                 .where(comment.id.eq(id))
                 .fetchOne();
 
@@ -38,7 +37,6 @@ public class CommentRepositoryCustomImpl implements CommentRepositoryCustom {
     @Override
     public Slice<Comment> findCursorBasedSliceByPostId(Long postId, String cursor, Pageable pageable) {
         List<Comment> content = queryFactory.selectFrom(comment)
-                .leftJoin(comment.user).fetchJoin()
                 .where(comment.post.id.eq(postId), hasCursor(cursor))
                 .orderBy(comment.parent.id.asc(), comment.id.asc())
                 .limit(pageable.getPageSize() + 1)

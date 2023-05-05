@@ -5,13 +5,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsGetAllDto;
 import com.yellowsunn.simpleboard.api.dto.posts.QPostsGetAllDto;
 import com.yellowsunn.simpleboard.domain.posts.Posts;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +21,7 @@ import static com.yellowsunn.simpleboard.domain.comment.QComment.comment;
 import static com.yellowsunn.simpleboard.domain.file.QFile.file;
 import static com.yellowsunn.simpleboard.domain.postHit.QPostHit.postHit;
 import static com.yellowsunn.simpleboard.domain.posts.QPosts.posts;
-import static com.yellowsunn.simpleboard.domain.user.QUser.user;
+import static com.yellowsunn.simpleboard.userservice.domain.user.QUser.user;
 
 public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
 
@@ -36,7 +36,6 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
     public Optional<Posts> findPost(Long id) {
         Posts findPost = queryFactory
                 .selectFrom(posts)
-                .leftJoin(posts.user).fetchJoin()
                 .leftJoin(posts.hit).fetchJoin()
                 .where(posts.id.eq(id))
                 .fetchFirst();
@@ -55,7 +54,6 @@ public class PostsRepositoryCustomImpl implements PostsRepositoryCustom {
                                 select(file.count()).from(file).where(file.post.eq(posts))))
                 .from(posts)
                 .leftJoin(posts.hit, postHit)
-                .leftJoin(posts.user, user)
                 .where(containsTitle(title), containsUsername(username))
                 .orderBy(posts.type.desc(), posts.id.desc())
                 .offset(pageable.getOffset())

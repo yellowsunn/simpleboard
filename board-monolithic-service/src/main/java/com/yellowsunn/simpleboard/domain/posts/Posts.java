@@ -4,7 +4,7 @@ import com.yellowsunn.simpleboard.domain.BaseTimeEntity;
 import com.yellowsunn.simpleboard.domain.comment.Comment;
 import com.yellowsunn.simpleboard.domain.file.File;
 import com.yellowsunn.simpleboard.domain.postHit.PostHit;
-import com.yellowsunn.simpleboard.domain.user.User;
+import com.yellowsunn.simpleboard.userservice.domain.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
