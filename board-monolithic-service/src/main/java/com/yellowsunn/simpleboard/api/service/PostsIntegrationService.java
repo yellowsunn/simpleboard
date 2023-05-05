@@ -1,10 +1,11 @@
 package com.yellowsunn.simpleboard.api.service;
 
+import com.yellowsunn.simpleboard.domain.posts.Posts;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleboard.api.util.FileStore;
-import com.yellowsunn.simpleboard.domain.posts.Posts;
-import com.yellowsunn.simpleboard.domain.user.User;
+import com.yellowsunn.simpleboard.userservice.domain.user.User;
+import com.yellowsunn.simpleboard.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

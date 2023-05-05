@@ -2,7 +2,7 @@ package com.yellowsunn.simpleboard.api.dto.posts;
 
 import com.yellowsunn.simpleboard.domain.posts.PostType;
 import com.yellowsunn.simpleboard.domain.posts.Posts;
-import com.yellowsunn.simpleboard.domain.user.User;
+import com.yellowsunn.simpleboard.userservice.domain.user.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

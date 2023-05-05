@@ -1,17 +1,17 @@
 package com.yellowsunn.simpleboard.api.service;
 
+import com.yellowsunn.simpleboard.domain.posts.PostType;
+import com.yellowsunn.simpleboard.domain.posts.Posts;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsEditDto;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsGetDto;
 import com.yellowsunn.simpleboard.api.dto.posts.PostsUploadDto;
 import com.yellowsunn.simpleboard.domain.file.FileRepository;
-import com.yellowsunn.simpleboard.domain.posts.PostType;
-import com.yellowsunn.simpleboard.domain.posts.Posts;
 import com.yellowsunn.simpleboard.domain.posts.repository.PostsRepository;
-import com.yellowsunn.simpleboard.domain.user.Role;
-import com.yellowsunn.simpleboard.domain.user.User;
-import com.yellowsunn.simpleboard.domain.user.repository.UserRepository;
-import com.yellowsunn.simpleboard.exception.ForbiddenException;
-import com.yellowsunn.simpleboard.exception.NotFoundException;
+import com.yellowsunn.simpleboard.userservice.domain.user.Role;
+import com.yellowsunn.simpleboard.userservice.domain.user.User;
+import com.yellowsunn.common.exception.ForbiddenException;
+import com.yellowsunn.common.exception.NotFoundException;
+import com.yellowsunn.simpleboard.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

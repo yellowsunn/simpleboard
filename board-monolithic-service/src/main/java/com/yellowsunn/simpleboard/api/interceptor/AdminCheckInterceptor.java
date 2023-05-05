@@ -1,7 +1,7 @@
 package com.yellowsunn.simpleboard.api.interceptor;
 
-import com.yellowsunn.simpleboard.api.SessionConst;
-import com.yellowsunn.simpleboard.domain.user.Role;
+import com.yellowsunn.common.constant.SessionConst;
+import com.yellowsunn.simpleboard.userservice.domain.user.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

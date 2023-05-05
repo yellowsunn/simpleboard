@@ -1,6 +1,6 @@
 package com.yellowsunn.simpleboard.api.interceptor;
 
-import com.yellowsunn.simpleboard.api.SessionConst;
+import com.yellowsunn.common.constant.SessionConst;
 import com.yellowsunn.simpleboard.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
