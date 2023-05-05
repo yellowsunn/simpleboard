@@ -34,6 +34,9 @@ dependencies {
     implementation(project(":board-monolithic-service:common-library"))
     implementation(project(":board-monolithic-service:user-service:user-api"))
     implementation(project(":board-monolithic-service:user-service:user-core"))
+
+    implementation(project(":board-monolithic-service:board-service:board-api"))
+    implementation(project(":board-monolithic-service:board-service:board-core"))
 }
 
 subprojects {
