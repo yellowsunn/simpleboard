@@ -23,7 +23,7 @@ public class ExternalUserController {
     }
 
     @PostMapping("/api/v2/users/login")
-    public UserLoginDto login(@Valid @RequestBody LoginRequestDto requestDto) {
+    public UserLoginDto login(@RequestBody LoginRequestDto requestDto) {
         return new UserLoginDto();
     }
 
