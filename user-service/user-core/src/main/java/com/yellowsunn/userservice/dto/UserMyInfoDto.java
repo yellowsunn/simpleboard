@@ -1,8 +1,9 @@
 package com.yellowsunn.userservice.dto;
 
-import lombok.Getter;
+import com.yellowsunn.userservice.domain.user.User;
 
-@Getter
-public class UserMyInfoDto {
-    private String username;
+public record UserMyInfoDto(String email, String nickName, String thumbnail) {
+    public static UserMyInfoDto fromUser(User user) {
+        return new UserMyInfoDto(user.getEmail(), user.getNickName(), user.getThumbnail());
+    }
 }

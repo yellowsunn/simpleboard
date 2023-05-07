@@ -6,4 +6,5 @@ include(
     "user-service",
     "user-service:user-api",
     "user-service:user-core",
+    "user-service:infra-persistence",
 )

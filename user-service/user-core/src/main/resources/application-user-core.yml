@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    default: local
+---
+spring:
+  profiles:
+    active: local
+token:
+  access:
+    expiration: 30m
+    secret: jekmrsrhPKOwSUnR7m8WtcWv_K5SdKygftw3x99BrCs
+  refresh:
+    expiration: 1d
+    secret: 8p1WxOIxZchtCRgQ0TeqYyV-0T86IR2rZhhVTwTtxLQ
