@@ -1,0 +1,45 @@
+spring:
+  profiles:
+    default: local
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/api/**]':
+            allowed-origins: "*"
+            allowed-headers: "*"
+            allowed-methods: "*"
+      routes:
+        - id: user-service-signup
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/signup
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/signup, /api/v2/users
+        - id: user-service-login
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/login, /api/v2/users/login
+        - id: user-service
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/users/**
+            - Method=GET, POST, PUT, PATCH, DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/users/(?<path>.*), /api/v2/users/$\{path}
+---
+server:
+  port: 8000
+spring:
+  profiles:
+    active: local
+
+endpoint:
+  user-service: http://localhost:8080

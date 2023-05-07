@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    default: local
+  config:
+    import:
+      - 'classpath:application-user-infra-persistence.yml'
+      - 'classpath:application-user-core.yml'
