@@ -54,7 +54,7 @@ class UserEmailAuthServiceTest {
         given(userRepository.existsByNickName(nickName)).willReturn(false);
 
         // when
-        boolean isSuccess = sut.signUp(command);
+        boolean isSuccess = sut.signUp(command, "defaultThumbnail");
 
         // then
         assertThat(isSuccess).isTrue();
@@ -69,7 +69,7 @@ class UserEmailAuthServiceTest {
         given(userRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
 
         // when
-        Throwable throwable = catchThrowable(() -> sut.signUp(command));
+        Throwable throwable = catchThrowable(() -> sut.signUp(command, "defaultThumbnail"));
 
         // then
         assertThat(throwable).isInstanceOf(CustomUserException.class);
@@ -86,7 +86,7 @@ class UserEmailAuthServiceTest {
         given(userRepository.existsByNickName(nickName)).willReturn(true);
 
         // when
-        Throwable throwable = catchThrowable(() -> sut.signUp(command));
+        Throwable throwable = catchThrowable(() -> sut.signUp(command, "defaultThumbnail"));
 
         // then
         assertThat(throwable).isInstanceOf(CustomUserException.class);

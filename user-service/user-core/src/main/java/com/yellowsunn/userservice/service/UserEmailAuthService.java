@@ -24,7 +24,7 @@ public class UserEmailAuthService {
     private final RefreshTokenGenerator refreshTokenGenerator;
 
     @Transactional
-    public boolean signUp(UserEmailSignUpCommand command) {
+    public boolean signUp(UserEmailSignUpCommand command, String thumbnail) {
         verifyAlreadyExistEmail(command.email());
         verifyAlreadyExistNickName(command.nickName());
 
@@ -32,6 +32,7 @@ public class UserEmailAuthService {
                 .email(command.email())
                 .password(passwordEncoder.encode(command.password()))
                 .nickName(command.nickName())
+                .thumbnail(thumbnail)
                 .build();
 
         var savedUser = userRepository.save(user);
@@ -44,7 +45,7 @@ public class UserEmailAuthService {
                 .filter(u -> passwordEncoder.matches(command.password(), u.getPassword()))
                 .orElseThrow(() -> new CustomUserException(UserErrorCode.INVALID_LOGIN));
 
-        String accessToken = accessTokenGenerator.generateToken(new AccessTokenPayload(user.getUuid(), user.getEmail(), user.getThumbnail()));
+        String accessToken = accessTokenGenerator.generateToken(new AccessTokenPayload(user.getUuid(), user.getEmail()));
         String refreshToken = refreshTokenGenerator.generateToken();
 
         return UserLoginDto.builder()

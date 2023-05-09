@@ -4,4 +4,5 @@ dependencies {
 
     implementation(project(":user-service:user-core"))
     runtimeOnly(project(":user-service:infra-persistence"))
+    runtimeOnly(project(":user-service:infra-aws-s3"))
 }

@@ -5,3 +5,4 @@ spring:
     import:
       - 'classpath:application-user-infra-persistence.yml'
       - 'classpath:application-user-core.yml'
+      - 'classpath:application-s3.yml'

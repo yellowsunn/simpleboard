@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    default: local
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+      auto: false
+    credentials:
+      access-key: ${aws-access-key}
+      secret-key: ${aws-secret-key}
+    s3:
+      bucket: simpleboard-dev
+---
+spring:
+  profiles:
+    active: local
+
+micro-services:
+  image-proxy-service-url: http://localhost:4000
