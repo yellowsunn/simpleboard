@@ -15,6 +15,15 @@ import java.util.List;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    protected ErrorResponse handleIllegalArgumentAndStateException(Exception e) {
+        log.warn("Illegal request. message={}", e.getMessage(), e);
+        return ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.name())
+                .message(e.getMessage())
+                .build();
+    }
+
     @ExceptionHandler(CustomUserException.class)
     protected ResponseEntity<ErrorResponse> handleCustomUserException(CustomUserException e) {
         var errorCode = e.getErrorCode();
@@ -31,8 +40,18 @@ public class GlobalExceptionHandler {
     protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.warn("Invalid request. message={}", e.getMessage(), e);
         return ErrorResponse.builder()
-                .code("BAD_REQUEST")
+                .code(HttpStatus.BAD_REQUEST.name())
                 .message(getFirstErrorMessage(e.getAllErrors()))
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    protected ErrorResponse handleUnknownException(Exception e) {
+        log.error("Unknown exception. message={}", e.getMessage(), e);
+        return ErrorResponse.builder()
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.name())
+                .message(e.getMessage())
                 .build();
     }
 

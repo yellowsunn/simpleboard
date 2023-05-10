@@ -80,6 +80,20 @@ class UserServiceTest {
         assertThat(isDeleted).isTrue();
     }
 
+    @Test
+    void changeUserThumbnail() {
+        // given
+        var userId = 1L;
+        var user = getTestUser();
+        var updatedThumbnail = "https://example.com/thubnail.png";
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        boolean isSuccess = sut.changeUserThumbnail(userId, updatedThumbnail);
+
+        assertThat(isSuccess).isTrue();
+        assertThat(user.getThumbnail()).isEqualTo(updatedThumbnail);
+    }
+
     private User getTestUser() {
         return User.builder()
                 .email("test@example.com")

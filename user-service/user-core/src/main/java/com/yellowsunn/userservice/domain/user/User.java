@@ -50,12 +50,19 @@ public class User extends BaseTimeEntity {
     @Builder
     public User(@NonNull String email,
                 @NonNull String password,
-                @NonNull String nickName) {
+                @NonNull String nickName,
+                String thumbnail) {
         this.email = email;
         this.password = password;
         this.uuid = UUID.randomUUID().toString();
         this.nickName = nickName;
         this.role = UserRole.USER;
         this.provider = UserProvider.EMAIL;
+        this.thumbnail = thumbnail;
+    }
+
+    public boolean changeThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+        return true;
     }
 }

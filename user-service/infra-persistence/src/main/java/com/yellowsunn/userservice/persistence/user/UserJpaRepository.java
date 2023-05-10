@@ -69,6 +69,7 @@ public class UserJpaRepository implements UserRepository {
     @Override
     public boolean existsByNickName(String nickName) {
         Long count = jpaQueryFactory.select(user.id.count())
+                .from(user)
                 .where(user.nickName.eq(nickName))
                 .fetchOne();
 

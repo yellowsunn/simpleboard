@@ -15,22 +15,35 @@ import org.springframework.util.Assert;
 public class UserService {
     private final UserRepository userRepository;
 
+    private static final String USER_ID_NULL_MESSAGE = "userId must not be null.";
+
     @Transactional(readOnly = true)
     public UserMyInfoDto findUserInfo(Long userId) {
-        Assert.notNull(userId, "userId must not be null.");
+        Assert.notNull(userId, USER_ID_NULL_MESSAGE);
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
-
+        User user = getUserById(userId);
         return UserMyInfoDto.fromUser(user);
     }
 
     @Transactional
     public boolean deleteUserInfo(Long userId) {
-        Assert.notNull(userId, "userId must not be null.");
+        Assert.notNull(userId, USER_ID_NULL_MESSAGE);
 
         return userRepository.findById(userId)
                 .map(userRepository::delete)
                 .orElse(true);
+    }
+
+    @Transactional
+    public boolean changeUserThumbnail(Long userId, String thumbnail) {
+        Assert.notNull(userId, USER_ID_NULL_MESSAGE);
+
+        User user = getUserById(userId);
+        return user.changeThumbnail(thumbnail);
+    }
+
+    private User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
     }
 }
