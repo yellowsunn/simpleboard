@@ -28,14 +28,14 @@ class TempUserRedisRepositoryIntegrationTest {
     }
 
     @Test
-    void save_and_findByEmail_test() {
+    void save_and_findByToken_test() {
         TempUser tempUser = TempUser.builder()
                 .email("test@example.com")
                 .provider(Provider.EMAIL)
                 .build();
 
         sut.save(tempUser, Duration.ofSeconds(3L));
-        TempUser foundTempUser = sut.findByEmail("test@example.com");
+        TempUser foundTempUser = sut.findByToken(tempUser.getToken());
 
         assertThat(foundTempUser.getEmail()).isEqualTo(tempUser.getEmail());
         assertThat(foundTempUser.getProvider()).isEqualTo(tempUser.getProvider());

@@ -18,17 +18,17 @@ public class TempUserRedisRepository implements TempUserCacheRepository {
 
     @Override
     public void save(TempUser tempUser, Duration timeout) {
-        String key = generateKey(tempUser.getEmail());
+        String key = generateKey(tempUser.getToken());
         redisTemplate.opsForValue().set(key, tempUser, timeout);
     }
 
     @Override
-    public TempUser findByEmail(String email) {
-        String key = generateKey(email);
+    public TempUser findByToken(String token) {
+        String key = generateKey(token);
         return redisTemplate.opsForValue().get(key);
     }
 
-    private String generateKey(String email) {
-        return PREFIX_KEY + email;
+    private String generateKey(String token) {
+        return PREFIX_KEY + token;
     }
 }

@@ -26,15 +26,31 @@ public class OAuth2Attribute {
     public static OAuth2Attribute of(String registrationId,
                                      String userNameAttributeName,
                                      Map<String, Object> attributes) {
+        if ("naver".equals(registrationId)) {
+            return ofNaver(userNameAttributeName, attributes);
+        }
         return ofGoogle(userNameAttributeName, attributes);
     }
 
-    public static OAuth2Attribute ofGoogle(String userNameAttributeName,
-                                           Map<String, Object> attributes) {
+    private static OAuth2Attribute ofGoogle(String userNameAttributeName,
+                                            Map<String, Object> attributes) {
         return OAuth2Attribute.builder()
                 .provider(Provider.GOOGLE)
                 .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static OAuth2Attribute ofNaver(String userNameAttributeName,
+                                           Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        return OAuth2Attribute.builder()
+                .provider(Provider.NAVER)
+                .email((String) response.get("email"))
+                .picture((String) response.get("profile_image"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
