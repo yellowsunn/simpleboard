@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    default: local
+---
+spring:
+  profiles:
+    active: local
+  data:
+    redis:
+      host: localhost
+      port: 6389
+      connect-timeout: 3000
+      timeout: 1000

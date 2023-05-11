@@ -1,4 +1,7 @@
 package com.yellowsunn.userservice.utils.token;
 
-public record AccessTokenPayload(String userId, String email) {
+import lombok.Builder;
+
+@Builder
+public record AccessTokenPayload(String uuid, String email) {
 }

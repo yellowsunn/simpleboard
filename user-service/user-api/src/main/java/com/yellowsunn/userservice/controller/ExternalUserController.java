@@ -1,7 +1,7 @@
 package com.yellowsunn.userservice.controller;
 
 import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
-import com.yellowsunn.userservice.dto.LoginRequestDto;
+import com.yellowsunn.userservice.dto.EmailLoginRequestDto;
 import com.yellowsunn.userservice.dto.UserLoginDto;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
 import com.yellowsunn.userservice.exception.CustomIOException;
@@ -47,7 +47,7 @@ public class ExternalUserController {
     }
 
     @PostMapping("/api/v2/users/login")
-    public UserLoginDto login(@Valid @RequestBody LoginRequestDto requestDto) {
+    public UserLoginDto loginEmail(@Valid @RequestBody EmailLoginRequestDto requestDto) {
         var command = requestDto.toUserLoginCommand();
         return userEmailAuthService.login(command);
     }

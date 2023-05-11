@@ -1,4 +1,4 @@
-package com.yellowsunn.userserivce.persistence;
+package com.yellowsunn.userservice.persistence;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -41,13 +41,10 @@ public class User extends BaseTimeEntity {
     private String thumbnail;
 
     @Enumerated(EnumType.STRING)
-    private UserProvider provider;
-
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
 
-    @Builder
+    @Builder(builderMethodName = "emailUserBuilder", builderClassName = "EmailUserBuilder")
     public User(@NonNull String email,
                 @NonNull String password,
                 @NonNull String nickName,
@@ -56,8 +53,7 @@ public class User extends BaseTimeEntity {
         this.password = password;
         this.uuid = UUID.randomUUID().toString();
         this.nickName = nickName;
-        this.role = UserRole.USER;
-        this.provider = UserProvider.EMAIL;
+        this.role = UserRole.ROLE_USER;
         this.thumbnail = thumbnail;
     }
 

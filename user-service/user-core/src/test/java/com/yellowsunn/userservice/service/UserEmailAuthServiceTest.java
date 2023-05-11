@@ -1,11 +1,14 @@
 package com.yellowsunn.userservice.service;
 
+import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.User;
+import com.yellowsunn.userservice.domain.user.UserProvider;
 import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
 import com.yellowsunn.userservice.dto.UserLoginCommand;
 import com.yellowsunn.userservice.dto.UserLoginDto;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
+import com.yellowsunn.userservice.repository.UserProviderRepository;
 import com.yellowsunn.userservice.repository.UserRepository;
 import com.yellowsunn.userservice.utils.BCryptPasswordEncoder;
 import com.yellowsunn.userservice.utils.PasswordEncoder;
@@ -21,11 +24,13 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 class UserEmailAuthServiceTest {
     UserRepository userRepository = mock(UserRepository.class);
+    UserProviderRepository userProviderRepository = mock(UserProviderRepository.class);
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     UserEmailAuthService sut;
@@ -36,6 +41,7 @@ class UserEmailAuthServiceTest {
         var refreshTokenGenerator = new RefreshTokenGenerator(UUID.randomUUID().toString(), Duration.ofSeconds(10L));
         sut = new UserEmailAuthService(
                 userRepository,
+                userProviderRepository,
                 passwordEncoder,
                 accessTokenGenerator,
                 refreshTokenGenerator
@@ -52,6 +58,7 @@ class UserEmailAuthServiceTest {
         given(userRepository.findByEmail(email)).willReturn(Optional.empty());
         given(userRepository.save(any(User.class))).willAnswer(i -> i.getArguments()[0]);
         given(userRepository.existsByNickName(nickName)).willReturn(false);
+        given(userProviderRepository.save(any(UserProvider.class))).willAnswer(i -> i.getArguments()[0]);
 
         // when
         boolean isSuccess = sut.signUp(command, "defaultThumbnail");
@@ -99,6 +106,7 @@ class UserEmailAuthServiceTest {
         var password = "password";
         var command = UserLoginCommand.builder().email(email).password(password).build();
         given(userRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
+        given(userProviderRepository.existsByUserIdAndProvider(any(), eq(Provider.EMAIL))).willReturn(true);
 
         UserLoginDto userLoginDto = sut.login(command);
 
@@ -113,6 +121,7 @@ class UserEmailAuthServiceTest {
         var password = "otherpassword";
         var command = UserLoginCommand.builder().email(email).password(password).build();
         given(userRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
+        given(userProviderRepository.existsByUserIdAndProvider(any(), eq(Provider.EMAIL))).willReturn(true);
 
         // when
         Throwable throwable = catchThrowable(() -> sut.login(command));
@@ -139,7 +148,7 @@ class UserEmailAuthServiceTest {
     }
 
     private User getTestUser() {
-        return User.builder()
+        return User.emailUserBuilder()
                 .email("test@example.com")
                 .nickName("nickName")
                 .password(passwordEncoder.encode("password"))

@@ -8,4 +8,6 @@ include(
     "user-service:user-core",
     "user-service:infra-persistence",
     "user-service:infra-aws-s3",
+    "user-service:infra-redis",
+    "user-service:infra-oauth2",
 )

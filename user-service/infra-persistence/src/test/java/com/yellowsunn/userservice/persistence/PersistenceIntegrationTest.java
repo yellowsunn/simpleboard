@@ -1,4 +1,4 @@
-package com.yellowsunn.userserivce.persistence;
+package com.yellowsunn.userservice.persistence;
 
 import com.yellowsunn.userservice.persistence.config.JpaConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -8,6 +8,7 @@ dependencies {
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 
+    implementation("commons-codec:commons-codec")
     implementation("com.fasterxml.jackson.core:jackson-databind:${UserServiceVersions.jackson}")
     implementation("io.jsonwebtoken:jjwt-api:${UserServiceVersions.jjwt}")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:${UserServiceVersions.jjwt}")

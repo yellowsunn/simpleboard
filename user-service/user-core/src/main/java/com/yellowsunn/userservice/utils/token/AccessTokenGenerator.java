@@ -3,6 +3,7 @@ package com.yellowsunn.userservice.utils.token;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yellowsunn.userservice.utils.Base64Handler;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -29,17 +30,18 @@ public class AccessTokenGenerator {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public String generateToken(AccessTokenPayload tokenPayload) {
+    public String generateEncodedToken(AccessTokenPayload tokenPayload) {
         var now = Instant.now();
         var payload = this.objectMapper.convertValue(tokenPayload, new TypeReference<Map<String, Object>>() {
         });
 
-        return Jwts.builder()
+        var jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setClaims(payload)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(expiration)))
                 .signWith(Keys.hmacShaKeyFor(this.secret.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
                 .compact();
+        return Base64Handler.encode(jwt);
     }
 }

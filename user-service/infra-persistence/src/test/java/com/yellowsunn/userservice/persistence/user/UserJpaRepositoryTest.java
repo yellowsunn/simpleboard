@@ -1,9 +1,7 @@
-package com.yellowsunn.userserivce.persistence.user;
+package com.yellowsunn.userservice.persistence.user;
 
-import com.yellowsunn.userserivce.persistence.PersistenceIntegrationTest;
 import com.yellowsunn.userservice.domain.user.User;
-import com.yellowsunn.userservice.domain.user.UserProvider;
-import com.yellowsunn.userservice.persistence.user.UserJpaRepository;
+import com.yellowsunn.userservice.persistence.PersistenceIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 
 class UserJpaRepositoryTest extends PersistenceIntegrationTest {
     @Autowired
@@ -28,7 +25,7 @@ class UserJpaRepositoryTest extends PersistenceIntegrationTest {
     @Test
     void save() {
         // given
-        User user = User.builder()
+        User user = User.emailUserBuilder()
                 .email("test@example.com")
                 .password("12345678")
                 .nickName("nickName")
@@ -44,7 +41,7 @@ class UserJpaRepositoryTest extends PersistenceIntegrationTest {
     @Test
     void findByEmailAndPassword() {
         // given
-        User user = User.builder()
+        User user = User.emailUserBuilder()
                 .email("test2@example.com")
                 .password("12345678")
                 .nickName("test")

@@ -95,7 +95,7 @@ class UserServiceTest {
     }
 
     private User getTestUser() {
-        return User.builder()
+        return User.emailUserBuilder()
                 .email("test@example.com")
                 .nickName("nickName")
                 .password(new BCryptPasswordEncoder().encode("password"))

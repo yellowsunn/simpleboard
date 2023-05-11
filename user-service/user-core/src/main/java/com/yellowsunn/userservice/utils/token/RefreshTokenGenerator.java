@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.utils.token;
 
+import com.yellowsunn.userservice.utils.Base64Handler;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -23,16 +24,17 @@ public class RefreshTokenGenerator {
         this.expiration = expiration;
     }
 
-    public String generateToken() {
+    public String generateEncodedToken() {
         var now = Instant.now();
         var jti = UUID.randomUUID().toString();
 
-        return Jwts.builder()
+        var jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setId(jti)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(expiration)))
                 .signWith(Keys.hmacShaKeyFor(this.secret.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)
                 .compact();
+        return Base64Handler.encode(jwt);
     }
 }

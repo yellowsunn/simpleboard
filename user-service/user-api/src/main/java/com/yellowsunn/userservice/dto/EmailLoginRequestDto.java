@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class LoginRequestDto {
+public class EmailLoginRequestDto {
     @NotBlank
     @Email(message = "이메일 형식이 올바르지 않습니다.")
     private String email;
