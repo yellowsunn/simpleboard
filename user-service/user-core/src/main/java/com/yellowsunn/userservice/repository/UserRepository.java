@@ -16,4 +16,6 @@ public interface UserRepository {
     boolean delete(User entity);
 
     boolean existsByNickName(String nickName);
+
+    Optional<User> findByUUID(String uuid);
 }
