@@ -50,13 +50,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     .oAuth2Attribute(attribute)
                     .user(userProviderOptional.get().getUser())
                     .build();
-        } else {
-            TempUser tempUser = saveTempUser(attribute);
-            return CustomOAuth2User.tempUserBuilder()
-                    .oAuth2Attribute(attribute)
-                    .tempUserToken(tempUser.getToken())
-                    .build();
         }
+
+        TempUser tempUser = saveTempUser(attribute);
+        return CustomOAuth2User.tempUserBuilder()
+                .oAuth2Attribute(attribute)
+                .tempUserToken(tempUser.getToken())
+                .build();
     }
 
     private String getRegistrationId(OAuth2UserRequest userRequest) {
