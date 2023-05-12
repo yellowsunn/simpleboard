@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.domain.user;
 
-import com.yellowsunn.userservice.utils.Base64Handler;
+import com.yellowsunn.common.utils.Base64Handler;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

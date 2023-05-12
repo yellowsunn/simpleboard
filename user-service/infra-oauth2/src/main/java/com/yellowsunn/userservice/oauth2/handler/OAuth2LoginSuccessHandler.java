@@ -1,9 +1,9 @@
 package com.yellowsunn.userservice.oauth2.handler;
 
+import com.yellowsunn.common.utils.token.AccessTokenHandler;
+import com.yellowsunn.common.utils.token.AccessTokenPayload;
+import com.yellowsunn.common.utils.token.RefreshTokenHandler;
 import com.yellowsunn.userservice.oauth2.CustomOAuth2User;
-import com.yellowsunn.userservice.utils.token.AccessTokenGenerator;
-import com.yellowsunn.userservice.utils.token.AccessTokenPayload;
-import com.yellowsunn.userservice.utils.token.RefreshTokenGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -20,15 +20,15 @@ import static com.yellowsunn.userservice.oauth2.constant.SessionConst.OAUTH2_LIN
 @Component
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final AccessTokenGenerator accessTokenGenerator;
-    private final RefreshTokenGenerator refreshTokenGenerator;
+    private final AccessTokenHandler accessTokenHandler;
+    private final RefreshTokenHandler refreshTokenHandler;
     private final String frontEndUrl;
 
-    public OAuth2LoginSuccessHandler(AccessTokenGenerator accessTokenGenerator,
-                                     RefreshTokenGenerator refreshTokenGenerator,
+    public OAuth2LoginSuccessHandler(AccessTokenHandler accessTokenHandler,
+                                     RefreshTokenHandler refreshTokenHandler,
                                      @Value("${micro-services.front-end-url}") String frontEndUrl) {
-        this.accessTokenGenerator = accessTokenGenerator;
-        this.refreshTokenGenerator = refreshTokenGenerator;
+        this.accessTokenHandler = accessTokenHandler;
+        this.refreshTokenHandler = refreshTokenHandler;
         this.frontEndUrl = frontEndUrl;
     }
 
@@ -63,8 +63,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         return UriComponentsBuilder.fromUriString(frontEndUrl)
                 .path("/token")
-                .queryParam("access", accessTokenGenerator.generateEncodedToken(accessTokenPayload))
-                .queryParam("refresh", refreshTokenGenerator.generateEncodedToken())
+                .queryParam("access", accessTokenHandler.generateEncodedToken(accessTokenPayload))
+                .queryParam("refresh", refreshTokenHandler.generateEncodedToken())
                 .build().toUriString();
     }
 

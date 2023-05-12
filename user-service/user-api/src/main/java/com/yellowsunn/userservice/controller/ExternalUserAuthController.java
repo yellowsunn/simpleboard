@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.yellowsunn.userservice.constant.RequestConst.USER_ID;
+import static com.yellowsunn.common.constant.CommonHeaderConst.USER_UUID_HEADER;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,27 +26,27 @@ public class ExternalUserAuthController {
     private final UserAuthService userAuthService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/api/v2/users")
+    @PostMapping("/api/v2/auth/email/signup")
     public boolean signUpEmail(@Valid @RequestBody EmailSignUpRequestDto requestDto) {
         var command = requestDto.toUserSignUpCommand();
         return userAuthFacade.signUpEmail(command);
     }
 
-    @PostMapping("/api/v2/users/login")
+    @PostMapping("/api/v2/auth/email/login")
     public UserLoginDto loginEmail(@Valid @RequestBody EmailLoginRequestDto requestDto) {
         var command = requestDto.toUserLoginCommand();
         return userAuthService.loginEmail(command);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/api/v2/users/oauth2")
+    @PostMapping("/api/v2/auth/oauth2/signup")
     public boolean singUpOAuth2(@Valid @RequestBody OAuth2SignUpRequestDto requestDto) {
         var command = requestDto.toUserOAuth2SignUpCommand();
         return userAuthFacade.signUpOAuth2(command);
     }
 
-    @PutMapping("/api/v2/users/oauth2/link")
-    public boolean linkOAuth2(@RequestHeader(USER_ID) String userUUID,
+    @PutMapping("/api/v2/auth/oauth2/link")
+    public boolean linkOAuth2(@RequestHeader(USER_UUID_HEADER) String userUUID,
                               @Valid @RequestBody OAuth2LinkUserRequestDto requestDto) {
         return userAuthService.linkOAuth2User(userUUID, requestDto.getTempUserToken());
     }

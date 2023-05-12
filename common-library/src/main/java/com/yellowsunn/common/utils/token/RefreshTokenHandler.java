@@ -1,11 +1,9 @@
-package com.yellowsunn.userservice.utils.token;
+package com.yellowsunn.common.utils.token;
 
-import com.yellowsunn.userservice.utils.Base64Handler;
+import com.yellowsunn.common.utils.Base64Handler;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -13,13 +11,11 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-@Component
-public class RefreshTokenGenerator {
+public class RefreshTokenHandler {
     private final String secret;
     private final Duration expiration;
 
-    public RefreshTokenGenerator(@Value("${token.refresh.secret}") String secret,
-                                 @Value("${token.refresh.expiration}") Duration expiration) {
+    public RefreshTokenHandler(String secret, Duration expiration) {
         this.secret = secret;
         this.expiration = expiration;
     }

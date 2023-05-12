@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.yellowsunn.userservice.constant.RequestConst.USER_ID;
+import static com.yellowsunn.common.constant.CommonHeaderConst.USER_UUID_HEADER;
 import static java.util.Objects.requireNonNull;
 
 @Slf4j
@@ -30,17 +30,17 @@ public class ExternalUserController {
     private final UserService userService;
 
     @GetMapping("/api/v2/users/my-info")
-    public UserMyInfoDto findMyInfo(@RequestHeader(USER_ID) Long userId) {
+    public UserMyInfoDto findMyInfo(@RequestHeader(USER_UUID_HEADER) Long userId) {
         return userService.findUserInfo(userId);
     }
 
     @DeleteMapping("/api/v2/users/my-info")
-    public boolean deleteMyInfo(@RequestHeader(USER_ID) Long userId) {
+    public boolean deleteMyInfo(@RequestHeader(USER_UUID_HEADER) Long userId) {
         return userService.deleteUserInfo(userId);
     }
 
     @PatchMapping("/api/v2/users/my-info/thumbnail")
-    public String updateMyThumbnail(@RequestHeader(USER_ID) Long userId,
+    public String updateMyThumbnail(@RequestHeader(USER_UUID_HEADER) Long userId,
                                     @RequestParam MultipartFile thumbnail) {
         if (isNotImageType(thumbnail.getContentType())) {
             throw new IllegalArgumentException("This file is not an image type.");

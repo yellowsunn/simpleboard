@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.utils;
+package com.yellowsunn.common.utils;
 
 import lombok.experimental.UtilityClass;
 import org.apache.commons.codec.binary.Base64;
@@ -10,6 +10,14 @@ public class Base64Handler {
             return null;
         }
         byte[] bytes = Base64.encodeBase64(target.getBytes());
+        return new String(bytes);
+    }
+
+    public String decode(String encodedTarget) {
+        if (encodedTarget == null) {
+            return null;
+        }
+        byte[] bytes = Base64.decodeBase64(encodedTarget);
         return new String(bytes);
     }
 }

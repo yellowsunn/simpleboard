@@ -1,14 +1,10 @@
-package com.yellowsunn.userservice.utils.token;
+package com.yellowsunn.common.utils.token;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yellowsunn.userservice.utils.Base64Handler;
+import com.yellowsunn.common.utils.Base64Handler;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -16,18 +12,12 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
-@Component
-public class AccessTokenGenerator {
-    private final String secret;
+public class AccessTokenHandler extends AccessTokenParser {
     private final Duration expiration;
-    private final ObjectMapper objectMapper;
 
-    public AccessTokenGenerator(@Value("${token.access.secret}") String secret,
-                                @Value("${token.access.expiration}") Duration expiration) {
-        this.secret = secret;
+    public AccessTokenHandler(String secret, Duration expiration) {
+        super(secret);
         this.expiration = expiration;
-        this.objectMapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public String generateEncodedToken(AccessTokenPayload tokenPayload) {

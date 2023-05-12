@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+import static com.yellowsunn.common.constant.CommonHeaderConst.USER_UUID_HEADER;
 import static com.yellowsunn.userservice.oauth2.constant.HeaderConst.OAUTH2_LINK;
-import static com.yellowsunn.userservice.oauth2.constant.HeaderConst.USER_UUID;
 import static com.yellowsunn.userservice.oauth2.constant.SessionConst.OAUTH2_LINK_USER;
 
 @Component
@@ -24,7 +24,7 @@ public class BeforeOAuth2AuthenticationFilter implements Filter {
 
         if (isOAuth2Link(httpServletRequest)) {
             var httpSession = httpServletRequest.getSession(true);
-            String uuid = httpServletRequest.getHeader(USER_UUID);
+            String uuid = httpServletRequest.getHeader(USER_UUID_HEADER);
             httpSession.setAttribute(OAUTH2_LINK_USER, StringUtils.defaultString(uuid));
         }
         chain.doFilter(request, response);

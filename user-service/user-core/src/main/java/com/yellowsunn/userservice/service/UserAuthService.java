@@ -1,5 +1,8 @@
 package com.yellowsunn.userservice.service;
 
+import com.yellowsunn.common.utils.token.AccessTokenHandler;
+import com.yellowsunn.common.utils.token.AccessTokenPayload;
+import com.yellowsunn.common.utils.token.RefreshTokenHandler;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.domain.user.User;
@@ -14,9 +17,6 @@ import com.yellowsunn.userservice.repository.TempUserCacheRepository;
 import com.yellowsunn.userservice.repository.UserProviderRepository;
 import com.yellowsunn.userservice.repository.UserRepository;
 import com.yellowsunn.userservice.utils.PasswordEncoder;
-import com.yellowsunn.userservice.utils.token.AccessTokenGenerator;
-import com.yellowsunn.userservice.utils.token.AccessTokenPayload;
-import com.yellowsunn.userservice.utils.token.RefreshTokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -29,8 +29,8 @@ public class UserAuthService {
     private final UserProviderRepository userProviderRepository;
     private final TempUserCacheRepository tempUserCacheRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AccessTokenGenerator accessTokenGenerator;
-    private final RefreshTokenGenerator refreshTokenGenerator;
+    private final AccessTokenHandler accessTokenHandler;
+    private final RefreshTokenHandler refreshTokenHandler;
 
     @Transactional
     public boolean signUpEmail(UserEmailSignUpCommand command, String thumbnail) {
@@ -87,8 +87,8 @@ public class UserAuthService {
                 .filter(u -> passwordEncoder.matches(command.password(), u.getPassword()))
                 .orElseThrow(() -> new CustomUserException(UserErrorCode.INVALID_LOGIN));
 
-        String accessToken = accessTokenGenerator.generateEncodedToken(new AccessTokenPayload(user.getUuid(), user.getEmail()));
-        String refreshToken = refreshTokenGenerator.generateEncodedToken();
+        String accessToken = accessTokenHandler.generateEncodedToken(new AccessTokenPayload(user.getUuid(), user.getEmail()));
+        String refreshToken = refreshTokenHandler.generateEncodedToken();
 
         return UserLoginDto.builder()
                 .accessToken(accessToken)

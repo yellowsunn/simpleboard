@@ -1,11 +1,10 @@
-package com.yellowsunn.userservice.utils;
+package com.yellowsunn.common.utils;
 
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class Base64HandlerTest {
-
     @Test
     void encode() {
         // given
@@ -16,5 +15,17 @@ class Base64HandlerTest {
 
         // then
         assertThat(encoded).isEqualTo("ZXhhbXBsZQ==");
+    }
+
+    @Test
+    void decode() {
+        // given
+        var encodedExample = "ZXhhbXBsZQ==";
+
+        // when
+        String decoded = Base64Handler.decode(encodedExample);
+
+        // then
+        assertThat(decoded).isEqualTo("example");
     }
 }

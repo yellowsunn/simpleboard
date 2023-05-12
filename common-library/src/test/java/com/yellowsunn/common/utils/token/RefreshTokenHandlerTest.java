@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.utils.token;
+package com.yellowsunn.common.utils.token;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,19 +7,19 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RefreshTokenGeneratorTest {
+class RefreshTokenHandlerTest {
 
-    RefreshTokenGenerator refreshTokenGenerator;
+    RefreshTokenHandler refreshTokenHandler;
 
     @BeforeEach
     void setUp() {
-        refreshTokenGenerator = new RefreshTokenGenerator("fTjWnZq4t7w!z%C*F-JaNdRgUkXp2s5u", Duration.ofSeconds(5));
+        refreshTokenHandler = new RefreshTokenHandler("fTjWnZq4t7w!z%C*F-JaNdRgUkXp2s5u", Duration.ofSeconds(5));
     }
 
     @Test
     void generateEncodedToken() {
         // when
-        String token = refreshTokenGenerator.generateEncodedToken();
+        String token = refreshTokenHandler.generateEncodedToken();
 
         // then
         assertThat(token).isNotBlank().isBase64();
