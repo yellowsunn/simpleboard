@@ -8,4 +8,6 @@ public interface TempUserCacheRepository {
     void save(TempUser tempUser, Duration timeout);
 
     TempUser findByToken(String token);
+
+    boolean deleteByToken(String token);
 }

@@ -28,6 +28,12 @@ public class TempUserRedisRepository implements TempUserCacheRepository {
         return redisTemplate.opsForValue().get(key);
     }
 
+    @Override
+    public boolean deleteByToken(String token) {
+        String key = generateKey(token);
+        return Boolean.TRUE.equals(redisTemplate.delete(key));
+    }
+
     private String generateKey(String token) {
         return PREFIX_KEY + token;
     }

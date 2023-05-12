@@ -3,5 +3,5 @@ package com.yellowsunn.userservice.dto;
 import lombok.Builder;
 
 @Builder
-public record UserLoginCommand(String email, String password) {
+public record UserEmailLoginCommand(String email, String password) {
 }

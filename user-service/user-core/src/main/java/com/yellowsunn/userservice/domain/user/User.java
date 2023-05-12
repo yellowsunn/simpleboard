@@ -45,12 +45,23 @@ public class User extends BaseTimeEntity {
     private UserRole role;
 
     @Builder(builderMethodName = "emailUserBuilder", builderClassName = "EmailUserBuilder")
-    public User(@NonNull String email,
-                @NonNull String password,
-                @NonNull String nickName,
-                String thumbnail) {
+    private User(@NonNull String email,
+                 @NonNull String password,
+                 @NonNull String nickName,
+                 String thumbnail) {
         this.email = email;
         this.password = password;
+        this.uuid = UUID.randomUUID().toString();
+        this.nickName = nickName;
+        this.role = UserRole.ROLE_USER;
+        this.thumbnail = thumbnail;
+    }
+
+    @Builder(builderMethodName = "oauth2UserBuilder", builderClassName = "OAut2UserBuilder")
+    private User(@NonNull String email,
+                 @NonNull String nickName,
+                 String thumbnail) {
+        this.email = email;
         this.uuid = UUID.randomUUID().toString();
         this.nickName = nickName;
         this.role = UserRole.ROLE_USER;

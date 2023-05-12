@@ -15,7 +15,7 @@ public class EmailLoginRequestDto {
     @Size(min = 8, max = 24)
     private String password;
 
-    public UserLoginCommand toUserLoginCommand() {
-        return new UserLoginCommand(email, password);
+    public UserEmailLoginCommand toUserLoginCommand() {
+        return new UserEmailLoginCommand(email, password);
     }
 }

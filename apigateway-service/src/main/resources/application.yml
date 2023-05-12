@@ -26,6 +26,46 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/login, /api/v2/users/login
+          # OAuth2 로그인 및 회원가입 요청
+        - id: user-service-oauth-authorization
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/oauth2/authorization/*
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=X-OAUTH2-LINK
+            - RemoveRequestHeader=X-USER-UUID
+        - id: user-service-oauth-code
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/*/oauth2/code/*
+            - Method=GET
+          # OAuth2 회원가입
+        - id: user-service-oauth2-signup
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/oauth2/signup
+            - Method=POST
+          filters:
+            - RewritePath=/oauth2/signup, /api/v2/users/oauth2
+          # 기존 계정과 OAuth2 로그인 연동 요청
+        - id: user-service-oauth-link
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/oauth2/link/*
+            - Method=GET
+          filters:
+            - AddRequestHeader=X-OAUTH2-LINK, true
+            - AddRequestHeader=X-USER-UUID, 1
+            - RewritePath=/oauth2/link/(?<provider>.*), /oauth2/authorization/$\{provider}
+          # 기존 계정과 OAuth 로그인 연동 완료
+        - id: user-service-oauth-link-complete
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/oauth2/link
+            - Method=PUT
+          filters:
+            - RewritePath=/oauth2/link, /api/v2/users/oauth2/link
         - id: user-service
           uri: ${endpoint.user-service}
           predicates:

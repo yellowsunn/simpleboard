@@ -75,4 +75,14 @@ public class UserJpaRepository implements UserRepository {
 
         return count != null && count > 0;
     }
+
+    @Override
+    public Optional<User> findByUUID(String uuid) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .selectFrom(user)
+                        .where(user.uuid.eq(uuid))
+                        .fetchFirst()
+        );
+    }
 }
