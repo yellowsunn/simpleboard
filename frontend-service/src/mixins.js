@@ -31,9 +31,5 @@ export default {
     $getSessionState() {
       return sessionStorage.getItem("state")
     },
-    $setLoginToken(tokenInfo) {
-      sessionStorage.setItem("board-access-token", tokenInfo.accessToken)
-      sessionStorage.setItem("board-refresh-token", tokenInfo.refreshToken)
-    }
   }
 }

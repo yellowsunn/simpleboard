@@ -48,9 +48,9 @@ export default {
         type: "google",
       })
       if (data.isLogin === true) {
-        this.$setLoginToken({
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
+        this.$store.commit('setUserToken', {
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
         })
         this.$router.push('/')
       } else if (data.isLogin === false) {

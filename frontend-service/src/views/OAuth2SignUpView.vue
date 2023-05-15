@@ -34,7 +34,7 @@ export default {
         this.handleSignUpError(response.code, response.message)
         return
       }
-      this.$setLoginToken(response)
+      this.$store.commit('setUserToken', response)
       this.$router.push("/")
     },
     cancelClickEvent() {
