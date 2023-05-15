@@ -5,7 +5,7 @@ import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LinkUserRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LoginOrSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2SignUpRequestDto;
-import com.yellowsunn.userservice.dto.UserLoginDto;
+import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpDto;
 import com.yellowsunn.userservice.facade.UserAuthFacade;
 import com.yellowsunn.userservice.service.UserAuthService;
@@ -35,7 +35,7 @@ public class ExternalUserAuthController {
     }
 
     @PostMapping("/api/v2/auth/email/login")
-    public UserLoginDto loginEmail(@Valid @RequestBody EmailLoginRequestDto requestDto) {
+    public UserLoginTokenDto loginEmail(@Valid @RequestBody EmailLoginRequestDto requestDto) {
         var command = requestDto.toUserLoginCommand();
         return userAuthService.loginEmail(command);
     }
@@ -48,7 +48,7 @@ public class ExternalUserAuthController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v2/auth/oauth2/signup")
-    public boolean singUpOAuth2(@Valid @RequestBody OAuth2SignUpRequestDto requestDto) {
+    public UserLoginTokenDto singUpOAuth2(@Valid @RequestBody OAuth2SignUpRequestDto requestDto) {
         var command = requestDto.toUserOAuth2SignUpCommand();
         return userAuthFacade.signUpOAuth2(command);
     }

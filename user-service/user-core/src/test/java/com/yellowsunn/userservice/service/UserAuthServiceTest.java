@@ -4,12 +4,11 @@ import com.yellowsunn.common.utils.token.AccessTokenHandler;
 import com.yellowsunn.common.utils.token.RefreshTokenHandler;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.domain.user.Provider;
-import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.domain.user.UserProvider;
 import com.yellowsunn.userservice.dto.UserEmailLoginCommand;
 import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
-import com.yellowsunn.userservice.dto.UserLoginDto;
+import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
 import com.yellowsunn.userservice.http.OAuth2UserInfo;
@@ -114,10 +113,10 @@ class UserAuthServiceTest {
         given(userRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
         given(userProviderRepository.existsByUserIdAndProvider(any(), eq(Provider.EMAIL))).willReturn(true);
 
-        UserLoginDto userLoginDto = sut.loginEmail(command);
+        UserLoginTokenDto userLoginTokenDto = sut.loginEmail(command);
 
-        assertThat(userLoginDto.accessToken()).isNotBlank();
-        assertThat(userLoginDto.refreshToken()).isNotBlank();
+        assertThat(userLoginTokenDto.accessToken()).isNotBlank();
+        assertThat(userLoginTokenDto.refreshToken()).isNotBlank();
     }
 
     @Test

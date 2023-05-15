@@ -1,13 +1,14 @@
 package com.yellowsunn.userservice.facade;
 
 import com.yellowsunn.userservice.constant.OAuth2Type;
-import com.yellowsunn.userservice.dto.UserLoginDto;
+import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpCommand;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.file.FileStorage;
 import com.yellowsunn.userservice.http.OAuth2UserInfo;
 import com.yellowsunn.userservice.http.client.OAuth2UserInfoHttpClient;
 import com.yellowsunn.userservice.http.client.OAuth2UserInfoHttpClientFactory;
+import com.yellowsunn.userservice.repository.TempUserCacheRepository;
 import com.yellowsunn.userservice.service.UserAuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.mock;
 class UserAuthFacadeTest {
     UserAuthService userAuthService = mock(UserAuthService.class);
     OAuth2UserInfoHttpClient oAuth2UserInfoHttpClient = mock(OAuth2UserInfoHttpClient.class);
+    TempUserCacheRepository tempUserCacheRepository = mock(TempUserCacheRepository.class);
     FileStorage fileStorage = mock(FileStorage.class);
 
     UserAuthFacade sut;
@@ -33,6 +35,7 @@ class UserAuthFacadeTest {
         sut = new UserAuthFacade(
                 userAuthService,
                 new OAuth2UserInfoHttpClientFactory(List.of(oAuth2UserInfoHttpClient)),
+                tempUserCacheRepository,
                 fileStorage
         );
     }
@@ -47,7 +50,7 @@ class UserAuthFacadeTest {
                 .type(OAuth2Type.GOOGLE)
                 .build();
         var oAuth2UserInfo = new OAuth2UserInfo("test@example.com", "https://example.com/thumbnail.png");
-        var userLoginDto = UserLoginDto.builder()
+        var userLoginDto = UserLoginTokenDto.builder()
                 .accessToken("access-token")
                 .refreshToken("refresh-token")
                 .build();

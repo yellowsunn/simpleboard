@@ -1,7 +1,8 @@
 package com.yellowsunn.userservice.facade;
 
+import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
-import com.yellowsunn.userservice.dto.UserLoginDto;
+import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpCommand;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpDto;
 import com.yellowsunn.userservice.dto.UserOAuth2SignUpCommand;
@@ -10,6 +11,7 @@ import com.yellowsunn.userservice.exception.UserErrorCode;
 import com.yellowsunn.userservice.file.FileStorage;
 import com.yellowsunn.userservice.http.OAuth2UserInfo;
 import com.yellowsunn.userservice.http.client.OAuth2UserInfoHttpClientFactory;
+import com.yellowsunn.userservice.repository.TempUserCacheRepository;
 import com.yellowsunn.userservice.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 public class UserAuthFacade {
     private final UserAuthService userAuthService;
     private final OAuth2UserInfoHttpClientFactory oAuth2UserInfoHttpClientFactory;
+    private final TempUserCacheRepository tempUserCacheRepository;
     private final FileStorage fileStorage;
 
     public boolean signUpEmail(UserEmailSignUpCommand command) {
@@ -27,9 +30,20 @@ public class UserAuthFacade {
         return userAuthService.signUpEmail(command, thumbnail);
     }
 
-    public boolean signUpOAuth2(UserOAuth2SignUpCommand command) {
-        String thumbnail = fileStorage.getDefaultThumbnail();
-        return userAuthService.signUpOAuth2(command, thumbnail);
+    public UserLoginTokenDto signUpOAuth2(UserOAuth2SignUpCommand command) {
+        // 임시 회원 정보 조회
+        TempUser tempUser = tempUserCacheRepository.findByTokenAndCsrfToken(command.tempUserToken(), command.csrfToken());
+        if (tempUser == null) {
+            throw new CustomUserException(UserErrorCode.INVALID_TEMP_USER);
+        }
+
+        String thumbnail = StringUtils.defaultIfBlank(tempUser.getThumbnail(), fileStorage.getDefaultThumbnail());
+        // 추가 정보 입력후 회원 가입 완료
+        UserLoginTokenDto userLoginTokenDto = userAuthService.signUpOAuth2(command, tempUser, thumbnail);
+
+        // 임시 회원 정보 삭제
+        tempUserCacheRepository.deleteByToken(command.tempUserToken());
+        return userLoginTokenDto;
     }
 
     public UserOAuth2LoginOrSignUpDto loginOrSignUpRequest(UserOAuth2LoginOrSignUpCommand command) {
@@ -39,11 +53,11 @@ public class UserAuthFacade {
         verifyOAuth2ProviderEmailIsNotBlank(userInfo);
 
         // 로그인
-        UserLoginDto userLoginDto = userAuthService.loginOAuth2(userInfo, command.type());
-        if (userLoginDto != null) {
+        UserLoginTokenDto userLoginTokenDto = userAuthService.loginOAuth2(userInfo, command.type());
+        if (userLoginTokenDto != null) {
             return UserOAuth2LoginOrSignUpDto.loginBuilder()
-                    .accessToken(userLoginDto.accessToken())
-                    .refreshToken(userLoginDto.refreshToken())
+                    .accessToken(userLoginTokenDto.accessToken())
+                    .refreshToken(userLoginTokenDto.refreshToken())
                     .build();
         }
 

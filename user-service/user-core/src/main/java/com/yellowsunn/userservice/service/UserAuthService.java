@@ -10,7 +10,7 @@ import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.domain.user.UserProvider;
 import com.yellowsunn.userservice.dto.UserEmailLoginCommand;
 import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
-import com.yellowsunn.userservice.dto.UserLoginDto;
+import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2SignUpCommand;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
@@ -20,7 +20,6 @@ import com.yellowsunn.userservice.repository.UserProviderRepository;
 import com.yellowsunn.userservice.repository.UserRepository;
 import com.yellowsunn.userservice.utils.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,18 +60,14 @@ public class UserAuthService {
     }
 
     @Transactional
-    public boolean signUpOAuth2(UserOAuth2SignUpCommand command, String thumbnail) {
-        TempUser tempUser = tempUserCacheRepository.findByTokenAndCsrfToken(command.tempUserToken(), command.csrfToken());
-        if (tempUser == null) {
-            throw new CustomUserException(UserErrorCode.INVALID_TEMP_USER);
-        }
+    public UserLoginTokenDto signUpOAuth2(UserOAuth2SignUpCommand command, TempUser tempUser, String thumbnail) {
         verifyAlreadyExistEmail(tempUser.getEmail());
         verifyAlreadyExistNickName(command.nickName());
 
         var user = User.oauth2UserBuilder()
                 .email(tempUser.getEmail())
                 .nickName(command.nickName())
-                .thumbnail(StringUtils.defaultIfBlank(tempUser.getThumbnail(), thumbnail))
+                .thumbnail(thumbnail)
                 .build();
         var savedUser = userRepository.save(user);
 
@@ -83,11 +78,11 @@ public class UserAuthService {
                 .build();
         userProviderRepository.save(userProvider);
 
-        return tempUserCacheRepository.deleteByToken(command.tempUserToken());
+        return generateUserToken(savedUser);
     }
 
     @Transactional(readOnly = true)
-    public UserLoginDto loginEmail(UserEmailLoginCommand command) {
+    public UserLoginTokenDto loginEmail(UserEmailLoginCommand command) {
         User user = userRepository.findByEmail(command.email())
                 .filter(u -> userProviderRepository.existsByUserIdAndProvider(u.getId(), Provider.EMAIL))
                 .filter(u -> passwordEncoder.matches(command.password(), u.getPassword()))
@@ -97,7 +92,7 @@ public class UserAuthService {
     }
 
     @Transactional(readOnly = true)
-    public UserLoginDto loginOAuth2(OAuth2UserInfo userInfo, OAuth2Type type) {
+    public UserLoginTokenDto loginOAuth2(OAuth2UserInfo userInfo, OAuth2Type type) {
         User user = userProviderRepository.findByProviderEmailAndProvider(userInfo.email(), type.toProvider())
                 .map(UserProvider::getUser)
                 .orElse(null);
@@ -161,11 +156,11 @@ public class UserAuthService {
         }
     }
 
-    private UserLoginDto generateUserToken(User user) {
+    private UserLoginTokenDto generateUserToken(User user) {
         String accessToken = accessTokenHandler.generateEncodedToken(new AccessTokenPayload(user.getUuid(), user.getEmail()));
         String refreshToken = refreshTokenHandler.generateEncodedToken();
 
-        return UserLoginDto.builder()
+        return UserLoginTokenDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
