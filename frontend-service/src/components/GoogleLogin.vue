@@ -47,7 +47,15 @@ export default {
         token: response?.credential,
         type: "google",
       })
-      console.log(data)
+      if (data.isLogin === true) {
+        this.$setLoginToken({
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        })
+        this.$router.push('/')
+      } else if (data.isLogin === false) {
+        this.$router.push(`/oauth2/signup?token=${data.tempUserToken}`)
+      }
     },
     getHeightRatio() {
       const heightNum = Number(this.height?.replace("px", ""))

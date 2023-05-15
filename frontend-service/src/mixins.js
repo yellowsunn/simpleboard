@@ -2,6 +2,11 @@ import axios from "axios";
 
 export default {
   methods: {
+    $getRequestParam(param) {
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+      return params[param]
+    },
     async $boardApi(method, url, data, headers = {"Content-Type": "application/json"}) {
       try {
         const response = await axios({
@@ -11,10 +16,10 @@ export default {
           data,
           headers,
         });
-        return response?.data
+        return response?.data || {}
       } catch (e) {
         console.log(e)
-        return e?.response?.data
+        return e?.response?.data || {}
       }
     },
     // csrf 토큰 용도
@@ -26,5 +31,9 @@ export default {
     $getSessionState() {
       return sessionStorage.getItem("state")
     },
+    $setLoginToken(tokenInfo) {
+      sessionStorage.setItem("board-access-token", tokenInfo.accessToken)
+      sessionStorage.setItem("board-refresh-token", tokenInfo.refreshToken)
+    }
   }
 }
