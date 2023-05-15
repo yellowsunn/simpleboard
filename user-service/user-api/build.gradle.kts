@@ -9,4 +9,5 @@ dependencies {
     runtimeOnly(project(":user-service:infra-redis"))
     runtimeOnly(project(":user-service:infra-aws-s3"))
     runtimeOnly(project(":user-service:infra-oauth2"))
+    runtimeOnly(project(":user-service:infra-http"))
 }

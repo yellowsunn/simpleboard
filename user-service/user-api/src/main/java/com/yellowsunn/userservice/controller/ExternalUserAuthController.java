@@ -3,8 +3,10 @@ package com.yellowsunn.userservice.controller;
 import com.yellowsunn.userservice.dto.EmailLoginRequestDto;
 import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LinkUserRequestDto;
+import com.yellowsunn.userservice.dto.OAuth2LoginOrSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2SignUpRequestDto;
 import com.yellowsunn.userservice.dto.UserLoginDto;
+import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpDto;
 import com.yellowsunn.userservice.facade.UserAuthFacade;
 import com.yellowsunn.userservice.service.UserAuthService;
 import jakarta.validation.Valid;
@@ -36,6 +38,12 @@ public class ExternalUserAuthController {
     public UserLoginDto loginEmail(@Valid @RequestBody EmailLoginRequestDto requestDto) {
         var command = requestDto.toUserLoginCommand();
         return userAuthService.loginEmail(command);
+    }
+
+    @PostMapping("/api/v2/auth/oauth2/login-signup")
+    public UserOAuth2LoginOrSignUpDto loginOrSignUpOAuth2(@Valid @RequestBody OAuth2LoginOrSignUpRequestDto requestDto) {
+        var command = requestDto.toCommand();
+        return userAuthFacade.loginOrSignUpRequest(command);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

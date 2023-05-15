@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record UserOAuth2SignUpCommand(
         String tempUserToken,
+        String csrfToken,
         String nickName
 ) {
 }

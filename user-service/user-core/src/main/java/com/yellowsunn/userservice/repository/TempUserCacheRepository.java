@@ -7,7 +7,7 @@ import java.time.Duration;
 public interface TempUserCacheRepository {
     void save(TempUser tempUser, Duration timeout);
 
-    TempUser findByToken(String token);
+    TempUser findByTokenAndCsrfToken(String token, String csrfToken);
 
     boolean deleteByToken(String token);
 }

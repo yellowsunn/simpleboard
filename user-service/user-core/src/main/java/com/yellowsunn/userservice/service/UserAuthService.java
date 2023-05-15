@@ -3,6 +3,7 @@ package com.yellowsunn.userservice.service;
 import com.yellowsunn.common.utils.token.AccessTokenHandler;
 import com.yellowsunn.common.utils.token.AccessTokenPayload;
 import com.yellowsunn.common.utils.token.RefreshTokenHandler;
+import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.domain.user.User;
@@ -13,6 +14,7 @@ import com.yellowsunn.userservice.dto.UserLoginDto;
 import com.yellowsunn.userservice.dto.UserOAuth2SignUpCommand;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
+import com.yellowsunn.userservice.http.OAuth2UserInfo;
 import com.yellowsunn.userservice.repository.TempUserCacheRepository;
 import com.yellowsunn.userservice.repository.UserProviderRepository;
 import com.yellowsunn.userservice.repository.UserRepository;
@@ -21,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Duration;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +35,8 @@ public class UserAuthService {
     private final PasswordEncoder passwordEncoder;
     private final AccessTokenHandler accessTokenHandler;
     private final RefreshTokenHandler refreshTokenHandler;
+
+    private final Duration tempUserDuration = Duration.ofMinutes(30);
 
     @Transactional
     public boolean signUpEmail(UserEmailSignUpCommand command, String thumbnail) {
@@ -56,7 +62,7 @@ public class UserAuthService {
 
     @Transactional
     public boolean signUpOAuth2(UserOAuth2SignUpCommand command, String thumbnail) {
-        TempUser tempUser = tempUserCacheRepository.findByToken(command.tempUserToken());
+        TempUser tempUser = tempUserCacheRepository.findByTokenAndCsrfToken(command.tempUserToken(), command.csrfToken());
         if (tempUser == null) {
             throw new CustomUserException(UserErrorCode.INVALID_TEMP_USER);
         }
@@ -80,40 +86,58 @@ public class UserAuthService {
         return tempUserCacheRepository.deleteByToken(command.tempUserToken());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public UserLoginDto loginEmail(UserEmailLoginCommand command) {
         User user = userRepository.findByEmail(command.email())
                 .filter(u -> userProviderRepository.existsByUserIdAndProvider(u.getId(), Provider.EMAIL))
                 .filter(u -> passwordEncoder.matches(command.password(), u.getPassword()))
                 .orElseThrow(() -> new CustomUserException(UserErrorCode.INVALID_LOGIN));
 
-        String accessToken = accessTokenHandler.generateEncodedToken(new AccessTokenPayload(user.getUuid(), user.getEmail()));
-        String refreshToken = refreshTokenHandler.generateEncodedToken();
+        return generateUserToken(user);
+    }
 
-        return UserLoginDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
+    @Transactional(readOnly = true)
+    public UserLoginDto loginOAuth2(OAuth2UserInfo userInfo, OAuth2Type type) {
+        User user = userProviderRepository.findByProviderEmailAndProvider(userInfo.email(), type.toProvider())
+                .map(UserProvider::getUser)
+                .orElse(null);
+        if (user == null) {
+            return null;
+        }
+        return generateUserToken(user);
+    }
+
+    public String saveTempOAuth2User(OAuth2UserInfo userInfo, OAuth2Type type, String csrfToken) {
+        var tempUser = TempUser.builder()
+                .email(userInfo.email())
+                .thumbnail(userInfo.thumbnail())
+                .provider(type.toProvider())
+                .csrfToken(csrfToken)
                 .build();
+
+        tempUserCacheRepository.save(tempUser, tempUserDuration);
+        return tempUser.getToken();
     }
 
     @Transactional
     public boolean linkOAuth2User(String userUUID, String tempUserToken) {
-        TempUser tempUser = tempUserCacheRepository.findByToken(tempUserToken);
-        if (tempUser == null) {
-            throw new CustomUserException(UserErrorCode.INVALID_TEMP_USER);
-        }
-        User user = userRepository.findByUUID(userUUID)
-                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
-        verifyAlreadyExistUserProvider(user.getId(), tempUser.getProvider());
-
-        var userProvider = UserProvider.builder()
-                .user(user)
-                .provider(tempUser.getProvider())
-                .providerEmail(tempUser.getEmail())
-                .build();
-        userProviderRepository.save(userProvider);
-
-        return tempUserCacheRepository.deleteByToken(tempUserToken);
+//        TempUser tempUser = tempUserCacheRepository.findByToken(tempUserToken);
+//        if (tempUser == null) {
+//            throw new CustomUserException(UserErrorCode.INVALID_TEMP_USER);
+//        }
+//        User user = userRepository.findByUUID(userUUID)
+//                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
+//        verifyAlreadyExistUserProvider(user.getId(), tempUser.getProvider());
+//
+//        var userProvider = UserProvider.builder()
+//                .user(user)
+//                .provider(tempUser.getProvider())
+//                .providerEmail(tempUser.getEmail())
+//                .build();
+//        userProviderRepository.save(userProvider);
+//
+//        return tempUserCacheRepository.deleteByToken(tempUserToken);
+        return true;
     }
 
     private void verifyAlreadyExistEmail(String email) {
@@ -135,5 +159,15 @@ public class UserAuthService {
         if (isExist) {
             throw new CustomUserException(UserErrorCode.ALREADY_EXIST_EMAIL);
         }
+    }
+
+    private UserLoginDto generateUserToken(User user) {
+        String accessToken = accessTokenHandler.generateEncodedToken(new AccessTokenPayload(user.getUuid(), user.getEmail()));
+        String refreshToken = refreshTokenHandler.generateEncodedToken();
+
+        return UserLoginDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

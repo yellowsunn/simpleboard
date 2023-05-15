@@ -9,6 +9,7 @@ public enum UserErrorCode {
     INVALID_LOGIN("가입하지 않은 이메일이거나, 잘못된 비밀번호입니다.", 400),
     INVALID_TEMP_USER("임시 유저 정보를 확인할 수 없습니다.", 400),
     NOT_FOUND_USER("유저를 찾을 수 없습니다.", 404),
+    NOT_FOUND_OAUTH_PROVIDER_EMAIL("소셜 계정을 사용하기 위해서는 이메일 조회 동의가 필요합니다.", 400),
     ;
 
     private final String description;

@@ -11,4 +11,5 @@ include(
     "user-service:infra-aws-s3",
     "user-service:infra-redis",
     "user-service:infra-oauth2",
+    "user-service:infra-http",
 )

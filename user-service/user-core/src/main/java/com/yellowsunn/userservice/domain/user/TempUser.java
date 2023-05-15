@@ -15,16 +15,19 @@ public class TempUser {
     private final Provider provider;
     private final String thumbnail;
     private final String token;
+    private final String csrfToken;
 
     @Builder
-    @ConstructorProperties({"email", "provider", "thumbnail"})
+    @ConstructorProperties({"email", "provider", "thumbnail", "csrfToken"})
     private TempUser(String email,
                      Provider provider,
-                     String thumbnail) {
+                     String thumbnail,
+                     String csrfToken) {
         this.email = email;
         this.provider = provider;
         this.thumbnail = thumbnail;
         this.token = generateBase64UUid();
+        this.csrfToken = csrfToken;
     }
 
     private String generateBase64UUid() {
