@@ -42,7 +42,12 @@ export default {
   },
   methods: {
     async handleCallback(response) {
-      console.log(response)
+      const data = await this.$boardApi('POST', '/api/oauth2/login-signup', {
+        state: this.$setSessionState(),
+        token: response?.credential,
+        type: "google",
+      })
+      console.log(data)
     },
     getHeightRatio() {
       const heightNum = Number(this.height?.replace("px", ""))
