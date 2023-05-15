@@ -3,10 +3,10 @@ package com.yellowsunn.userservice.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 public class OAuth2SignUpRequestDto {
-    @NotBlank
     private String state;
 
     @NotBlank
@@ -18,7 +18,7 @@ public class OAuth2SignUpRequestDto {
 
     public UserOAuth2SignUpCommand toUserOAuth2SignUpCommand() {
         return UserOAuth2SignUpCommand.builder()
-                .csrfToken(state)
+                .csrfToken(StringUtils.defaultString(state))
                 .tempUserToken(tempUserToken)
                 .nickName(nickName)
                 .build();
