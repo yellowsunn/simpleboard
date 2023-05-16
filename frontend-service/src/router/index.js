@@ -24,6 +24,11 @@ const routes = [
     path: "/oauth2/signup",
     name: "OAuth2SignUp",
     component: () => import(/* webpackChunkName: "login" */ '@/views/OAuth2SignUpView.vue'),
+  },
+  {
+    path: "/mypage",
+    name: "MyPage",
+    component: () => import(/* webpackChunkName: "login" */ '@/views/MyPageView.vue'),
   }
 ]
 
