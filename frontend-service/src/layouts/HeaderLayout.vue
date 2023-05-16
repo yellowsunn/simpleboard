@@ -1,5 +1,6 @@
 <template>
-    <div class="header-layout">
+    <div class="header-layout mx-auto">
+        <div class="px-3" style="font-weight: bold; cursor: pointer" @click="homeClickEvent">HOME</div>
         <section class="header-section mx-auto">
             <div class="header-list" v-if="isLogin">
                 <div class="header-element noti-button">
@@ -14,12 +15,19 @@
             </div>
         </section>
     </div>
+    <NavBar></NavBar>
 </template>
 
 <script>
+import NavBar from "@/layouts/NavBar.vue";
+
 export default {
   name: "HeaderLayout",
+  components: {NavBar},
   methods: {
+    homeClickEvent() {
+        this.$router.push("/")
+    },
     loginClickEvent() {
       this.$router.push("/login")
     },
@@ -38,13 +46,17 @@ export default {
 
 <style scoped>
 .header-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     border-bottom: 1px solid rgb(0 0 0 / 10%);
+    width: 950px;
 }
 
 .header-section {
     display: flex;
+    width: 100%;
     justify-content: flex-end;
-    width: 950px;
 }
 
 .header-list {
