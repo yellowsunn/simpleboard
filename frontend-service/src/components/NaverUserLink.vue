@@ -37,8 +37,13 @@ export default {
     handleUserLink() {
       this.$refs.naverIdLogin.firstChild.click()
     },
-    handleUserUnlink() {
-
+    async handleUserUnlink() {
+      const response = await this.$boardApi('DELETE', '/api/oauth2/link?type=NAVER', null, true);
+        console.log('unlink', response)
+      if (response?.code) {
+        alert(response.message)
+      }
+      window.location.href = '/mypage'
     }
   }
 }
