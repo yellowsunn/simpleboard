@@ -1,24 +1,14 @@
 <template>
     <div>
         <div id="naverIdLogin" ref="naverIdLogin" v-show="false"></div>
-        <img src="../assets/btn_naver.png" alt="btn_naver" @click="clickEvent" :style="naverStyle"/>
+        <img src="../assets/btn_naver.png" class="btn_naver" alt="btn_naver" @click="clickEvent"/>
     </div>
 </template>
 
 <script>
 export default {
   name: "NaverLogin",
-  props: {
-    height: String,
-  },
   data() {
-    return {
-      naverLogin: null,
-      naverStyle: {
-        cursor: "pointer",
-        height: this.height,
-      }
-    }
   },
   mounted() {
     this.naverLogin = new window.naver.LoginWithNaverId({
@@ -47,5 +37,8 @@ export default {
 </script>
 
 <style scoped>
-
+.btn_naver {
+    cursor: pointer;
+    height: 3.125rem;
+}
 </style>

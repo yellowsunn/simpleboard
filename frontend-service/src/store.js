@@ -29,13 +29,13 @@ const store = createStore({
         access: userToken.accessToken,
         refresh: userToken.refreshToken,
       }
-      document.cookie = `${ACCESS_TOKEN}=${userToken.accessToken}; SameSite=Strict; Secure`
-      document.cookie = `${REFRESH_TOKEN}=${userToken.refreshToken}; SameSite=Strict; Secure`
+      document.cookie = `${ACCESS_TOKEN}=${userToken.accessToken}; SameSite=Strict; Domain=${process.env.VUE_APP_DOMAIN}`
+      document.cookie = `${REFRESH_TOKEN}=${userToken.refreshToken}; SameSite=Strict; Domain=${process.env.VUE_APP_DOMAIN}`
     },
     deleteUserToken(state) {
       state.userToken = {}
-      document.cookie = `${ACCESS_TOKEN}=; max-age=0`
-      document.cookie = `${REFRESH_TOKEN}=; max-age=0`
+      document.cookie = `${ACCESS_TOKEN}=; max-age=0; Domain=${process.env.VUE_APP_DOMAIN}`
+      document.cookie = `${REFRESH_TOKEN}=; max-age=0; Domain=${process.env.VUE_APP_DOMAIN}`
     }
   }
 })

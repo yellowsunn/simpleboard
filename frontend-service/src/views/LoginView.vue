@@ -18,8 +18,8 @@
             <div class="tit">소셜 계정으로 간편 로그인</div>
         </div>
         <div style="display: flex; justify-content: space-around; align-items: center;">
-            <NaverLogin height="50px"></NaverLogin>
-            <GoogleLogin height="50px"></GoogleLogin>
+            <NaverLogin></NaverLogin>
+            <GoogleLogin></GoogleLogin>
             <KakaoLogin height="50px"></KakaoLogin>
         </div>
     </div>

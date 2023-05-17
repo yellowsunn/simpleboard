@@ -1,9 +1,11 @@
 <template>
-    <div class="d-flex justify-content-center">
-        <div class="border rounded-circle" style="width: 3.125rem; padding: 0.5rem">
+    <div class="d-flex justify-content-center align-items-center border" style="height: 48px">
+        <div class="d-flex m-1 h-100" style="width: 24px;">
             <GoogleLogo></GoogleLogo>
         </div>
-        <div ref="googleButton" class="btn_google"></div>
+        <div v-if="isLinked">구글 계정 연동 끊기</div>
+        <div v-else>구글 계정 연동하기</div>
+        <div ref="googleButton" :style="googleStyle" style="z-index: 1; position: absolute; opacity: 0"></div>
     </div>
 </template>
 
@@ -11,10 +13,18 @@
 import GoogleLogo from "@/components/logo/GoogleLogo.vue";
 
 export default {
-  name: "GoogleLogin",
+  name: "GoogleUserLink",
+  props: {
+    isLinked: Boolean,
+  },
   components: {GoogleLogo},
   data() {
-    return {}
+    return {
+      googleStyle: {
+        display: "flex",
+        alignItems: "center",
+      },
+    }
   },
   mounted() {
     const google = window.google
@@ -27,12 +37,14 @@ export default {
 
     google.accounts.id.renderButton(
       this.$refs.googleButton, {
-        type: 'icon', //NOTE: 버튼 유형, standard,icon
+        type: 'standard', //NOTE: 버튼 유형, standard,icon
         theme: 'outline', //NOTE: 테마 , outline,filled_blue,filled_black
         size: 'large', //NOTE: 버튼 크기 large,medium,small
         text: 'signin_with',//NOTE: 버튼 텍스트 , signin_with,wignup_with,continue_with,signIn
-        shape: 'circle', //NOTE: 버튼 모양 rectangular,pill,circle,square
+        shape: 'rectangular', //NOTE: 버튼 모양 rectangular,pill,circle,square
         logo_alignment: 'center',
+        width: '360',
+        prompt_parent_id: 'gggg',
       }
     )
   },
@@ -58,13 +70,5 @@ export default {
 </script>
 
 <style scoped>
-.btn_google {
-    position: absolute;
-    z-index: 1;
-    opacity: 0;
-    display: flex;
-    align-items: center;
-    height: 50px;
-    transform: scale(1.25);
-}
+
 </style>
