@@ -29,11 +29,6 @@
             </button>
         </div>
     </div>
-    <Transition>
-        <div class="alert alert-success px-5" role="alert" v-if="isEditFinished">
-            정보 수정이 완료되었습니다.
-        </div>
-    </Transition>
 </template>
 
 <script>
@@ -46,7 +41,6 @@ export default {
   },
   data() {
     return {
-      isEditFinished: false,
       thumbnailWidth: 80,
       thumbnailHeight: 80,
       nickName: '',
@@ -70,9 +64,10 @@ export default {
       const data = await this.$boardApi('PATCH', '/api/users/my-info/thumbnail', formData, true, {
         'Content-Type': 'multipart/form-data',
       })
-      console.log(data)
+      // 성공
       if (!data?.code) {
         this.$emit('update-thumbnail', data)
+        this.$store.dispatch('editFinished')
       }
     },
     async handleUserInfoChange() {
@@ -93,10 +88,7 @@ export default {
         this.$emit('update-user-info', {
           nickName: this.nickName,
         })
-        this.isEditFinished = true
-        setTimeout(() => {
-          this.isEditFinished = false
-        }, 1500)
+        this.$store.dispatch('editFinished')
       }
     },
   }
@@ -122,20 +114,4 @@ export default {
     background-color: #fff;
 }
 
-.alert-success {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1;
-}
-
-.v-enter-active,
-.v-leave-active {
-    transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-    opacity: 0;
-}
 </style>

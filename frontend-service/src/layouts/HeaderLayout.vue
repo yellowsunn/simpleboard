@@ -26,8 +26,12 @@ export default {
   components: {NavBar},
   methods: {
     logoutClickEvent() {
+      const isConfirmed = confirm('로그아웃 하시겠습니까?');
+      if (!isConfirmed) {
+        return true
+      }
       this.$store.commit('deleteUserToken')
-      window.location = "/";
+      this.$router.push('/')
     }
   },
   computed: {

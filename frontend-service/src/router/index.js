@@ -21,6 +21,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '@/views/LoginView.vue'),
   },
   {
+    path: "/login/naver",
+    name: "NaverLoginCallback",
+    component: () => import(/* webpackChunkName: "login" */ '@/views/NaverLoginCallbackView.vue'),
+  },
+  {
     path: "/oauth2/signup",
     name: "OAuth2SignUp",
     component: () => import(/* webpackChunkName: "login" */ '@/views/OAuth2SignUpView.vue'),

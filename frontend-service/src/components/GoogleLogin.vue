@@ -18,11 +18,11 @@ export default {
   },
   mounted() {
     const google = window.google
-    const clientId = '260450438379-kc2vpk07h60qn6ojmb0t9u048dckm6a5.apps.googleusercontent.com'
+    const clientId = process.env.VUE_APP_GOOGLE_CLIENT_ID
     google.accounts.id.initialize({
       client_id: clientId,
       callback: this.handleCallback,
-      auto_select: 'true',
+      auto_select: 'false',
     })
 
     google.accounts.id.renderButton(

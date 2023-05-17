@@ -18,28 +18,34 @@
             <button type="button" class="btn btn-danger btn-lg">회원탈퇴</button>
         </div>
     </div>
+    <EditFinished></EditFinished>
 </template>
 
 <script>
 import MyPageHeader from "@/components/mypage/MyPageHeader.vue";
 import MyPageUserInfo from "@/components/mypage/MyPageUserInfo.vue";
 import MyPageUserLink from "@/components/mypage/MyPageUserLink.vue";
+import EditFinished from "@/components/EditFinshed.vue";
 
 export default {
   name: "MyPageView",
-  components: {MyPageUserLink, MyPageUserInfo, MyPageHeader},
-  async created() {
+  components: {EditFinished, MyPageUserLink, MyPageUserInfo, MyPageHeader},
+  async mounted() {
     const {email, nickName, thumbnail, providers} = await this.$boardApi('GET', '/api/users/my-info', null, true)
     this.userInfo = {
       email, nickName, thumbnail
     }
-    this.userProviders = new Set(providers)
+    this.$store.commit('setUserProviders', providers)
   },
   data() {
     return {
       userInfo: null,
-      userProviders: null,
     }
+  },
+  computed: {
+    userProviders() {
+      return this.$store.state.userProviders
+    },
   },
   methods: {
     updateThumbnail(thumbnail) {

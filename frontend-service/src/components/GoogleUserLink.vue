@@ -1,11 +1,14 @@
 <template>
-    <div class="d-flex justify-content-center align-items-center border" style="height: 48px">
-        <div class="d-flex m-1 h-100" style="width: 24px;">
+    <div class="btn_google border" :class="{ unlink_btn : isLinked }"
+         @click="isLinked ? handleUserUnlink() : undefined">
+        <div class="btn_google_logo">
             <GoogleLogo></GoogleLogo>
         </div>
         <div v-if="isLinked">구글 계정 연동 끊기</div>
-        <div v-else>구글 계정 연동하기</div>
-        <div ref="googleButton" :style="googleStyle" style="z-index: 1; position: absolute; opacity: 0"></div>
+
+        <div v-show="!isLinked">구글 계정 연동하기</div>
+        <div ref="googleButton" :style="googleStyle" v-show="!isLinked"
+             style="z-index: 1; position: absolute; opacity: 0"></div>
     </div>
 </template>
 
@@ -28,11 +31,11 @@ export default {
   },
   mounted() {
     const google = window.google
-    const clientId = '260450438379-kc2vpk07h60qn6ojmb0t9u048dckm6a5.apps.googleusercontent.com'
+    const clientId = process.env.VUE_APP_GOOGLE_CLIENT_ID
     google.accounts.id.initialize({
       client_id: clientId,
-      callback: this.handleCallback,
-      auto_select: 'true',
+      callback: this.handleUserLink,
+      auto_select: 'false',
     })
 
     google.accounts.id.renderButton(
@@ -49,26 +52,54 @@ export default {
     )
   },
   methods: {
-    async handleCallback(response) {
-      const data = await this.$boardApi('POST', '/api/oauth2/login-signup', {
-        state: this.$setSessionState(),
+    async handleUserLink(response) {
+      const data = await this.$boardApi('PUT', '/api/oauth2/link', {
         token: response?.credential,
         type: "google",
-      })
-      if (data.isLogin === true) {
-        this.$store.commit('setUserToken', {
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-        })
-        this.$router.push('/')
-      } else if (data.isLogin === false) {
-        this.$router.push(`/oauth2/signup?token=${data.tempUserToken}`)
+      }, true)
+
+      if (data?.code) {
+        alert(response?.message)
+      }
+
+      if (data === true) {
+        this.$store.commit('addUserProvider', 'GOOGLE')
       }
     },
+    async handleUserUnlink() {
+      const isConfirmed = confirm('소셜 계정 연동을 끊으시겠습니까?')
+      if (!isConfirmed) {
+        return
+      }
+
+      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=GOOGLE', null, true);
+      if (data?.code) {
+        alert(data.message)
+      }
+      if (data === true) {
+        this.$store.commit('deleteUserProvider', 'GOOGLE')
+      }
+    }
   },
 }
 </script>
 
 <style scoped>
+.btn_google {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+}
 
+.btn_google_logo {
+    display: flex;
+    margin: 0.25rem;
+    width: 24px;
+    height: 100%;
+}
+
+.unlink_btn {
+    cursor: pointer;
+}
 </style>

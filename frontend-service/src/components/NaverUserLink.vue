@@ -23,27 +23,24 @@ export default {
       loginButton: {color: 'green', type: 1, height: 50}
     })
     this.naverLogin.init()
-
-    this.naverLogin.getLoginStatus(status => {
-      if (status) {
-        console.log(status)
-        console.log(this.naverLogin.user)
-      } else {
-        console.log("callback 처리에 실패하였습니다.")
-      }
-    })
   },
   methods: {
     handleUserLink() {
       this.$refs.naverIdLogin.firstChild.click()
     },
     async handleUserUnlink() {
-      const response = await this.$boardApi('DELETE', '/api/oauth2/link?type=NAVER', null, true);
-        console.log('unlink', response)
-      if (response?.code) {
-        alert(response.message)
+      const isConfirmed = confirm('소셜 계졍 연동을 끊으시겠습니까?')
+      if (!isConfirmed) {
+        return
       }
-      window.location.href = '/mypage'
+
+      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=NAVER', null, true);
+      if (data?.code) {
+        alert(data.message)
+      }
+      if (data === true) {
+        this.$store.commit('deleteUserProvider', 'NAVER')
+      }
     }
   }
 }
