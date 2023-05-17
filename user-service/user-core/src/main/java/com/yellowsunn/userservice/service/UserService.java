@@ -9,6 +9,7 @@ import com.yellowsunn.userservice.exception.UserErrorCode;
 import com.yellowsunn.userservice.repository.UserProviderRepository;
 import com.yellowsunn.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -55,11 +56,23 @@ public class UserService {
         Assert.notNull(command.userUUID(), USER_UUID_ID_NULL_MESSAGE);
 
         User user = getUserByUUID(command.userUUID());
+        checkValidNickName(user.getId(), command.nickName());
+
         return user.changeNickName(command.nickName());
     }
 
     private User getUserByUUID(String uuid) {
         return userRepository.findByUUID(uuid)
                 .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
+    }
+
+    private void checkValidNickName(Long userId, String nickName) {
+        boolean isExist = userRepository.findByNickName(nickName)
+                .map(user -> ObjectUtils.notEqual(user.getId(), userId))
+                .orElse(false);
+
+        if (isExist) {
+            throw new CustomUserException(UserErrorCode.ALREADY_EXIST_NICKNAME);
+        }
     }
 }

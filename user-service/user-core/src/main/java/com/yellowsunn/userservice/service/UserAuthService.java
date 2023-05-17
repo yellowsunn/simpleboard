@@ -137,6 +137,21 @@ public class UserAuthService {
         return userProviderRepository.save(userProvider) != null;
     }
 
+
+    @Transactional
+    public boolean unlinkOAuth2User(String userUUID, OAuth2Type type) {
+        Provider provider = type.toProvider();
+        Assert.notNull(provider, "OAuth2 provider must not be null.");
+
+        User user = userRepository.findByUUID(userUUID)
+                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
+
+        // TODO: 동시성 이슈 고려 필요
+        checkAtLeastOneProvider(user.getId());
+
+        return userProviderRepository.deleteByUserIdAndProvider(user.getId(), provider);
+    }
+
     private void verifyAlreadyExistEmail(String email) {
         userRepository.findByEmail(email)
                 .ifPresent(user -> {
@@ -165,7 +180,7 @@ public class UserAuthService {
         }
 
         // 다른 계정에서 사용중인 Provider라면 예외 반환
-        throw new CustomUserException(UserErrorCode.ALREADY_EXIST_EMAIL);
+        throw new CustomUserException(UserErrorCode.LINK_AT_OTHER_USER_PROVIDER);
     }
 
     private boolean isMyUserProvider(Long userId, UserProvider userProvider) {
@@ -180,5 +195,12 @@ public class UserAuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    private void checkAtLeastOneProvider(Long userId) {
+        long providerCount = userProviderRepository.countProvidersByUserId(userId);
+        if (providerCount <= 1) {
+            throw new CustomUserException(UserErrorCode.LINK_AT_LEAST_ONE_USER_PROVIDER);
+        }
     }
 }

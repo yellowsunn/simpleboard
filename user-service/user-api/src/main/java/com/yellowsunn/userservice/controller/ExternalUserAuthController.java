@@ -1,6 +1,7 @@
 package com.yellowsunn.userservice.controller;
 
 import com.yellowsunn.userservice.annotation.LoginUser;
+import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.dto.EmailLoginRequestDto;
 import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LinkUserRequestDto;
@@ -13,9 +14,11 @@ import com.yellowsunn.userservice.service.UserAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,5 +59,12 @@ public class ExternalUserAuthController {
                               @Valid @RequestBody OAuth2LinkUserRequestDto requestDto) {
         var command = requestDto.toCommand(userUUID);
         return userAuthFacade.linkOAuth2User(command);
+    }
+
+    @DeleteMapping("/api/v2/auth/oauth2/link")
+    public boolean unlinkOAuth2(@LoginUser String userUUID,
+                                @RequestParam String type) {
+        var oAuth2Type = OAuth2Type.convertFrom(type);
+        return userAuthService.unlinkOAuth2User(userUUID, oAuth2Type);
     }
 }

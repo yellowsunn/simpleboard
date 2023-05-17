@@ -14,4 +14,8 @@ public interface UserProviderRepository {
     Optional<UserProvider> findByProviderEmailAndProvider(String providerEmail, Provider provider);
 
     List<Provider> findProvidersByUserId(Long userId);
+
+    boolean deleteByUserIdAndProvider(Long userId, Provider provider);
+
+    long countProvidersByUserId(Long userId);
 }

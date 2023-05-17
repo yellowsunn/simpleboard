@@ -72,4 +72,23 @@ public class UserProviderJpaRepository implements UserProviderRepository {
                 .fetch();
     }
 
+    @Override
+    public boolean deleteByUserIdAndProvider(Long userId, Provider provider) {
+        long execute = jpaQueryFactory
+                .delete(userProvider)
+                .where(userProvider.user.id.eq(userId), userProvider.provider.eq(provider))
+                .execute();
+        return execute >= 0;
+    }
+
+    @Override
+    public long countProvidersByUserId(Long userId) {
+        Long count = jpaQueryFactory
+                .select(userProvider.id.count())
+                .from(userProvider)
+                .where(userProvider.user.id.eq(userId))
+                .fetchFirst();
+
+        return count != null ? count : 0L;
+    }
 }

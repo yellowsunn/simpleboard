@@ -63,7 +63,7 @@ spring:
           uri: ${endpoint.user-service}
           predicates:
             - Path=/api/oauth2/link
-            - Method=PUT
+            - Method=PUT, DELETE
           filters:
             - AuthorizationHeaderFilter
             - RewritePath=/api/oauth2/link, /api/v2/auth/oauth2/link
@@ -71,11 +71,19 @@ spring:
           uri: ${endpoint.user-service}
           predicates:
             - Path=/api/users/**
-            - Method=GET, POST, PUT, PATCH, DELETE
+            - Method=GET, POST, PUT, PATCH, DELETE, OPTIONS
           filters:
             - RemoveRequestHeader=Cookie
             - AuthorizationHeaderFilter
             - RewritePath=/api/users/(?<path>.*), /api/v2/users/$\{path}
+        - id: oauth2-api
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/api/oauth2/**
+            - Method=POST, DELETE, OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/api/oauth2/(?<path>.*), /api/v2/auth/oauth2/$\{path}
 ---
 server:
   port: 8000
