@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    default: local
+oauth2:
+  kakao:
+    client-id: 36a710c0f0041dcbb3f68b717171c947
+    redirect-uri: http://localhost:3000/login/kakao

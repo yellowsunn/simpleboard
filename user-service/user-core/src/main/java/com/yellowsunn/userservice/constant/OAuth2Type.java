@@ -18,11 +18,10 @@ public enum OAuth2Type {
     }
 
     public Provider toProvider() {
-        if (this == OAuth2Type.GOOGLE) {
-            return Provider.GOOGLE;
-        } else if (this == OAuth2Type.NAVER) {
-            return Provider.NAVER;
-        }
-        return null;
+        return switch (this) {
+            case GOOGLE -> Provider.GOOGLE;
+            case NAVER -> Provider.NAVER;
+            case KAKAO -> Provider.KAKAO;
+        };
     }
 }

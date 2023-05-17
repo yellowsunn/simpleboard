@@ -2,7 +2,7 @@ package com.yellowsunn.userservice.http.client;
 
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.http.OAuth2UserInfo;
-import com.yellowsunn.userservice.http.dto.GoogleOAuth2TokenInfoResponseDto;
+import com.yellowsunn.userservice.http.dto.GoogleOAuth2UserInfoResponseDto;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
@@ -33,7 +33,7 @@ public class GoogleOAuth2RestHttpClient implements OAuth2UserInfoHttpClient {
                 .build()
                 .toUri();
 
-        var responseDto = restTemplate.getForObject(uri, GoogleOAuth2TokenInfoResponseDto.class);
+        var responseDto = restTemplate.getForObject(uri, GoogleOAuth2UserInfoResponseDto.class);
         Assert.notNull(responseDto, "Google oauth2 oAuth2Token info must not be null.");
 
         return new OAuth2UserInfo(responseDto.email(), responseDto.picture());
