@@ -62,7 +62,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         var accessTokenPayload = new AccessTokenPayload(customOAuth2User.getUuid(), customOAuth2User.getEmail());
 
         return UriComponentsBuilder.fromUriString(frontEndUrl)
-                .path("/token")
+                .path("/oAuth2Token")
                 .queryParam("access", accessTokenHandler.generateEncodedToken(accessTokenPayload))
                 .queryParam("refresh", refreshTokenHandler.generateEncodedToken())
                 .build().toUriString();
@@ -72,7 +72,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private String generateOAuth2SignUpUri(String tempUserToken) {
         return UriComponentsBuilder.fromUriString(frontEndUrl)
                 .path("/oauth2/signup")
-                .queryParam("token", tempUserToken)
+                .queryParam("oAuth2Token", tempUserToken)
                 .build().toUriString();
     }
 
@@ -80,8 +80,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     private String generateOAuth2LinkUri(String tempUserToken, Object uuid) {
         return UriComponentsBuilder.fromUriString(frontEndUrl)
                 .path("/oauth2/link")
-                .queryParam("token", tempUserToken)
-                .queryParam("uuid", uuid)
+                .queryParam("oAuth2Token", tempUserToken)
+                .queryParam("userUUID", uuid)
                 .build().toUriString();
     }
 }

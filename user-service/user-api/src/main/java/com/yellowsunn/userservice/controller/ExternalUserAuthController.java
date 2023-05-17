@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.controller;
 
+import com.yellowsunn.userservice.annotation.LoginUser;
 import com.yellowsunn.userservice.dto.EmailLoginRequestDto;
 import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LinkUserRequestDto;
@@ -15,11 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import static com.yellowsunn.common.constant.CommonHeaderConst.USER_UUID_HEADER;
 
 @RequiredArgsConstructor
 @RestController
@@ -54,8 +52,9 @@ public class ExternalUserAuthController {
     }
 
     @PutMapping("/api/v2/auth/oauth2/link")
-    public boolean linkOAuth2(@RequestHeader(USER_UUID_HEADER) String userUUID,
+    public boolean linkOAuth2(@LoginUser String userUUID,
                               @Valid @RequestBody OAuth2LinkUserRequestDto requestDto) {
-        return userAuthService.linkOAuth2User(userUUID, requestDto.getTempUserToken());
+        var command = requestDto.toCommand(userUUID);
+        return userAuthFacade.linkOAuth2User(command);
     }
 }

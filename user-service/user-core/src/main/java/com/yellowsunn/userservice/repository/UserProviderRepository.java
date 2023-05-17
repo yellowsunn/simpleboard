@@ -3,6 +3,7 @@ package com.yellowsunn.userservice.repository;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.UserProvider;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserProviderRepository {
@@ -11,4 +12,6 @@ public interface UserProviderRepository {
     boolean existsByUserIdAndProvider(Long userId, Provider provider);
 
     Optional<UserProvider> findByProviderEmailAndProvider(String providerEmail, Provider provider);
+
+    List<Provider> findProvidersByUserId(Long userId);
 }

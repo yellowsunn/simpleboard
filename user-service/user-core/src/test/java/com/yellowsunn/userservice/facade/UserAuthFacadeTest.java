@@ -51,8 +51,8 @@ class UserAuthFacadeTest {
                 .build();
         var oAuth2UserInfo = new OAuth2UserInfo("test@example.com", "https://example.com/thumbnail.png");
         var userLoginDto = UserLoginTokenDto.builder()
-                .accessToken("access-token")
-                .refreshToken("refresh-token")
+                .accessToken("access-oAuth2Token")
+                .refreshToken("refresh-oAuth2Token")
                 .build();
         given(oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token())).willReturn(oAuth2UserInfo);
         given(userAuthService.loginOAuth2(oAuth2UserInfo, OAuth2Type.GOOGLE)).willReturn(userLoginDto);
@@ -77,14 +77,14 @@ class UserAuthFacadeTest {
         given(oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token())).willReturn(oAuth2UserInfo);
         given(userAuthService.loginOAuth2(oAuth2UserInfo, OAuth2Type.GOOGLE)).willReturn(null);
         given(userAuthService.saveTempOAuth2User(oAuth2UserInfo, OAuth2Type.GOOGLE, command.csrfToken()))
-                .willReturn("temp-user-token");
+                .willReturn("temp-user-oAuth2Token");
 
         // when
         var userOAuth2LoginOrSignUpDto = sut.loginOrSignUpRequest(command);
 
         // then
         assertThat(userOAuth2LoginOrSignUpDto.getIsLogin()).isFalse();
-        assertThat(userOAuth2LoginOrSignUpDto.getTempUserToken()).isEqualTo("temp-user-token");
+        assertThat(userOAuth2LoginOrSignUpDto.getTempUserToken()).isEqualTo("temp-user-oAuth2Token");
     }
 
     @DisplayName("OAuth2 서버에서 회원의 이메일을 조회할 수 없으면 에러 반환 (이메일 제공에 동의하지 않은 경우)")

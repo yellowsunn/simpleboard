@@ -34,7 +34,7 @@ public class GoogleOAuth2RestHttpClient implements OAuth2UserInfoHttpClient {
                 .toUri();
 
         var responseDto = restTemplate.getForObject(uri, GoogleOAuth2TokenInfoResponseDto.class);
-        Assert.notNull(responseDto, "Google oauth2 token info must not be null.");
+        Assert.notNull(responseDto, "Google oauth2 oAuth2Token info must not be null.");
 
         return new OAuth2UserInfo(responseDto.email(), responseDto.picture());
     }

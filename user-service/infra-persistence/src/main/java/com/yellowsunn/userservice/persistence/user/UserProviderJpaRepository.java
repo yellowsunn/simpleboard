@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.yellowsunn.userservice.domain.user.QUserProvider.userProvider;
@@ -57,4 +59,17 @@ public class UserProviderJpaRepository implements UserProviderRepository {
                         .fetchFirst()
         );
     }
+
+    @Override
+    public List<Provider> findProvidersByUserId(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        return jpaQueryFactory
+                .select(userProvider.provider)
+                .from(userProvider)
+                .where(userProvider.user.id.eq(userId))
+                .fetch();
+    }
+
 }

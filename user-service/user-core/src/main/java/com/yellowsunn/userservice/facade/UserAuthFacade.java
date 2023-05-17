@@ -3,6 +3,7 @@ package com.yellowsunn.userservice.facade;
 import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
+import com.yellowsunn.userservice.dto.UserOAuth2LinkCommand;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpCommand;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpDto;
 import com.yellowsunn.userservice.dto.UserOAuth2SignUpCommand;
@@ -66,6 +67,15 @@ public class UserAuthFacade {
         return UserOAuth2LoginOrSignUpDto.signUpRequestBuilder()
                 .tempUserToken(tempUserToken)
                 .build();
+    }
+
+    public boolean linkOAuth2User(UserOAuth2LinkCommand command) {
+        // OAuth2 유저 정보 조회
+        var oAuth2UserInfoHttpClient = oAuth2UserInfoHttpClientFactory.get(command.type());
+        OAuth2UserInfo userInfo = oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token());
+        verifyOAuth2ProviderEmailIsNotBlank(userInfo);
+
+        return userAuthService.linkOAuth2User(command.userUUID(), userInfo.email(), command.type());
     }
 
     // OAuth2 계정 이메일을 조회할 수 없는 경우 예외 발생 (이메일 조회에 동의 하지 않은 경우)

@@ -22,8 +22,10 @@ import com.yellowsunn.userservice.utils.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.time.Duration;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -115,24 +117,24 @@ public class UserAuthService {
     }
 
     @Transactional
-    public boolean linkOAuth2User(String userUUID, String tempUserToken) {
-//        TempUser tempUser = tempUserCacheRepository.findByToken(tempUserToken);
-//        if (tempUser == null) {
-//            throw new CustomUserException(UserErrorCode.INVALID_TEMP_USER);
-//        }
-//        User user = userRepository.findByUUID(userUUID)
-//                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
-//        verifyAlreadyExistUserProvider(user.getId(), tempUser.getProvider());
-//
-//        var userProvider = UserProvider.builder()
-//                .user(user)
-//                .provider(tempUser.getProvider())
-//                .providerEmail(tempUser.getEmail())
-//                .build();
-//        userProviderRepository.save(userProvider);
-//
-//        return tempUserCacheRepository.deleteByToken(tempUserToken);
-        return true;
+    public boolean linkOAuth2User(String userUUID, String providerEmail, OAuth2Type type) {
+        Provider provider = type.toProvider();
+        Assert.notNull(provider, "OAuth2 provider must not be null.");
+
+        User user = userRepository.findByUUID(userUUID)
+                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
+
+        boolean isAlreadyFinished = checkAlreadyExistProvider(user.getId(), providerEmail, provider);
+        if (isAlreadyFinished) {
+            return true;
+        }
+
+        var userProvider = UserProvider.builder()
+                .user(user)
+                .provider(provider)
+                .providerEmail(providerEmail)
+                .build();
+        return userProviderRepository.save(userProvider) != null;
     }
 
     private void verifyAlreadyExistEmail(String email) {
@@ -149,11 +151,25 @@ public class UserAuthService {
         }
     }
 
-    private void verifyAlreadyExistUserProvider(Long userId, Provider provider) {
-        boolean isExist = userProviderRepository.existsByUserIdAndProvider(userId, provider);
-        if (isExist) {
-            throw new CustomUserException(UserErrorCode.ALREADY_EXIST_EMAIL);
+    private boolean checkAlreadyExistProvider(Long userId, String providerEmail, Provider provider) {
+        // 사용하지 않는 새로운 provider 인 경우
+        var userProviderOptional = userProviderRepository.findByProviderEmailAndProvider(providerEmail, provider);
+        if (userProviderOptional.isEmpty()) {
+            return false;
         }
+
+        // 내 계정에서 이미 사용중인 Provider 경우
+        var userProvider = userProviderOptional.get();
+        if (isMyUserProvider(userId, userProvider)) {
+            return true;
+        }
+
+        // 다른 계정에서 사용중인 Provider라면 예외 반환
+        throw new CustomUserException(UserErrorCode.ALREADY_EXIST_EMAIL);
+    }
+
+    private boolean isMyUserProvider(Long userId, UserProvider userProvider) {
+        return Objects.equals(userId, userProvider.getUser().getId());
     }
 
     private UserLoginTokenDto generateUserToken(User user) {

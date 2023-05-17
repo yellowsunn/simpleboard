@@ -5,6 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
+import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_NICKNAME_MESSAGE;
+import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_NICKNAME_REGEX;
+import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_PASSWORD_MESSAGE;
+import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_PASSWORD_REGEX;
+
 @Getter
 public class EmailSignUpRequestDto {
     @NotBlank
@@ -12,11 +17,11 @@ public class EmailSignUpRequestDto {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9~`!@#$%^&*()-+=]{8,24}$", message = "8~24자의 영문대소문자, 숫자, 특수문자만 가능합니다.")
+    @Pattern(regexp = VALID_PASSWORD_REGEX, message = VALID_PASSWORD_MESSAGE)
     private String password;
 
     @NotBlank
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9]{3,20}$", message = "사용할 수 없는 닉네임입니다.")
+    @Pattern(regexp = VALID_NICKNAME_REGEX, message = VALID_NICKNAME_MESSAGE)
     private String nickName;
 
     public UserEmailSignUpCommand toUserSignUpCommand() {

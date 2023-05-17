@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.exception;
 
+import com.yellowsunn.common.exception.InvalidAuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,16 @@ public class GlobalExceptionHandler {
         return ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.name())
                 .message(getFirstErrorMessage(e.getAllErrors()))
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(InvalidAuthenticationException.class)
+    protected ErrorResponse handleInvalidAuthorizationException(InvalidAuthenticationException e) {
+        log.warn("Forbidden request. message={}", e.getMessage(), e);
+        return ErrorResponse.builder()
+                .code(HttpStatus.UNAUTHORIZED.name())
+                .message(e.getMessage())
                 .build();
     }
 
