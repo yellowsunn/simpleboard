@@ -14,7 +14,7 @@ spring:
           uri: ${endpoint.user-service}
           predicates:
             - Path=/api/signup
-            - Method=POST
+            - Method=POST, OPTIONS
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/api/signup, /api/v2/auth/email/signup
@@ -22,7 +22,7 @@ spring:
           uri: ${endpoint.user-service}
           predicates:
             - Path=/api/login
-            - Method=POST
+            - Method=POST, OPTIONS
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/api/login, /api/v2/auth/email/login
