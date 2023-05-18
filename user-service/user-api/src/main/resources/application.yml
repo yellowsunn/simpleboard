@@ -7,5 +7,4 @@ spring:
       - 'classpath:application-user-core.yml'
       - 'classpath:application-s3.yml'
       - 'classpath:application-redis.yml'
-      - 'classpath:application-oauth2.yml'
       - 'classpath:application-http.yml'
