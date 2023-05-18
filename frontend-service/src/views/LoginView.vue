@@ -3,16 +3,18 @@
         <h1>로그인</h1>
         <div class="mb-3">이메일 혹은 소셜 계정으로 로그인을 진행해주세요.</div>
         <div class="form-floating mb-2">
-            <input type="email" class="form-control" placeholder="name@example.com">
+            <input type="email" v-model="email" class="form-control" placeholder="name@example.com">
             <label>이메일</label>
         </div>
         <div class="form-floating mb-2">
-            <input type="password" class="form-control" placeholder="password">
+            <input type="password" v-model="password" class="form-control" placeholder="password">
             <label>비밀번호</label>
         </div>
-        <button type="button" class="btn btn-primary btn-lg mb-1 w-100">로그인</button>
+        <button type="button" class="btn btn-primary btn-lg mb-1 w-100" @click="handleLogin">로그인</button>
         <div class="d-flex flex-row m-1">
-            <div class="text-secondary" style="font-size: 0.9rem; cursor: pointer">이메일로 회원가입하기</div>
+            <div class="text-secondary" @click="$router.push('/email/signup')"
+                 style="font-size: 0.9rem; cursor: pointer">이메일로 회원가입하기
+            </div>
         </div>
         <div class="social_login_tit py-3">
             <div class="tit">소셜 계정으로 간편 로그인</div>
@@ -32,7 +34,34 @@ import KakaoLogin from "@/components/KakaoLogin.vue";
 
 export default {
   name: "LoginView",
-  components: {KakaoLogin, GoogleLogin, NaverLogin}
+  components: {KakaoLogin, GoogleLogin, NaverLogin},
+  data() {
+    return {
+      email: '',
+      password: '',
+    }
+  },
+  methods: {
+    async handleLogin() {
+      if (!this.email || !this.password) {
+        return
+      }
+      const data = await this.$boardApi('POST', '/api/login', {
+        email: this.email,
+        password: this.password,
+      })
+      if (data?.code) {
+        alert(data?.message)
+        return
+      }
+
+      this.$store.commit('setUserToken', {
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      })
+      this.$router.push('/')
+    }
+  }
 }
 </script>
 

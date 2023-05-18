@@ -59,7 +59,7 @@ export default {
       }, true)
 
       if (data?.code) {
-        alert(response?.message)
+        alert(data?.message)
       }
 
       if (data === true) {
@@ -72,7 +72,7 @@ export default {
         return
       }
 
-      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=GOOGLE', null, true);
+      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=google', null, true);
       if (data?.code) {
         alert(data.message)
       }

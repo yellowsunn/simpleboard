@@ -1,11 +1,11 @@
 <template>
-    <div class="mx-auto" style="width: 950px">
+    <div v-if="userInfo" class="mx-auto" style="width: 950px">
         <div class="mb-2">
             <MyPageHeader></MyPageHeader>
         </div>
         <div class="d-flex justify-content-between">
             <div class="ms-3" style="width: 360px">
-                <MyPageUserInfo v-if="userInfo" :userInfo="userInfo"
+                <MyPageUserInfo :userInfo="userInfo"
                                 @update-thumbnail="updateThumbnail"
                                 @update-user-info="updateUserInfo"></MyPageUserInfo>
             </div>
@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-end mt-5">
-            <button type="button" class="btn btn-danger btn-lg">회원탈퇴</button>
+            <button type="button" class="btn btn-danger btn-lg" @click="deleteUserInfo">회원탈퇴</button>
         </div>
     </div>
     <EditFinished></EditFinished>
@@ -58,6 +58,21 @@ export default {
       this.userInfo = {
         ...this.userInfo,
         nickName,
+      }
+    },
+    async deleteUserInfo() {
+      const isConfirmed = confirm('회원을 탈퇴하시겠습니까?')
+      if (!isConfirmed) {
+        return
+      }
+
+      const data = await this.$boardApi('DELETE', '/api/users/my-info', undefined, true)
+      if (data === true) {
+        this.$store.commit('deleteUserToken')
+        this.$router.push('/')
+      }
+      if (data?.code) {
+        alert(data?.message)
       }
     }
   }

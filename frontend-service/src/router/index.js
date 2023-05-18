@@ -26,6 +26,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '@/views/NaverLoginCallbackView.vue'),
   },
   {
+    path: "/login/kakao",
+    name: "KakaoLoginCallback",
+    component: () => import(/* webpackChunkName: "login" */ '@/views/KakaoLoginCallbackView.vue'),
+  },
+  {
+    path: "/email/signup",
+    name: "EmailSignUp",
+    component: () => import(/* webpackChunkName: "login" */ '@/views/EmailSignUpView.vue'),
+  },
+  {
     path: "/oauth2/signup",
     name: "OAuth2SignUp",
     component: () => import(/* webpackChunkName: "login" */ '@/views/OAuth2SignUpView.vue'),
@@ -37,8 +47,13 @@ const routes = [
   },
   {
     path: "/mypage/naver/link",
-    name: "NaverUserCallbackLink",
+    name: "NaverUserLinkCallbackLink",
     component: () => import(/* webpackChunkName: "login" */ '@/views/NaverUserLinkCallbackView.vue'),
+  },
+  {
+    path: "/mypage/kakao/link",
+    name: "KakaoUserLinkCallback",
+    component: () => import(/* webpackChunkName: "login" */ '@/views/KakaoUserLinkCallbackView.vue'),
   }
 ]
 

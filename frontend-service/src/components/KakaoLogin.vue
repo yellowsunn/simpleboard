@@ -16,14 +16,14 @@ export default {
   mounted() {
     const kakao = window.Kakao
     if (!kakao.isInitialized()) {
-      kakao.init('b9c163d3f9dab27b02c9010289851a21')
+      kakao.init(process.env.VUE_APP_KAKAO_CLIENT_ID)
     }
   },
   methods: {
     loginWithKakao() {
       window.Kakao.Auth.authorize({
-        redirectUri: "http://localhost:8080/login",
-        scope: "account_email"
+        redirectUri: `${process.env.VUE_APP_FRONT_BASE_URL}/login/kakao`,
+        scope: "account_email,profile_image"
       })
     },
   }

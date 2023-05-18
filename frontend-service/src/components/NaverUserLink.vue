@@ -34,7 +34,7 @@ export default {
         return
       }
 
-      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=NAVER', null, true);
+      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=naver', null, true);
       if (data?.code) {
         alert(data.message)
       }
