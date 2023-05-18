@@ -35,10 +35,11 @@ public class UserService {
     }
 
     @Transactional
-    public boolean deleteUserInfo(Long userId) {
-        Assert.notNull(userId, USER_UUID_ID_NULL_MESSAGE);
+    public boolean deleteUserInfo(String uuid) {
+        Assert.notNull(uuid, USER_UUID_ID_NULL_MESSAGE);
 
-        return userRepository.findById(userId)
+        return userRepository.findByUUID(uuid)
+                .filter(user -> userProviderRepository.deleteByUserId(user.getId()))
                 .map(userRepository::delete)
                 .orElse(true);
     }

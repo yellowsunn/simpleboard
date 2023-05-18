@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.http.client;
 
+import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.http.OAuth2UserInfo;
 import com.yellowsunn.userservice.http.dto.GoogleOAuth2UserInfoResponseDto;
@@ -26,7 +27,7 @@ public class GoogleOAuth2RestHttpClient implements OAuth2UserInfoHttpClient {
     }
 
     @Override
-    public OAuth2UserInfo findUserInfo(String token) {
+    public OAuth2UserInfo findUserInfo(String token, OAuth2Request oAuth2Request) {
         URI uri = UriComponentsBuilder.fromUriString(BASE_URI)
                 .path("/tokeninfo")
                 .queryParam("id_token", token)

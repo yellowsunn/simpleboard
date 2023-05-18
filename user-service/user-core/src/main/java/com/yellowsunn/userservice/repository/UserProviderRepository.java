@@ -18,4 +18,6 @@ public interface UserProviderRepository {
     boolean deleteByUserIdAndProvider(Long userId, Provider provider);
 
     long countProvidersByUserId(Long userId);
+
+    boolean deleteByUserId(Long userId);
 }

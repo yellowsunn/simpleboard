@@ -1,9 +1,9 @@
 package com.yellowsunn.userservice.http.client;
 
+import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.http.OAuth2UserInfo;
 import com.yellowsunn.userservice.http.dto.NaverOAuth2UserInfoResponseDto;
-import com.yellowsunn.userservice.http.dto.NaverUserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +25,7 @@ public class NaverOAuth2RestHttpClient implements OAuth2UserInfoHttpClient {
     }
 
     @Override
-    public OAuth2UserInfo findUserInfo(String token) {
+    public OAuth2UserInfo findUserInfo(String token, OAuth2Request oAuth2Request) {
         var headers = new HttpHeaders();
         headers.setBearerAuth(token);
 

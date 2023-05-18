@@ -40,8 +40,8 @@ public class ExternalUserController {
     }
 
     @DeleteMapping("/api/v2/users/my-info")
-    public boolean deleteMyInfo(@RequestHeader(USER_UUID_HEADER) Long userId) {
-        return userService.deleteUserInfo(userId);
+    public boolean deleteMyInfo(@LoginUser String uuid) {
+        return userService.deleteUserInfo(uuid);
     }
 
     @PutMapping("/api/v2/users/my-info")

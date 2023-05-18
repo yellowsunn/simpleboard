@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.http.client;
 
+import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.http.OAuth2UserInfo;
 import com.yellowsunn.userservice.http.dto.KakaoOAuth2TokenResponseDto;
@@ -23,17 +24,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class KakaoOAuth2RestHttpClient implements OAuth2UserInfoHttpClient {
     private final RestTemplate restTemplate;
     private final String clientId;
-    private final String redirectUri;
+    private final String loginRedirectUri;
+    private final String userLinkRedirectUri;
 
     private static final String KAKAO_AUTH_BASE_URI = "https://kauth.kakao.com";
     private static final String KAKAO_API_BASE_URI = "https://kapi.kakao.com";
 
     public KakaoOAuth2RestHttpClient(RestTemplate restTemplate,
                                      @Value("${oauth2.kakao.client-id}") String clientId,
-                                     @Value("${oauth2.kakao.redirect-uri}") String redirectUri) {
+                                     @Value("${oauth2.kakao.redirect-uri.login}") String loginRedirectUri,
+                                     @Value("${oauth2.kakao.redirect-uri.user-link}") String userLinkRedirectUri) {
         this.restTemplate = restTemplate;
         this.clientId = clientId;
-        this.redirectUri = redirectUri;
+        this.loginRedirectUri = loginRedirectUri;
+        this.userLinkRedirectUri = userLinkRedirectUri;
     }
 
     @Override
@@ -42,8 +46,8 @@ public class KakaoOAuth2RestHttpClient implements OAuth2UserInfoHttpClient {
     }
 
     @Override
-    public OAuth2UserInfo findUserInfo(String code) {
-        var accessToken = getTokenByCode(code);
+    public OAuth2UserInfo findUserInfo(String code, OAuth2Request oAuth2Request) {
+        var accessToken = getTokenByCode(code, oAuth2Request);
 
         var headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
@@ -66,11 +70,11 @@ public class KakaoOAuth2RestHttpClient implements OAuth2UserInfoHttpClient {
         }
     }
 
-    private String getTokenByCode(String code) {
+    private String getTokenByCode(String code, OAuth2Request oAuth2Request) {
         var params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
-        params.add("redirect_uri", redirectUri);
+        params.add("redirect_uri", getRedirectUri(oAuth2Request));
         params.add("code", code);
 
         var uri = UriComponentsBuilder.fromUriString(KAKAO_AUTH_BASE_URI)
@@ -113,5 +117,12 @@ public class KakaoOAuth2RestHttpClient implements OAuth2UserInfoHttpClient {
             return null;
         }
         return profile.thumbnail();
+    }
+
+    private String getRedirectUri(OAuth2Request oAuth2Request) {
+        return switch (oAuth2Request) {
+            case LOGIN -> loginRedirectUri;
+            case USER_LINK -> userLinkRedirectUri;
+        };
     }
 }

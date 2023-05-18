@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.facade;
 
+import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
@@ -50,7 +51,7 @@ public class UserAuthFacade {
     public UserOAuth2LoginOrSignUpDto loginOrSignUpRequest(UserOAuth2LoginOrSignUpCommand command) {
         // OAuth2 유저 정보 조회
         var oAuth2UserInfoHttpClient = oAuth2UserInfoHttpClientFactory.get(command.type());
-        OAuth2UserInfo userInfo = oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token());
+        OAuth2UserInfo userInfo = oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token(), OAuth2Request.LOGIN);
         verifyOAuth2ProviderEmailIsNotBlank(userInfo);
 
         // 로그인
@@ -72,7 +73,7 @@ public class UserAuthFacade {
     public boolean linkOAuth2User(UserOAuth2LinkCommand command) {
         // OAuth2 유저 정보 조회
         var oAuth2UserInfoHttpClient = oAuth2UserInfoHttpClientFactory.get(command.type());
-        OAuth2UserInfo userInfo = oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token());
+        OAuth2UserInfo userInfo = oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token(), OAuth2Request.USER_LINK);
         verifyOAuth2ProviderEmailIsNotBlank(userInfo);
 
         return userAuthService.linkOAuth2User(command.userUUID(), userInfo.email(), command.type());

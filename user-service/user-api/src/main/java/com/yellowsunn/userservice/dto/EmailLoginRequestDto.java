@@ -2,8 +2,11 @@ package com.yellowsunn.userservice.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+
+import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_PASSWORD_MESSAGE;
+import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_PASSWORD_REGEX;
 
 @Getter
 public class EmailLoginRequestDto {
@@ -12,7 +15,7 @@ public class EmailLoginRequestDto {
     private String email;
 
     @NotBlank
-    @Size(min = 8, max = 24)
+    @Pattern(regexp = VALID_PASSWORD_REGEX, message = VALID_PASSWORD_MESSAGE)
     private String password;
 
     public UserEmailLoginCommand toUserLoginCommand() {

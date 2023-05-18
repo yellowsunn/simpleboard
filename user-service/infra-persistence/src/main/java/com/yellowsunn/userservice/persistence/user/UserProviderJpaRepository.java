@@ -91,4 +91,14 @@ public class UserProviderJpaRepository implements UserProviderRepository {
 
         return count != null ? count : 0L;
     }
+
+    @Override
+    public boolean deleteByUserId(Long userId) {
+        long count = jpaQueryFactory
+                .delete(userProvider)
+                .where(userProvider.user.id.eq(userId))
+                .execute();
+
+        return count >= 0;
+    }
 }
