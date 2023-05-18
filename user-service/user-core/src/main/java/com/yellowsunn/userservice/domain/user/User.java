@@ -72,4 +72,9 @@ public class User extends BaseTimeEntity {
         this.thumbnail = thumbnail;
         return true;
     }
+
+    public boolean changeNickName(String nickName) {
+        this.nickName = nickName;
+        return true;
+    }
 }

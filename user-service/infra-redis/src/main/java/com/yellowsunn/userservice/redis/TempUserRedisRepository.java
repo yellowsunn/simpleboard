@@ -2,6 +2,7 @@ package com.yellowsunn.userservice.redis;
 
 import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.repository.TempUserCacheRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -23,9 +24,13 @@ public class TempUserRedisRepository implements TempUserCacheRepository {
     }
 
     @Override
-    public TempUser findByToken(String token) {
+    public TempUser findByTokenAndCsrfToken(String token, String csrfToken) {
         String key = generateKey(token);
-        return redisTemplate.opsForValue().get(key);
+        TempUser tempUser = redisTemplate.opsForValue().get(key);
+        if (tempUser != null && StringUtils.equals(tempUser.getCsrfToken(), csrfToken)) {
+            return tempUser;
+        }
+        return null;
     }
 
     @Override

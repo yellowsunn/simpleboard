@@ -14,9 +14,9 @@ public class UserFacade {
 
     private static final String THUMBNAIL_PATH = "thumbnail";
 
-    public String updateUserThumbnail(Long userId, FileUploadRequest request) {
+    public String updateUserThumbnail(String uuid, FileUploadRequest request) {
         String updatedThumbnail = fileStorage.uploadFile(request, THUMBNAIL_PATH);
-        userService.changeUserThumbnail(userId, updatedThumbnail);
+        userService.changeUserThumbnail(uuid, updatedThumbnail);
         return updatedThumbnail;
     }
 }

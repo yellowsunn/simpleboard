@@ -85,4 +85,14 @@ public class UserJpaRepository implements UserRepository {
                         .fetchFirst()
         );
     }
+
+    @Override
+    public Optional<User> findByNickName(String nickName) {
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .selectFrom(user)
+                        .where(user.nickName.eq(nickName))
+                        .fetchFirst()
+        );
+    }
 }

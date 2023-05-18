@@ -32,10 +32,11 @@ class TempUserRedisRepositoryIntegrationTest {
         TempUser tempUser = TempUser.builder()
                 .email("test@example.com")
                 .provider(Provider.EMAIL)
+                .csrfToken("12345678")
                 .build();
 
         sut.save(tempUser, Duration.ofSeconds(3L));
-        TempUser foundTempUser = sut.findByToken(tempUser.getToken());
+        TempUser foundTempUser = sut.findByTokenAndCsrfToken(tempUser.getToken(), tempUser.getCsrfToken());
 
         assertThat(foundTempUser.getEmail()).isEqualTo(tempUser.getEmail());
         assertThat(foundTempUser.getProvider()).isEqualTo(tempUser.getProvider());

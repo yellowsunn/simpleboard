@@ -4,4 +4,5 @@ public enum Provider {
     EMAIL,
     GOOGLE,
     NAVER,
+    KAKAO,
 }
