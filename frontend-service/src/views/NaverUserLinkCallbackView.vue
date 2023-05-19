@@ -19,14 +19,13 @@ export default {
       return
     }
     const token = found[0].replace("access_token=", "")?.trim()
-    const response = await this.$boardApi('PUT', '/api/oauth2/link', {
+    const {isError, data} = await this.$boardApi('PUT', '/api/v2/auth/oauth2/link', {
       token,
       type: "NAVER",
     }, true);
 
-    // 실패하는 경우 알럿창 띄움
-    if (response?.code) {
-      alert(response?.message)
+    if (isError) {
+      alert(data.message)
     }
     this.$router.push('/mypage')
   }

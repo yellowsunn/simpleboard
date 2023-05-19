@@ -15,15 +15,22 @@ export default {
 
     if (!found || found.length === 0) {
       alert('잘못된 요청입니다.')
-      this.$rotuer.push('/')
+      this.$router.push('/')
       return
     }
+
     const code = found[0].replace('code=', "")?.trim()
-    const data = await this.$boardApi('POST', '/api/oauth2/login-signup', {
+    const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/oauth2/login-signup', {
       state: this.$setSessionState(),
       token: code,
       type: "kakao",
     })
+    if (isError) {
+      alert(data.message)
+      this.$router.push('/')
+      return
+    }
+
     if (data.isLogin === true) {
       this.$store.commit('setUserToken', {
         accessToken: data.accessToken,

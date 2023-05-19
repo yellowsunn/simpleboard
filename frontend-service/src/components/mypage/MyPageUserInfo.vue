@@ -32,6 +32,7 @@
 </template>
 
 <script>
+
 export default {
   name: "MyPageUserInfo",
   props: {
@@ -61,30 +62,31 @@ export default {
       }
       const formData = new FormData()
       formData.append('thumbnail', e.target.files[0])
-      const data = await this.$boardApi('PATCH', '/api/users/my-info/thumbnail', formData, true, {
+      const {isError, data} = await this.$boardApi('PATCH', '/api/v2/users/my-info/thumbnail', formData, true, {
         'Content-Type': 'multipart/form-data',
       })
-      // 성공
-      if (!data?.code) {
-        this.$emit('update-thumbnail', data)
-        this.$store.dispatch('editFinished')
+      if (isError) {
+        alert(data.message)
+        return
       }
+      this.$emit('update-thumbnail', data)
+      this.$store.dispatch('editFinished')
     },
     async handleUserInfoChange() {
       if (this.userInfo?.nickName === this.nickName) {
         return
       }
-      const response = await this.$boardApi('PUT', '/api/users/my-info', {
+      const {isError, data} = await this.$boardApi('PUT', '/api/v2/users/my-info', {
         nickName: this.nickName,
       }, true)
       // 실패
-      if (response?.code) {
-        alert(response?.message)
+      if (isError) {
+        alert(data.message)
         this.nickName = this.userInfo?.nickName
         return
       }
 
-      if (response === true) {
+      if (data === true) {
         this.$emit('update-user-info', {
           nickName: this.nickName,
         })

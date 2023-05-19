@@ -53,13 +53,14 @@ export default {
   },
   methods: {
     async handleUserLink(response) {
-      const data = await this.$boardApi('PUT', '/api/oauth2/link', {
+      const {isError, data} = await this.$boardApi('PUT', '/api/v2/auth/oauth2/link', {
         token: response?.credential,
         type: "google",
       }, true)
 
-      if (data?.code) {
-        alert(data?.message)
+      if (isError) {
+        alert(data.message)
+        return
       }
 
       if (data === true) {
@@ -72,7 +73,7 @@ export default {
         return
       }
 
-      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=google', null, true);
+      const data = await this.$boardApi('DELETE', '/api/v2/auth/oauth2/link?type=google', null, true);
       if (data?.code) {
         alert(data.message)
       }

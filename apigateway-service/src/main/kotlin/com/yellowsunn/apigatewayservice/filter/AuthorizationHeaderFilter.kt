@@ -25,24 +25,17 @@ class AuthorizationHeaderFilter(
         val request: ServerHttpRequest = exchange.request
         val authorizationHeader: String? = request.headers[HttpHeaders.AUTHORIZATION]?.getOrNull(0)
 
-        val isBearerStartsWith = authorizationHeader?.startsWith(BEARER, ignoreCase = true) ?: false
-        val userId: String = if (isBearerStartsWith) {
-            val jwt = authorizationHeader?.replace(BEARER, "", ignoreCase = true)?.trim() ?: ""
-            try {
-                val accessTokenPayload: AccessTokenPayload = accessTokenParser.parseEncodedToken(jwt)
-                accessTokenPayload.uuid
-            } catch (e: Exception) {
-                logger.warn("Access token parse failed.", e)
-                ""
-            }
+        val isStartsWithBearer = authorizationHeader?.startsWith(BEARER, ignoreCase = true) ?: false
+        if (isStartsWithBearer.not()) {
+            chain.filter(exchange)
         } else {
-            ""
+            val jwt = authorizationHeader?.replace(BEARER, "", ignoreCase = true)?.trim() ?: ""
+            val accessTokenPayload: AccessTokenPayload = accessTokenParser.parseEncodedToken(jwt)
+            val changedRequest = exchange.request.mutate()
+                .header(USER_UUID_HEADER, accessTokenPayload.uuid)
+                .build()
+
+            chain.filter(exchange.mutate().request(changedRequest).build())
         }
-
-        val changedRequest = exchange.request.mutate()
-            .header(USER_UUID_HEADER, userId)
-            .build()
-
-        chain.filter(exchange.mutate().request(changedRequest).build())
     }
 }

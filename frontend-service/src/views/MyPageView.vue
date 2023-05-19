@@ -31,7 +31,13 @@ export default {
   name: "MyPageView",
   components: {EditFinished, MyPageUserLink, MyPageUserInfo, MyPageHeader},
   async mounted() {
-    const {email, nickName, thumbnail, providers} = await this.$boardApi('GET', '/api/users/my-info', null, true)
+    const {isError, data} = await this.$boardApi('GET', '/api/v2/users/my-info', null, true)
+    if (isError) {
+      alert(data.message)
+      return
+    }
+
+    const {email, nickName, thumbnail, providers} = data
     this.userInfo = {
       email, nickName, thumbnail
     }
@@ -66,13 +72,15 @@ export default {
         return
       }
 
-      const data = await this.$boardApi('DELETE', '/api/users/my-info', undefined, true)
+      const {isError, data} = await this.$boardApi('DELETE', '/api/v2/users/my-info', undefined, true)
+      if (isError) {
+        alert(data.message)
+        return
+      }
+
       if (data === true) {
         this.$store.commit('deleteUserToken')
         this.$router.push('/')
-      }
-      if (data?.code) {
-        alert(data?.message)
       }
     }
   }

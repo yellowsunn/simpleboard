@@ -25,28 +25,20 @@ export default {
   methods: {
     async completeClickEvent() {
       const state = this.$getSessionState()
-      const response = await this.$boardApi("POST", "/api/oauth2/signup", {
+      const {isError, data} = await this.$boardApi("POST", "/api/v2/auth/oauth2/signup", {
         state,
         tempUserToken: this.$getRequestParam("token"),
         nickName: this.nickName?.slice(0, 100),
       })
-      if (response.code) {
-        this.handleSignUpError(response.code, response.message)
+      if (isError) {
+        alert(data.message)
         return
       }
-      this.$store.commit('setUserToken', response)
+      this.$store.commit('setUserToken', data)
       this.$router.push("/")
     },
     cancelClickEvent() {
       this.$router.push('/login')
-    },
-    handleSignUpError(code, message) {
-      if (code === 'INVALID_TEMP_USER') {
-        alert('기존 정보를 불러올 수 없습니다. 다시 시도해주세요.')
-        this.$router.push("/login")
-      } else {
-        alert(message)
-      }
     },
   },
   watch: {

@@ -34,10 +34,12 @@ export default {
         return
       }
 
-      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=naver', null, true);
-      if (data?.code) {
+      const {isError, data} = await this.$boardApi('DELETE', '/api/v2/auth/oauth2/link?type=naver', null, true);
+      if (isError) {
         alert(data.message)
+        return
       }
+
       if (data === true) {
         this.$store.commit('deleteUserProvider', 'NAVER')
       }

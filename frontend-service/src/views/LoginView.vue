@@ -46,12 +46,12 @@ export default {
       if (!this.email || !this.password) {
         return
       }
-      const data = await this.$boardApi('POST', '/api/login', {
+      const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/email/login', {
         email: this.email,
         password: this.password,
       })
-      if (data?.code) {
-        alert(data?.message)
+      if (isError) {
+        alert(data.message)
         return
       }
 

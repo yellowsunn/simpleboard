@@ -10,80 +10,29 @@ spring:
             allowed-headers: "*"
             allowed-methods: "*"
       routes:
-        - id: user-service-signup
+        - id: oauth2-link-complete
           uri: ${endpoint.user-service}
           predicates:
-            - Path=/api/signup
-            - Method=POST, OPTIONS
+            - Path=/api/v2/auth/oauth2/link
+            - Method=PUT, DELETE, OPTIONS
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/api/signup, /api/v2/auth/email/signup
-        - id: user-service-login
+            - AuthorizationHeaderFilter
+        - id: user-auth
           uri: ${endpoint.user-service}
           predicates:
-            - Path=/api/login
-            - Method=POST, OPTIONS
+            - Path=/api/v2/auth/**
+            - Method=POST, PUT, DELETE, OPTIONS
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/api/login, /api/v2/auth/email/login
-          # OAuth2 로그인 및 회원가입 요청
-        - id: user-service-oauth-authorization
-          uri: ${endpoint.user-service}
-          predicates:
-            - Path=/oauth2/authorization/*
-            - Method=GET
-          filters:
-            - RemoveRequestHeader=X-OAUTH2-LINK
-            - RemoveRequestHeader=X-USER-UUID
-        - id: user-service-oauth-code
-          uri: ${endpoint.user-service}
-          predicates:
-            - Path=/*/oauth2/code/*
-            - Method=GET
-          # OAuth2 회원가입 완료
-        - id: user-service-oauth2-signup-complete
-          uri: ${endpoint.user-service}
-          predicates:
-            - Path=/api/oauth2/signup
-            - Method=POST
-          filters:
-            - RewritePath=/api/oauth2/signup, /api/v2/auth/oauth2/signup
-          # 기존 계정과 OAuth2 로그인 연동 요청
-        - id: user-service-oauth-link
-          uri: ${endpoint.user-service}
-          predicates:
-            - Path=/oauth2/link/*
-            - Method=GET
-          filters:
-            - AuthorizationHeaderFilter
-            - AddRequestHeader=X-OAUTH2-LINK, true
-            - RewritePath=/oauth2/link/(?<provider>.*), /oauth2/authorization/$\{provider}
-          # 기존 계정과 OAuth 로그인 연동 완료
-        - id: user-service-oauth-link-complete
-          uri: ${endpoint.user-service}
-          predicates:
-            - Path=/api/oauth2/link
-            - Method=PUT, DELETE
-          filters:
-            - AuthorizationHeaderFilter
-            - RewritePath=/api/oauth2/link, /api/v2/auth/oauth2/link
         - id: user-service
           uri: ${endpoint.user-service}
           predicates:
-            - Path=/api/users/**
+            - Path=/api/v2/users/**
             - Method=GET, POST, PUT, PATCH, DELETE, OPTIONS
           filters:
             - RemoveRequestHeader=Cookie
             - AuthorizationHeaderFilter
-            - RewritePath=/api/users/(?<path>.*), /api/v2/users/$\{path}
-        - id: oauth2-api
-          uri: ${endpoint.user-service}
-          predicates:
-            - Path=/api/oauth2/**
-            - Method=POST, DELETE, OPTIONS
-          filters:
-            - RemoveRequestHeader=Cookie
-            - RewritePath=/api/oauth2/(?<path>.*), /api/v2/auth/oauth2/$\{path}
 ---
 server:
   port: 8000

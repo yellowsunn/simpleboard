@@ -1,13 +1,13 @@
 import {createStore} from "vuex";
-import {ACCESS_TOKEN, REFRESH_TOKEN, getAccessToken, getRefreshToken} from "@/utils/tokenUtils";
+import {ACCESS_TOKEN, getAccessToken, getRefreshToken, REFRESH_TOKEN} from "@/utils/tokenUtils";
 
 
 const store = createStore({
   state() {
     return {
       userToken: {
-        access: getAccessToken(),
-        refresh: getRefreshToken(),
+        accessToken: getAccessToken(),
+        refreshToken: getRefreshToken(),
       },
       userProviders: null,
       isEditFinished: false,
@@ -15,15 +15,15 @@ const store = createStore({
   },
   getters: {
     isLogin(state) {
-      return !!state?.userToken?.access
+      return !!state?.userToken?.accessToken
     },
   },
   mutations: {
     setUserToken(state, userToken) {
-      state.userToken = {
-        access: userToken.accessToken,
-        refresh: userToken.refreshToken,
+      if (!userToken) {
+        return
       }
+      state.userToken = userToken
       document.cookie = `${ACCESS_TOKEN}=${userToken.accessToken}; SameSite=Strict; Domain=${process.env.VUE_APP_DOMAIN}; path=/;`
       document.cookie = `${REFRESH_TOKEN}=${userToken.refreshToken}; SameSite=Strict; Domain=${process.env.VUE_APP_DOMAIN}; path=/;`
     },
