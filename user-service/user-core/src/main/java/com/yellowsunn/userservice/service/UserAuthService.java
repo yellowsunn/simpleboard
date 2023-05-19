@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.service;
 
+import com.yellowsunn.common.exception.ExpiredAccessTokenException;
 import com.yellowsunn.common.utils.token.AccessTokenHandler;
 import com.yellowsunn.common.utils.token.AccessTokenPayload;
 import com.yellowsunn.common.utils.token.RefreshTokenHandler;
@@ -104,6 +105,7 @@ public class UserAuthService {
         return generateUserToken(user);
     }
 
+    @Transactional
     public String saveTempOAuth2User(OAuth2UserInfo userInfo, OAuth2Type type, String csrfToken) {
         var tempUser = TempUser.builder()
                 .email(userInfo.email())
@@ -150,6 +152,19 @@ public class UserAuthService {
         checkAtLeastOneProvider(user.getId());
 
         return userProviderRepository.deleteByUserIdAndProvider(user.getId(), provider);
+    }
+
+    public UserLoginTokenDto refreshUserToken(String encodedAccessToken, String encodedRefreshToken) {
+        refreshTokenHandler.parseEncodedToken(encodedRefreshToken);
+
+        AccessTokenPayload tokenPayload = generateNewEncodedAccessToken(encodedAccessToken);
+        String newAccessToken = accessTokenHandler.generateEncodedToken(tokenPayload);
+        String newRefreshToken = refreshTokenHandler.generateEncodedToken();
+
+        return UserLoginTokenDto.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .build();
     }
 
     private void verifyAlreadyExistEmail(String email) {
@@ -202,5 +217,23 @@ public class UserAuthService {
         if (providerCount <= 1) {
             throw new CustomUserException(UserErrorCode.LINK_AT_LEAST_ONE_USER_PROVIDER);
         }
+    }
+
+    private AccessTokenPayload generateNewEncodedAccessToken(String encodedAccessToken) {
+        String email;
+        String userUUID;
+        try {
+            var tokenPayload = accessTokenHandler.parseEncodedToken(encodedAccessToken);
+            email = tokenPayload.email();
+            userUUID = tokenPayload.uuid();
+        } catch (ExpiredAccessTokenException e) {
+            email = e.getEmail();
+            userUUID = e.getUserUUID();
+        }
+
+        return AccessTokenPayload.builder()
+                .email(email)
+                .uuid(userUUID)
+                .build();
     }
 }

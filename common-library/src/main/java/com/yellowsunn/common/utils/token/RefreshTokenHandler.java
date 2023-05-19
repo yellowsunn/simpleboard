@@ -11,12 +11,11 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-public class RefreshTokenHandler {
-    private final String secret;
+public class RefreshTokenHandler extends RefreshTokenParser {
     private final Duration expiration;
 
     public RefreshTokenHandler(String secret, Duration expiration) {
-        this.secret = secret;
+        super(secret);
         this.expiration = expiration;
     }
 

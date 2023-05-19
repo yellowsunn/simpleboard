@@ -19,11 +19,17 @@ export default {
       return
     }
     const token = found[0].replace("access_token=", "")?.trim()
-    const data = await this.$boardApi('POST', '/api/oauth2/login-signup', {
+    const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/oauth2/login-signup', {
       state: this.$setSessionState(),
       token,
       type: "naver",
     })
+    if (isError) {
+      alert(data.message)
+      this.$router.push('/')
+      return
+    }
+
     if (data.isLogin === true) {
       this.$store.commit('setUserToken', {
         accessToken: data.accessToken,

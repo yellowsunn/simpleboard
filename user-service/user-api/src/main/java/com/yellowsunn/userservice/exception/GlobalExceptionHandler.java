@@ -1,6 +1,7 @@
 package com.yellowsunn.userservice.exception;
 
 import com.yellowsunn.common.exception.InvalidAuthenticationException;
+import com.yellowsunn.common.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
+import static com.yellowsunn.common.exception.ErrorCode.UNKNOWN_ERROR;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -22,6 +25,7 @@ public class GlobalExceptionHandler {
         return ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.name())
                 .message(e.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
 
@@ -32,6 +36,7 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.builder()
                         .code(errorCode.name())
                         .message(errorCode.getDescription())
+                        .status(errorCode.getStatus())
                         .build()
                 );
     }
@@ -43,6 +48,7 @@ public class GlobalExceptionHandler {
         return ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.name())
                 .message(getFirstErrorMessage(e.getAllErrors()))
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
 
@@ -53,6 +59,7 @@ public class GlobalExceptionHandler {
         return ErrorResponse.builder()
                 .code(HttpStatus.UNAUTHORIZED.name())
                 .message(e.getMessage())
+                .status(HttpStatus.UNAUTHORIZED.value())
                 .build();
     }
 
@@ -61,8 +68,9 @@ public class GlobalExceptionHandler {
     protected ErrorResponse handleUnknownException(Exception e) {
         log.error("Unknown exception. message={}", e.getMessage(), e);
         return ErrorResponse.builder()
-                .code(HttpStatus.INTERNAL_SERVER_ERROR.name())
-                .message(e.getMessage())
+                .code(UNKNOWN_ERROR.name())
+                .message(UNKNOWN_ERROR.getDescription())
+                .status(UNKNOWN_ERROR.getStatus())
                 .build();
     }
 

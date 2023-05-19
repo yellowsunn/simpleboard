@@ -7,7 +7,7 @@ spring:
     active: local
 token:
   access:
-    expiration: 30m
+    expiration: 10s
     secret: jekmrsrhPKOwSUnR7m8WtcWv_K5SdKygftw3x99BrCs
   refresh:
     expiration: 1d

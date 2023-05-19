@@ -23,7 +23,6 @@ export default {
   components: {KakaoLogo},
   methods: {
     async handleUserLink() {
-        console.log('외 반응 안함?')
       window.Kakao.Auth.authorize({
         redirectUri: `${process.env.VUE_APP_FRONT_BASE_URL}/mypage/kakao/link`,
         scope: "account_email"
@@ -35,9 +34,10 @@ export default {
         return
       }
 
-      const data = await this.$boardApi('DELETE', '/api/oauth2/link?type=kakao', null, true);
-      if (data?.code) {
+      const {isError, data} = await this.$boardApi('DELETE', '/api/v2/auth/oauth2/link?type=kakao', null, true);
+      if (isError) {
         alert(data.message)
+        return
       }
       if (data === true) {
         this.$store.commit('deleteUserProvider', 'KAKAO')

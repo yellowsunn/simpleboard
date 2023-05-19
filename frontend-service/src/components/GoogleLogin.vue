@@ -37,12 +37,17 @@ export default {
     )
   },
   methods: {
-    async handleCallback(response) {
-      const data = await this.$boardApi('POST', '/api/oauth2/login-signup', {
+    async handleCallback(callbackData) {
+      const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/oauth2/login-signup', {
         state: this.$setSessionState(),
-        token: response?.credential,
+        token: callbackData?.credential,
         type: "google",
       })
+      if (isError) {
+        alert(data.message)
+        return
+      }
+
       if (data.isLogin === true) {
         this.$store.commit('setUserToken', {
           accessToken: data.accessToken,

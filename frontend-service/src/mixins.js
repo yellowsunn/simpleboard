@@ -1,12 +1,5 @@
 import axios from "axios";
-
-const handleUnAuthorizedStatus = (e, store) => {
-  if (e?.response?.status === 401) {
-    alert("로그인이 필요합니다.")
-    store.commit('deleteUserToken')
-    window.location = "/";
-  }
-};
+import {isAccessTokenExpired} from "@/utils/httpErrorHandler";
 
 export default {
   methods: {
@@ -16,26 +9,56 @@ export default {
       return params[param]
     },
     async $boardApi(method, url, data, isRequireAuth = false, headers = {"Content-Type": "application/json"}) {
-      if (isRequireAuth) {
-        headers = {
-          ...headers,
-          'Authorization': 'bearer ' + this.$store.state?.userToken?.access,
+      for (let i = 0; i < 2; i++) {
+        if (isRequireAuth) {
+          headers = {
+            ...headers,
+            'Authorization': 'bearer ' + this.$store.state?.userToken?.accessToken,
+          }
         }
-      }
+        try {
+          const response = await axios({
+            baseURL: process.env.VUE_APP_BOARD_API_BASE_URL,
+            url,
+            method,
+            data,
+            headers,
+          });
+          const responseData = response?.data || {};
+          return {
+            isError: false,
+            data: responseData,
+          }
+        } catch (e) {
+          const errorResponse = e?.response?.data
+          if (isRequireAuth && isAccessTokenExpired(errorResponse)) {
+            if (i === 0) {
+              try {
+                const res = await axios({
+                  baseURL: process.env.VUE_APP_BOARD_API_BASE_URL,
+                  url: '/api/v2/auth/token',
+                  method: "POST",
+                  data: this.$store.state?.userToken
+                });
+                await this.$store.commit('setUserToken', res?.data)
+                continue
+              } catch (e) {
+                this.$store.commit('deleteUserToken')
+                this.$router.push('/')
+              }
+            }
+            this.$store.commit('deleteUserToken')
+            this.$router.push('/')
+          }
 
-      try {
-        const response = await axios({
-          baseURL: process.env.VUE_APP_BOARD_API_BASE_URL,
-          url,
-          method,
-          data,
-          headers,
-        });
-        return response?.data || {}
-      } catch (e) {
-        console.log(e)
-        handleUnAuthorizedStatus(e, this.$store)
-        return e?.response?.data || {}
+          return {
+            isError: true,
+            data: {
+              message: "알 수 없는 에러가 발생하였습니다.",
+              ...errorResponse
+            }
+          }
+        }
       }
     },
     // csrf 토큰 용도

@@ -7,6 +7,7 @@
 </template>
 
 <script>
+
 export default {
   name: "KakaoUserLinkCallbackView.vue",
   async created() {
@@ -15,18 +16,18 @@ export default {
 
     if (!found || found.length === 0) {
       alert('잘못된 요청입니다.')
-      this.$rotuer.push('/')
+      this.$router.push('/')
       return
     }
+
     const code = found[0].replace('code=', "")?.trim()
-    const response = await this.$boardApi('PUT', '/api/oauth2/link', {
+    const {isError, data} = await this.$boardApi('PUT', '/api/v2/auth/oauth2/link', {
       token: code,
       type: "kakao",
     }, true);
 
-    // 실패하는 경우 알럿창 띄움
-    if (response?.code) {
-      alert(response?.message)
+    if (isError) {
+      alert(data.message)
     }
     this.$router.push('/mypage')
   }

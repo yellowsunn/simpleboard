@@ -58,16 +58,16 @@ export default {
   methods: {
     async handleSignUp() {
       if (this.isValidEmail && this.isValidNickName && this.isValidPassword && this.isSamePassword) {
-        //     /api/signup
-        const data = await this.$boardApi('POST', '/api/signup', {
+        const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/email/signup', {
           email: this.email,
           password: this.password,
           nickName: this.nickName
         })
-        if (data?.code) {
-          alert(data?.message)
+        if (isError) {
+          alert(data.message)
           return
         }
+
         if (data === true) {
           this.$router.push('/')
         }

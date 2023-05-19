@@ -7,6 +7,7 @@ import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LinkUserRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LoginOrSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2SignUpRequestDto;
+import com.yellowsunn.userservice.dto.RefreshAccessTokenRequestDto;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpDto;
 import com.yellowsunn.userservice.facade.UserAuthFacade;
@@ -66,5 +67,10 @@ public class ExternalUserAuthController {
                                 @RequestParam String type) {
         var oAuth2Type = OAuth2Type.convertFrom(type);
         return userAuthService.unlinkOAuth2User(userUUID, oAuth2Type);
+    }
+
+    @PostMapping("/api/v2/auth/token")
+    public UserLoginTokenDto refreshUserToken(@Valid @RequestBody RefreshAccessTokenRequestDto requestDto) {
+        return userAuthService.refreshUserToken(requestDto.getAccessToken(), requestDto.getRefreshToken());
     }
 }
