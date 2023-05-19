@@ -5,6 +5,8 @@ plugins {
     id("io.spring.dependency-management") version BoardServiceVersions.springDependencyManagement
     kotlin("jvm") version BoardServiceVersions.kotlin
     kotlin("plugin.spring") version BoardServiceVersions.kotlin
+    kotlin("plugin.noarg") version BoardServiceVersions.kotlin
+    kotlin("kapt") version BoardServiceVersions.kotlin
 }
 
 group = "com.example"
@@ -15,6 +17,7 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+    apply(plugin = "kotlin-kapt")
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
