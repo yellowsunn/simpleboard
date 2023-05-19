@@ -4,6 +4,7 @@ include(
     "board-monolithic-service",
     "apigateway-service",
     "common-library",
+
     "user-service",
     "user-service:user-api",
     "user-service:user-core",
@@ -12,4 +13,7 @@ include(
     "user-service:infra-redis",
     "user-service:infra-oauth2",
     "user-service:infra-http",
+
+    "board-service",
+    "board-service:board-api"
 )
