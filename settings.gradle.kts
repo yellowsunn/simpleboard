@@ -15,5 +15,6 @@ include(
     "user-service:infra-http",
 
     "board-service",
-    "board-service:board-api"
+    "board-service:board-api",
+    "board-service:board-core",
 )
