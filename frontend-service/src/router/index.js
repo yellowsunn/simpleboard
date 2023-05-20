@@ -54,6 +54,11 @@ const routes = [
     path: "/mypage/kakao/link",
     name: "KakaoUserLinkCallback",
     component: () => import(/* webpackChunkName: "login" */ '@/views/KakaoUserLinkCallbackView.vue'),
+  },
+  {
+    path: "/edit",
+    name: "Edit",
+    component: () => import(/* webpackChunkName: "login" */ '@/views/TextEditorView.vue'),
   }
 ]
 
