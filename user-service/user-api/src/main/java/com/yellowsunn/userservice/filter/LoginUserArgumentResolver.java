@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.annotation;
+package com.yellowsunn.userservice.filter;
 
 import com.yellowsunn.common.annotation.LoginUser;
 import com.yellowsunn.common.exception.InvalidAuthenticationException;

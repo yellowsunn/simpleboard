@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    default: local
+  kafka:
+    producer:
+      bootstrap-servers: ${my-kafka.bootstrap-servers}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+my-kafka:
+  topic:
+    article: queuing.board.article
+---
+spring:
+  profiles:
+    active: local
+
+my-kafka:
+  bootstrap-servers: localhost:19092, localhost:29092, localhost:39092

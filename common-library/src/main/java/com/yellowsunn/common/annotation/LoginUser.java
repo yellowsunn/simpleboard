@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.annotation;
+package com.yellowsunn.common.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

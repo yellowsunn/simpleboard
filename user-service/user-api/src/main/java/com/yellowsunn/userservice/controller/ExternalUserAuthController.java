@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.controller;
 
-import com.yellowsunn.userservice.annotation.LoginUser;
+import com.yellowsunn.common.annotation.LoginUser;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.dto.EmailLoginRequestDto;
 import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;

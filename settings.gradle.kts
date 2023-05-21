@@ -17,4 +17,7 @@ include(
     "board-service",
     "board-service:board-api",
     "board-service:board-core",
+    "board-service:infra-persistence",
+    "board-service:infra-http",
+    "board-service:infra-kafka-producer",
 )
