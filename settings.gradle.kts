@@ -15,9 +15,9 @@ include(
     "user-service:infra-http",
 
     "board-service",
-    "board-service:board-api",
-    "board-service:board-core",
-    "board-service:infra-persistence",
-    "board-service:infra-http",
-    "board-service:infra-kafka-producer",
+    "board-service:apps:board-api",
+    "board-service:libs:board-core",
+    "board-service:libs:infra-persistence",
+    "board-service:libs:infra-http",
+    "board-service:libs:infra-kafka-producer",
 )
