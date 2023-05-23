@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  #  레디스
+  #  레디스 (standalone)
   redis:
     image: redis:7.0-alpine
     ports:
@@ -10,7 +10,18 @@ services:
     command: redis-server /usr/local/etc/redis/redis.conf
     restart: on-failure
 
-  # 카프카
+  mysql-board:
+    image: mysql:8.0.33
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: board
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+      # 카프카 클러스터 (주키퍼 1, 브로커 3, UI 서버 1)
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.9
     environment:
@@ -69,4 +80,14 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:9092, kafka-2:9092, kafka-3:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    restart: on-failure
+  # mongo db
+  mongodb:
+    image: mongo:6.0.5
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=board
     restart: on-failure

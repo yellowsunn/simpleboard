@@ -1,4 +1,4 @@
-package com.yellowsunn.boardservice.domain.comment
+package com.yellowsunn.boardservice.domain.command.comment
 
 import java.io.Serializable
 

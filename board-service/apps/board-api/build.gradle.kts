@@ -8,4 +8,5 @@ dependencies {
     runtimeOnly(project(":board-service:libs:infra-persistence"))
     runtimeOnly(project(":board-service:libs:infra-http"))
     runtimeOnly(project(":board-service:libs:infra-kafka-producer"))
+    runtimeOnly(project(":board-service:libs:infra-mongodb"))
 }

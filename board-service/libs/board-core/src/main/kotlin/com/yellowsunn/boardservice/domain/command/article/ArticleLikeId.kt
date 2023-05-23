@@ -1,4 +1,4 @@
-package com.yellowsunn.boardservice.domain.article
+package com.yellowsunn.boardservice.domain.command.article
 
 import java.io.Serializable
 

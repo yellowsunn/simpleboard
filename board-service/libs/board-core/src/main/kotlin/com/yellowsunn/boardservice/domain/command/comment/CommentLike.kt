@@ -1,6 +1,6 @@
-package com.yellowsunn.boardservice.domain.comment
+package com.yellowsunn.boardservice.domain.command.comment
 
-import com.yellowsunn.boardservice.domain.BaseTimeEntity
+import com.yellowsunn.boardservice.domain.command.BaseTimeEntity
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.IdClass

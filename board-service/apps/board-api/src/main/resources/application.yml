@@ -6,6 +6,7 @@ spring:
       - 'classpath:application-persistence.yml'
       - 'classpath:application-http.yml'
       - 'classpath:application-kafka-producer.yml'
+      - 'classpath:application-mongodb.yml'
 ---
 server:
   port: 8081

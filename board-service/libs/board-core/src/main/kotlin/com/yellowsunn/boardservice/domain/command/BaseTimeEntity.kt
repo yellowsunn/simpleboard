@@ -1,4 +1,4 @@
-package com.yellowsunn.boardservice.domain
+package com.yellowsunn.boardservice.domain.command
 
 import jakarta.persistence.MappedSuperclass
 import jakarta.persistence.PrePersist

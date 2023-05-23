@@ -1,6 +1,6 @@
-package com.yellowsunn.boardservice.domain.article
+package com.yellowsunn.boardservice.domain.command.article
 
-import com.yellowsunn.boardservice.domain.BaseTimeEntity
+import com.yellowsunn.boardservice.domain.command.BaseTimeEntity
 import com.yellowsunn.boardservice.utils.sanitizeHtml
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
