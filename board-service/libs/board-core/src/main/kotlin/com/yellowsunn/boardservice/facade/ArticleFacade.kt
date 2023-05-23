@@ -14,13 +14,13 @@ class ArticleFacade(
     private val articleService: ArticleService,
     private val articleEventProducer: ArticleEventProducer,
 ) {
-    fun saveArticle(command: ArticleSaveCommand): String {
+    fun saveArticle(command: ArticleSaveCommand): Long {
         val user: User = userHttpClient.findUserByUserUUID(command.userUUID)
             ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
 
         val article: Article = articleService.saveArticle(user.userId, command.title, command.body)
 
         articleEventProducer.sendEvent(articleId = article.id)
-        return article.uuid
+        return article.id
     }
 }

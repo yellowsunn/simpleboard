@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import java.time.ZonedDateTime
 import java.util.UUID
 
-class ArticleMongoRepositoryTest : MongoIntegrationTest() {
+class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
     @Autowired
     lateinit var mongoTemplate: MongoTemplate
 
@@ -56,7 +56,7 @@ class ArticleMongoRepositoryTest : MongoIntegrationTest() {
         assertThat(articleDocumentPage.totalPages).isEqualTo(3)
         assertThat(articleDocumentPage.number).isEqualTo(1)
         assertThat(articleDocumentPage.content)
-            .isSortedAccordingTo(Comparator.comparing<ArticleDocument, ZonedDateTime> { it.createdAt }.reversed())
+            .isSortedAccordingTo(Comparator.comparing<ArticleDocument, ZonedDateTime> { it.savedAt }.reversed())
     }
 
     private fun getTestArticle(articleId: Long): ArticleDocument = ArticleDocument(
@@ -67,5 +67,6 @@ class ArticleMongoRepositoryTest : MongoIntegrationTest() {
         body = "body",
         readCount = 0L,
         likeCount = 0L,
+        savedAt = ZonedDateTime.now(),
     )
 }

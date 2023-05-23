@@ -31,7 +31,7 @@ class ArticleMongoRepository(
             .with(pageable)
 
         val articles: List<ArticleDocument> = mongoTemplate.find(
-            Query.of(query).with(Sort.by(Sort.Direction.DESC, "createdAt")),
+            Query.of(query).with(Sort.by(Sort.Direction.DESC, "savedAt")),
             ArticleDocument::class.java,
         )
 
