@@ -1,8 +1,8 @@
 package com.yellowsunn.boardservice.dto
 
 import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
-import org.apache.commons.text.StringEscapeUtils
 import java.time.ZonedDateTime
+import org.apache.commons.text.StringEscapeUtils
 
 data class ArticleDocumentDto(
     val id: String,
@@ -14,12 +14,12 @@ data class ArticleDocumentDto(
     val savedAt: ZonedDateTime,
 ) {
     companion object {
-        fun from(articleDocument: ArticleDocument) = ArticleDocumentDto(
+        fun from(articleDocument: ArticleDocument, increasedViewCount: Long) = ArticleDocumentDto(
             id = articleDocument.id,
             articleId = articleDocument.articleId,
             title = articleDocument.title,
             body = StringEscapeUtils.unescapeHtml4(articleDocument.body),
-            readCount = articleDocument.readCount,
+            readCount = articleDocument.readCount + increasedViewCount,
             likeCount = articleDocument.likeCount,
             savedAt = articleDocument.savedAt,
         )

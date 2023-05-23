@@ -6,6 +6,7 @@ import com.yellowsunn.boardservice.dto.ArticleDocumentDto
 import com.yellowsunn.boardservice.dto.ArticleDocumentPageDto
 import com.yellowsunn.boardservice.repository.article.ArticleQueryRepository
 import com.yellowsunn.boardservice.repository.article.ArticleRepository
+import com.yellowsunn.boardservice.repository.article.ArticleViewCacheRepository
 import kotlin.math.max
 import kotlin.math.min
 import org.springframework.data.domain.Page
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service
 class ArticleQueryService(
     private val articleRepository: ArticleRepository,
     private val articleQueryRepository: ArticleQueryRepository,
+    private val articleViewCacheRepository: ArticleViewCacheRepository,
 ) {
     private companion object {
         private const val DEFAULT_ELEM_SIZE = 10
@@ -41,7 +43,10 @@ class ArticleQueryService(
         val articleDocument = articleQueryRepository.findById(id)
             ?: throw IllegalArgumentException("게시글을 찾을 수 없습니다.")
 
-        return ArticleDocumentDto.from(articleDocument)
+        // 조회수 증가
+        val increasedViewCount = articleViewCacheRepository.increaseViewCount(articleDocument.articleId)
+
+        return ArticleDocumentDto.from(articleDocument, increasedViewCount)
     }
 
     fun findArticles(page: Int, size: Int): ArticleDocumentPageDto {
@@ -53,6 +58,10 @@ class ArticleQueryService(
         }
 
         val articleDocumentPage: Page<ArticleDocument> = articleQueryRepository.findArticles(curPage, curSize)
-        return ArticleDocumentPageDto.from(articleDocumentPage)
+
+        val articleIds = articleDocumentPage.content.map { it.articleId }
+        val viewCounts = articleViewCacheRepository.findViewCounts(articleIds)
+
+        return ArticleDocumentPageDto.from(articleDocumentPage, viewCounts)
     }
 }

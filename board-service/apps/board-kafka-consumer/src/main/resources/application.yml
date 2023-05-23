@@ -12,6 +12,7 @@ spring:
       - 'classpath:application-http.yml'
       - 'classpath:application-persistence.yml'
       - 'classpath:application-mongodb.yml'
+      - 'classpath:application-redis.yml'
 ---
 server:
   port: 8181

@@ -22,9 +22,9 @@ data class ArticleDocumentPageDto(
     )
 
     companion object {
-        fun from(documentPage: Page<ArticleDocument>): ArticleDocumentPageDto {
+        fun from(documentPage: Page<ArticleDocument>, viewCounts: Map<Long, Long>): ArticleDocumentPageDto {
             val articles = documentPage.content.map {
-                convertArticleDocumentDto(it)
+                convertArticleDocumentDto(it, viewCounts[it.articleId] ?: 0L)
             }
 
             return ArticleDocumentPageDto(
@@ -37,11 +37,11 @@ data class ArticleDocumentPageDto(
             )
         }
 
-        private fun convertArticleDocumentDto(document: ArticleDocument) = ArticleDocumentDto(
+        private fun convertArticleDocumentDto(document: ArticleDocument, increasedViewCount: Long) = ArticleDocumentDto(
             id = document.id,
             articleId = document.articleId,
             title = document.title,
-            readCount = document.readCount,
+            readCount = document.readCount + increasedViewCount,
             likeCount = document.likeCount,
             savedAt = document.savedAt,
         )
