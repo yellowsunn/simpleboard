@@ -26,6 +26,4 @@ class ArticleQueryService(
         articleQueryRepository.save(articleDocument)
         return true
     }
-
-    fun find
 }
