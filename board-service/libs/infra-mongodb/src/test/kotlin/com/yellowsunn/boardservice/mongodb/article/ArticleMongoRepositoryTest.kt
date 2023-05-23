@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.mongodb.core.MongoTemplate
 import java.time.ZonedDateTime
+import java.util.UUID
 
 class ArticleMongoRepositoryTest : MongoIntegrationTest() {
     @Autowired
@@ -34,6 +35,17 @@ class ArticleMongoRepositoryTest : MongoIntegrationTest() {
     }
 
     @Test
+    fun findById() {
+        val articleDocument = getTestArticle(1L)
+        articleMongoRepository.save(articleDocument)
+
+        val savedArticleDocument: ArticleDocument? = articleMongoRepository.findById(articleDocument.id)
+
+        assertThat(savedArticleDocument).isNotNull
+        assertThat(savedArticleDocument!!.id).isEqualTo(articleDocument.id)
+    }
+
+    @Test
     fun findArticles() {
         (1L..10L).forEach {
             articleMongoRepository.save(getTestArticle(it))
@@ -50,7 +62,7 @@ class ArticleMongoRepositoryTest : MongoIntegrationTest() {
     private fun getTestArticle(articleId: Long): ArticleDocument = ArticleDocument(
         articleId = articleId,
         userId = 1L,
-        uuid = "uuid",
+        uuid = UUID.randomUUID().toString(),
         title = "title",
         body = "body",
         readCount = 0L,

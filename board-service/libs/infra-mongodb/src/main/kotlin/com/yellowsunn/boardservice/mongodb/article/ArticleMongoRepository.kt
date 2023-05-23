@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.data.support.PageableExecutionUtils
 import org.springframework.stereotype.Component
 
@@ -18,6 +19,10 @@ class ArticleMongoRepository(
 ) : ArticleQueryRepository {
     override fun save(entity: ArticleDocument): ArticleDocument {
         return delegate.save(entity)
+    }
+
+    override fun findById(id: String): ArticleDocument? {
+        return delegate.findByIdOrNull(id)
     }
 
     override fun findArticles(page: Int, size: Int): Page<ArticleDocument> {

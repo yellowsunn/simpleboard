@@ -5,5 +5,6 @@ import org.springframework.data.domain.Page
 
 interface ArticleQueryRepository {
     fun save(entity: ArticleDocument): ArticleDocument
+    fun findById(id: String): ArticleDocument?
     fun findArticles(page: Int, size: Int): Page<ArticleDocument>
 }
