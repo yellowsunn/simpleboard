@@ -1,6 +1,6 @@
 package com.yellowsunn.boardservice.facade
 
-import com.yellowsunn.boardservice.domain.article.Article
+import com.yellowsunn.boardservice.domain.command.article.Article
 import com.yellowsunn.boardservice.domain.user.User
 import com.yellowsunn.boardservice.dto.ArticleSaveCommand
 import com.yellowsunn.boardservice.event.producer.ArticleEventProducer

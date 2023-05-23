@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    default: local
+---
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:password@localhost:27017/board?authSource=admin
+      auto-index-creation: true

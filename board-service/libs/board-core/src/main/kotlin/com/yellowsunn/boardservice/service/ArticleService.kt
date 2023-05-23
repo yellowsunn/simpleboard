@@ -1,6 +1,6 @@
 package com.yellowsunn.boardservice.service
 
-import com.yellowsunn.boardservice.domain.article.Article
+import com.yellowsunn.boardservice.domain.command.article.Article
 import com.yellowsunn.boardservice.repository.article.ArticleRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
