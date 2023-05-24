@@ -11,9 +11,9 @@
 
 <script>
 
-import GoogleUserLink from "@/components/GoogleUserLink.vue";
-import NaverUserLink from "@/components/NaverUserLink.vue";
-import KakaoUserLink from "@/components/KakaoUserLink.vue";
+import GoogleUserLink from "@/components/mypage/userlink/GoogleUserLink.vue";
+import NaverUserLink from "@/components/mypage/userlink/NaverUserLink.vue";
+import KakaoUserLink from "@/components/mypage/userlink/KakaoUserLink.vue";
 
 export default {
   name: "MyPageUserLink",

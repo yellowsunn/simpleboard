@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import NaverLogin from "@/components/NaverLogin.vue";
-import GoogleLogin from "@/components/GoogleLogin.vue";
-import KakaoLogin from "@/components/KakaoLogin.vue";
+import NaverLogin from "@/components/oauth2-login/NaverLogin.vue";
+import GoogleLogin from "@/components/oauth2-login/GoogleLogin.vue";
+import KakaoLogin from "@/components/oauth2-login/KakaoLogin.vue";
 
 export default {
   name: "LoginView",

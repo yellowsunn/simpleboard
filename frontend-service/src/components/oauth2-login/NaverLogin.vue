@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="naverIdLogin" ref="naverIdLogin" v-show="false"></div>
-        <img src="../assets/btn_naver.png" class="btn_naver" alt="btn_naver" @click="clickEvent"/>
+        <img src="../../assets/btn_naver.png" class="btn_naver" alt="btn_naver" @click="clickEvent"/>
     </div>
 </template>
 

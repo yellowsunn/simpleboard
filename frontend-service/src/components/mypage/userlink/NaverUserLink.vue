@@ -1,7 +1,7 @@
 <template>
     <div class="btn_naver border" @click="isLinked ? handleUserUnlink() : handleUserLink()">
         <div class="d-flex">
-            <img src="../assets/btn_naver.png" width="40"/>
+            <img src="../../../assets/btn_naver.png" width="40"/>
         </div>
         <div v-if="isLinked" class="btn_naver_text">네이버 계정 연동 끊기</div>
         <div v-else class="btn_naver_text">네이버 계정 연동하기</div>

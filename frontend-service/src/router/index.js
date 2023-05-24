@@ -8,14 +8,6 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  },
-  {
     path: "/login",
     name: "Login",
     component: () => import(/* webpackChunkName: "login" */ '@/views/LoginView.vue'),
@@ -23,12 +15,12 @@ const routes = [
   {
     path: "/login/naver",
     name: "NaverLoginCallback",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/NaverLoginCallbackView.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '@/views/callback/NaverLoginCallbackView.vue'),
   },
   {
     path: "/login/kakao",
     name: "KakaoLoginCallback",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/KakaoLoginCallbackView.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '@/views/callback/KakaoLoginCallbackView.vue'),
   },
   {
     path: "/email/signup",
@@ -48,12 +40,12 @@ const routes = [
   {
     path: "/mypage/naver/link",
     name: "NaverUserLinkCallbackLink",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/NaverUserLinkCallbackView.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '@/views/callback/NaverUserLinkCallbackView.vue'),
   },
   {
     path: "/mypage/kakao/link",
     name: "KakaoUserLinkCallback",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/KakaoUserLinkCallbackView.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '@/views/callback/KakaoUserLinkCallbackView.vue'),
   },
   {
     path: "/edit",
