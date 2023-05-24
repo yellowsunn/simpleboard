@@ -1,8 +1,6 @@
 package com.yellowsunn.apigatewayservice.exception
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.yellowsunn.common.exception.ErrorCode.ACCESS_TOKEN_EXPIRED
-import com.yellowsunn.common.exception.ErrorCode.UNKNOWN_ERROR
 import com.yellowsunn.common.exception.ExpiredAccessTokenException
 import com.yellowsunn.common.response.ErrorResponse
 import org.slf4j.Logger
@@ -21,18 +19,10 @@ class GlobalWebExceptionHandler : ErrorWebExceptionHandler {
 
     override fun handle(exchange: ServerWebExchange, e: Throwable): Mono<Void> {
         val errorResponse = if (e is ExpiredAccessTokenException) {
-            ErrorResponse.builder()
-                .code(ACCESS_TOKEN_EXPIRED.name)
-                .message(ACCESS_TOKEN_EXPIRED.description)
-                .status(ACCESS_TOKEN_EXPIRED.status)
-                .build()
+            ErrorResponse.accessTokenExpired()
         } else {
             logger.error("Unknown error. message={}", e.message, e)
-            ErrorResponse.builder()
-                .code(UNKNOWN_ERROR.name)
-                .message(UNKNOWN_ERROR.description)
-                .status(UNKNOWN_ERROR.status)
-                .build()
+            ErrorResponse.unknownError()
         }
 
         exchange.response.headers.contentType = MediaType.APPLICATION_JSON

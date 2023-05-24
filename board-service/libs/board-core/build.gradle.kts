@@ -5,6 +5,8 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":common-library"))
+
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.apache.commons:commons-text:1.10.0")

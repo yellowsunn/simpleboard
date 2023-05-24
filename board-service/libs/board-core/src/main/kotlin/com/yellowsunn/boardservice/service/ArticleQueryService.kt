@@ -1,11 +1,10 @@
 package com.yellowsunn.boardservice.service
 
-import com.yellowsunn.boardservice.domain.command.article.Article
 import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
 import com.yellowsunn.boardservice.dto.ArticleDocumentDto
 import com.yellowsunn.boardservice.dto.ArticleDocumentPageDto
-import com.yellowsunn.boardservice.repository.article.ArticleQueryRepository
-import com.yellowsunn.boardservice.repository.article.ArticleRepository
+import com.yellowsunn.boardservice.exception.ArticleNotFoundException
+import com.yellowsunn.boardservice.repository.article.ArticleDocumentRepository
 import com.yellowsunn.boardservice.repository.article.ArticleViewCacheRepository
 import kotlin.math.max
 import kotlin.math.min
@@ -14,8 +13,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ArticleQueryService(
-    private val articleRepository: ArticleRepository,
-    private val articleQueryRepository: ArticleQueryRepository,
+    private val articleDocumentRepository: ArticleDocumentRepository,
     private val articleViewCacheRepository: ArticleViewCacheRepository,
 ) {
     private companion object {
@@ -23,25 +21,9 @@ class ArticleQueryService(
         private const val MAX_ELEM_SIZE = 100
     }
 
-    fun sync(articleId: Long): Boolean {
-        val article: Article = articleRepository.findById(articleId) ?: return false
-
-        val articleDocument = ArticleDocument(
-            articleId = articleId,
-            title = article.title,
-            body = article.body,
-            readCount = article.readCount,
-            likeCount = article.readCount,
-            userId = article.userId,
-            savedAt = article.createdAt,
-        )
-        articleQueryRepository.save(articleDocument)
-        return true
-    }
-
     fun findArticleByDocumentId(id: String): ArticleDocumentDto {
-        val articleDocument = articleQueryRepository.findById(id)
-            ?: throw IllegalArgumentException("게시글을 찾을 수 없습니다.")
+        val articleDocument = articleDocumentRepository.findById(id)
+            ?: throw ArticleNotFoundException()
 
         // 조회수 증가
         val increasedViewCount = articleViewCacheRepository.increaseViewCount(articleDocument.articleId)
@@ -57,7 +39,7 @@ class ArticleQueryService(
             min(size, MAX_ELEM_SIZE)
         }
 
-        val articleDocumentPage: Page<ArticleDocument> = articleQueryRepository.findArticles(curPage, curSize)
+        val articleDocumentPage: Page<ArticleDocument> = articleDocumentRepository.findArticles(curPage, curSize)
 
         val articleIds = articleDocumentPage.content.map { it.articleId }
         val viewCounts = articleViewCacheRepository.findViewCounts(articleIds)

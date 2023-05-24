@@ -23,7 +23,7 @@ class Article(
     // HTML 태그를 필터링하고, 이스케이프 문자로 치환한다.
     val body: String = StringEscapeUtils.escapeHtml4(filterHtmlTag(body))
 
-    var readCount: Long = 0L
+    var viewCount: Long = 0L
         private set
 
     // 이스케이프 문자로 저장된 데이터를, 로우한 HTML 데이터로 변환

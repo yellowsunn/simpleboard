@@ -7,30 +7,29 @@ import com.yellowsunn.boardservice.dto.ArticleSaveCommand
 import com.yellowsunn.boardservice.dto.ArticleUndoLikeCommand
 import com.yellowsunn.boardservice.event.producer.ArticleEventProducer
 import com.yellowsunn.boardservice.http.client.user.UserHttpClient
-import com.yellowsunn.boardservice.service.ArticleService
+import com.yellowsunn.boardservice.service.ArticleCommandService
+import com.yellowsunn.common.exception.UserNotFoundException
 import org.springframework.stereotype.Component
 
 @Component
-class ArticleFacade(
+class ArticleCommandFacade(
     private val userHttpClient: UserHttpClient,
-    private val articleService: ArticleService,
+    private val articleCommandService: ArticleCommandService,
     private val articleEventProducer: ArticleEventProducer,
 ) {
     fun saveArticle(command: ArticleSaveCommand): Long {
-        val user: User = userHttpClient.findUserByUserUUID(command.userUUID)
-            ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        val user: User = getUserByUUID(command.userUUID)
 
-        val article: Article = articleService.saveArticle(user.userId, command.title, command.body)
+        val article: Article = articleCommandService.saveArticle(user.userId, command.title, command.body)
 
         articleEventProducer.saveArticleEvent(article.id)
         return article.id
     }
 
     fun likeArticle(command: ArticleLikeCommand): Boolean {
-        val user: User = userHttpClient.findUserByUserUUID(command.userUUID)
-            ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        val user: User = getUserByUUID(command.userUUID)
 
-        val isUpdated: Boolean = articleService.likeArticle(user.userId, command.articleId)
+        val isUpdated: Boolean = articleCommandService.likeArticle(user.userId, command.articleId)
         if (isUpdated) {
             articleEventProducer.updateArticleLikeEvent(command.articleId)
         }
@@ -38,13 +37,17 @@ class ArticleFacade(
     }
 
     fun undoLikeArticle(command: ArticleUndoLikeCommand): Boolean {
-        val user: User = userHttpClient.findUserByUserUUID(command.userUUID)
-            ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+        val user: User = getUserByUUID(command.userUUID)
 
-        val isUpdated: Boolean = articleService.undoLikeArticle(user.userId, command.articleId)
+        val isUpdated: Boolean = articleCommandService.undoLikeArticle(user.userId, command.articleId)
         if (isUpdated) {
             articleEventProducer.updateArticleUndoLikeEvent(command.articleId)
         }
         return isUpdated
+    }
+
+    private fun getUserByUUID(uuid: String): User {
+        return userHttpClient.findUserByUserUUID(uuid)
+            ?: throw UserNotFoundException()
     }
 }

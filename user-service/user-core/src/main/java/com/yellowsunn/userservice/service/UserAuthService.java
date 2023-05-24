@@ -1,6 +1,7 @@
 package com.yellowsunn.userservice.service;
 
 import com.yellowsunn.common.exception.ExpiredAccessTokenException;
+import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.common.utils.token.AccessTokenHandler;
 import com.yellowsunn.common.utils.token.AccessTokenPayload;
 import com.yellowsunn.common.utils.token.RefreshTokenHandler;
@@ -124,7 +125,7 @@ public class UserAuthService {
         Assert.notNull(provider, "OAuth2 provider must not be null.");
 
         User user = userRepository.findByUUID(userUUID)
-                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
+                .orElseThrow(UserNotFoundException::new);
 
         boolean isAlreadyFinished = checkAlreadyExistProvider(user.getId(), providerEmail, provider);
         if (isAlreadyFinished) {
@@ -146,7 +147,7 @@ public class UserAuthService {
         Assert.notNull(provider, "OAuth2 provider must not be null.");
 
         User user = userRepository.findByUUID(userUUID)
-                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
+                .orElseThrow(UserNotFoundException::new);
 
         // TODO: 동시성 이슈 고려 필요
         checkAtLeastOneProvider(user.getId());

@@ -16,7 +16,7 @@ data class ArticleDocumentPageDto(
         val id: String,
         val articleId: Long,
         val title: String,
-        val readCount: Long,
+        val viewCount: Long,
         val likeCount: Long,
         val savedAt: ZonedDateTime,
     )
@@ -41,7 +41,7 @@ data class ArticleDocumentPageDto(
             id = document.id,
             articleId = document.articleId,
             title = document.title,
-            readCount = document.readCount + increasedViewCount,
+            viewCount = document.viewCount + increasedViewCount,
             likeCount = document.likeCount,
             savedAt = document.savedAt,
         )

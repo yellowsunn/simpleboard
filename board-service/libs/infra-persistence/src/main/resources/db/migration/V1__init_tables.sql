@@ -3,7 +3,7 @@ create table article
     article_id  bigint       not null auto_increment,
     title       varchar(200) not null,
     body        text         not null,
-    read_count  bigint       not null,
+    view_count  bigint       not null,
     user_id     bigint       not null,
     created_at  timestamp(6) not null,
     modified_at timestamp(6) not null,

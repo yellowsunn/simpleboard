@@ -72,7 +72,7 @@ class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
         userId = 1L,
         title = "title",
         body = "body",
-        readCount = 0L,
+        viewCount = 0L,
         likeCount = 0L,
         savedAt = ZonedDateTime.now(),
     )

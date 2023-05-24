@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
 
 @Component
-class ArticleEventKafkaProducer(
+class ArticleKafkaEventProducer(
     private val kafkaTemplate: KafkaTemplate<String, String>,
 ) : ArticleEventProducer {
     private val log = KotlinLogging.logger { }

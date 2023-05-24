@@ -1,15 +1,15 @@
 package com.yellowsunn.boardservice.dto
 
 import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
-import java.time.ZonedDateTime
 import org.apache.commons.text.StringEscapeUtils
+import java.time.ZonedDateTime
 
 data class ArticleDocumentDto(
     val id: String,
     val articleId: Long,
     val title: String,
     val body: String,
-    val readCount: Long,
+    val viewCount: Long,
     val likeCount: Long,
     val savedAt: ZonedDateTime,
 ) {
@@ -19,7 +19,7 @@ data class ArticleDocumentDto(
             articleId = articleDocument.articleId,
             title = articleDocument.title,
             body = StringEscapeUtils.unescapeHtml4(articleDocument.body),
-            readCount = articleDocument.readCount + increasedViewCount,
+            viewCount = articleDocument.viewCount + increasedViewCount,
             likeCount = articleDocument.likeCount,
             savedAt = articleDocument.savedAt,
         )

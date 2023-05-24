@@ -2,7 +2,7 @@ package com.yellowsunn.boardservice.mongodb.article
 
 import com.mongodb.client.result.UpdateResult
 import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
-import com.yellowsunn.boardservice.repository.article.ArticleQueryRepository
+import com.yellowsunn.boardservice.repository.article.ArticleDocumentRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component
 class ArticleMongoRepository(
     private val delegate: ArticleMongoRepositoryDelegate,
     private val mongoTemplate: MongoTemplate,
-) : ArticleQueryRepository {
+) : ArticleDocumentRepository {
     override fun save(entity: ArticleDocument): ArticleDocument {
         return delegate.save(entity)
     }

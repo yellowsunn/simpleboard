@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.service;
 
+import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.dto.UserInfoUpdateCommand;
@@ -64,7 +65,7 @@ public class UserService {
 
     private User getUserByUUID(String uuid) {
         return userRepository.findByUUID(uuid)
-                .orElseThrow(() -> new CustomUserException(UserErrorCode.NOT_FOUND_USER));
+                .orElseThrow(UserNotFoundException::new);
     }
 
     private void checkValidNickName(Long userId, String nickName) {

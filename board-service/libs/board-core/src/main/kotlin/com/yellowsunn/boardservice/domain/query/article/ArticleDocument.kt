@@ -12,7 +12,7 @@ class ArticleDocument(
     var articleId: Long,
     var title: String,
     var body: String,
-    var readCount: Long,
+    var viewCount: Long,
     var likeCount: Long,
     val userId: Long,
     @Indexed(direction = DESCENDING)

@@ -1,6 +1,7 @@
 package com.yellowsunn.userservice.exception;
 
 import com.yellowsunn.common.exception.InvalidAuthenticationException;
+import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.common.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
-import static com.yellowsunn.common.exception.ErrorCode.UNKNOWN_ERROR;
-
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
     protected ErrorResponse handleIllegalArgumentAndStateException(Exception e) {
         log.warn("Illegal request. message={}", e.getMessage(), e);
@@ -55,7 +56,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(InvalidAuthenticationException.class)
     protected ErrorResponse handleInvalidAuthorizationException(InvalidAuthenticationException e) {
-        log.warn("Forbidden request. message={}", e.getMessage(), e);
+        log.warn("Unauthorized request. message={}", e.getMessage(), e);
         return ErrorResponse.builder()
                 .code(HttpStatus.UNAUTHORIZED.name())
                 .message(e.getMessage())
@@ -63,15 +64,18 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ErrorResponse handleUserNotFoundException(UserNotFoundException e) {
+        log.warn("Unauthorized request. message={}", e.getMessage(), e);
+        return ErrorResponse.notFoundUser();
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     protected ErrorResponse handleUnknownException(Exception e) {
         log.error("Unknown exception. message={}", e.getMessage(), e);
-        return ErrorResponse.builder()
-                .code(UNKNOWN_ERROR.name())
-                .message(UNKNOWN_ERROR.getDescription())
-                .status(UNKNOWN_ERROR.getStatus())
-                .build();
+        return ErrorResponse.unknownError();
     }
 
     private String getFirstErrorMessage(List<ObjectError> errors) {

@@ -1,5 +1,6 @@
 package com.yellowsunn.userservice.service;
 
+import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
 import com.yellowsunn.userservice.exception.CustomUserException;
@@ -50,8 +51,7 @@ class UserServiceTest {
         Throwable throwable = catchThrowable(() -> sut.findUserInfo(userId));
 
         // then
-        assertThat(throwable).isInstanceOf(CustomUserException.class);
-        assertThat(((CustomUserException) throwable).getErrorCode()).isEqualTo(UserErrorCode.NOT_FOUND_USER);
+        assertThat(throwable).isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.yellowsunn.boardservice.service
 import com.yellowsunn.boardservice.domain.command.article.Article
 import com.yellowsunn.boardservice.domain.command.article.ArticleLike
 import com.yellowsunn.boardservice.domain.command.article.ArticleLikeId
+import com.yellowsunn.boardservice.exception.ArticleNotFoundException
 import com.yellowsunn.boardservice.repository.article.ArticleLikeRepository
 import com.yellowsunn.boardservice.repository.article.ArticleRepository
 import jakarta.persistence.EntityExistsException
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ArticleService(
+class ArticleCommandService(
     private val articleRepository: ArticleRepository,
     private val articleLikeRepository: ArticleLikeRepository,
 ) {
@@ -27,8 +28,7 @@ class ArticleService(
     }
 
     fun likeArticle(userId: Long, articleId: Long): Boolean {
-        articleRepository.findById(articleId)
-            ?: throw IllegalArgumentException("게시글을 찾을 수 없습니다.")
+        checkValidArticleId(articleId)
 
         val articleLike = ArticleLike(
             articleId = articleId,
@@ -47,13 +47,17 @@ class ArticleService(
 
     @Transactional
     fun undoLikeArticle(userId: Long, articleId: Long): Boolean {
-        articleRepository.findById(articleId)
-            ?: throw IllegalArgumentException("게시글을 찾을 수 없습니다.")
+        checkValidArticleId(articleId)
 
         val id = ArticleLikeId(
             articleId = articleId,
             userId = userId,
         )
         return articleLikeRepository.deleteById(id)
+    }
+
+    private fun checkValidArticleId(articleId: Long) {
+        articleRepository.findById(articleId)
+            ?: throw ArticleNotFoundException()
     }
 }
