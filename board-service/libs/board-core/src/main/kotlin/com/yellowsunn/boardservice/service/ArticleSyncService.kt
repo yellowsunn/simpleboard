@@ -34,5 +34,6 @@ class ArticleSyncService(
         likeCount = articleLikeRepository.countByArticleId(article.id),
         userId = article.userId,
         savedAt = article.createdAt,
+        isDeleted = article.isDeleted,
     )
 }

@@ -1,6 +1,5 @@
 package com.yellowsunn.boardservice.event
 
-class ArticleLikeEvent(
+data class ArticleLikeSyncEvent(
     val articleId: Long,
-    val userId: Long,
 ) : Event
