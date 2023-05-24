@@ -24,12 +24,4 @@ class ArticleJpaRepository(
             .where(article.id.eq(id))
             .fetchFirst()
     }
-
-    @Transactional(readOnly = true)
-    override fun findByUUID(uuid: String): Article? {
-        return jpaQueryFactory
-            .selectFrom(article)
-            .where(article.uuid.eq(uuid))
-            .fetchFirst()
-    }
 }

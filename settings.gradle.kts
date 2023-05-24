@@ -22,4 +22,5 @@ include(
     "board-service:libs:infra-http",
     "board-service:libs:infra-kafka-producer",
     "board-service:libs:infra-mongodb",
+    "board-service:libs:infra-redis",
 )

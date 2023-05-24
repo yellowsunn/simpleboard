@@ -20,6 +20,7 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    restart: on-failure
 
       # 카프카 클러스터 (주키퍼 1, 브로커 3, UI 서버 1)
   zookeeper:

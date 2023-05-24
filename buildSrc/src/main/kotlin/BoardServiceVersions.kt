@@ -3,4 +3,5 @@ object BoardServiceVersions {
     const val springDependencyManagement = "1.1.0"
     const val kotlin = "1.8.21"
     const val querydsl = "5.0.0"
+    const val embeddedMongo = "4.6.2"
 }

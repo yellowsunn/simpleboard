@@ -6,7 +6,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import java.util.UUID
 
 @Entity
 class Comment(
@@ -21,8 +20,6 @@ class Comment(
     @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
-
-    val uuid: String = UUID.randomUUID().toString()
 
     var content: String? = content
         private set
