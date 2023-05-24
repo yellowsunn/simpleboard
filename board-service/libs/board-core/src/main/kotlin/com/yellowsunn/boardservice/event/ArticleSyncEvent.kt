@@ -1,6 +1,5 @@
 package com.yellowsunn.boardservice.event
 
-class ArticleUndoLikeEvent(
+data class ArticleSyncEvent(
     val articleId: Long,
-    val userId: Long,
 ) : Event

@@ -42,6 +42,14 @@ class ArticleCommandController(
         return articleCommandFacade.updateArticle(command)
     }
 
+    @DeleteMapping("/api/v2/articles/{articleId}")
+    fun deleteArticle(
+        @LoginUser userUUID: String,
+        @PathVariable articleId: Long,
+    ): Boolean {
+        return articleCommandFacade.deleteArticle(userUUID, articleId)
+    }
+
     @PutMapping("/api/v2/articles/{articleId}/like")
     fun likeArticle(
         @LoginUser userUUID: String,

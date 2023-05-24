@@ -30,14 +30,18 @@ class ArticleCommandService(
 
     @Transactional
     fun updateArticle(userId: Long, command: ArticleUpdateCommand): Boolean {
-        val article: Article = articleRepository.findById(command.articleId)
-            ?: throw ArticleNotFoundException()
-
-        if (article.id != command.articleId) {
-            throw IllegalArgumentException("게시글 작성자만 수정할 수 있습니다.")
-        }
+        val article: Article = getArticleById(command.articleId)
+        checkSameUser(userId, article.userId)
 
         return article.updateTitleAndBody(command.title, command.body)
+    }
+
+    @Transactional
+    fun deleteArticle(userId: Long, articleId: Long): Boolean {
+        val article: Article = getArticleById(articleId)
+        checkSameUser(userId, article.userId)
+
+        return article.delete()
     }
 
     fun likeArticle(userId: Long, articleId: Long): Boolean {
@@ -69,8 +73,18 @@ class ArticleCommandService(
         return articleLikeRepository.deleteById(id)
     }
 
-    private fun checkValidArticleId(articleId: Long) {
-        articleRepository.findById(articleId)
+    private fun getArticleById(articleId: Long): Article {
+        return articleRepository.findById(articleId)
             ?: throw ArticleNotFoundException()
+    }
+
+    private fun checkSameUser(requestUserId: Long, articleUserId: Long) {
+        if (requestUserId != articleUserId) {
+            throw IllegalArgumentException("게시글 작성자만 수정할 수 있습니다.")
+        }
+    }
+
+    private fun checkValidArticleId(articleId: Long) {
+        getArticleById(articleId)
     }
 }

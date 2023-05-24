@@ -25,6 +25,8 @@ class Article(
     var viewCount: Long = 0L
         private set
 
+    var isDeleted: Boolean = false
+
     // 이스케이프 문자로 저장된 데이터를, 로우한 HTML 데이터로 변환
     fun unescapedBody(): String {
         return StringEscapeUtils.unescapeHtml4(body)
@@ -36,6 +38,14 @@ class Article(
         }
         this.title = title
         this.body = filterAndEscapeHtmlTag(body)
+        return true
+    }
+
+    fun delete(): Boolean {
+        if (this.isDeleted) {
+            return false
+        }
+        this.isDeleted = true
         return true
     }
 

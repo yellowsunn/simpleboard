@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.repository.MongoRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.data.support.PageableExecutionUtils
 import org.springframework.stereotype.Component
 
@@ -35,6 +34,7 @@ class ArticleMongoRepository(
             set(LIKE_COUNT, entity.likeCount)
             set(USER_ID, entity.userId)
             set(SAVED_AT, entity.savedAt)
+            set(IS_DELETED, entity.isDeleted)
         }
         val options = FindAndModifyOptions()
             .upsert(true)
@@ -44,12 +44,18 @@ class ArticleMongoRepository(
     }
 
     override fun findById(id: String): ArticleDocument? {
-        return delegate.findByIdOrNull(id)
+        if (id.length != OBJECT_ID_LENGTH) {
+            return null
+        }
+
+        return delegate.findById(id)
+            .filter { it.isDeleted.not() }
+            .orElse(null)
     }
 
     override fun findArticles(page: Int, size: Int): Page<ArticleDocument> {
         val pageable = PageRequest.of(page, size)
-        val query = Query()
+        val query = Query(Criteria.where(IS_DELETED).`is`(false))
             .with(pageable)
 
         val articles: List<ArticleDocument> = mongoTemplate.find(
@@ -72,6 +78,7 @@ class ArticleMongoRepository(
     }
 
     private companion object {
+        private const val OBJECT_ID_LENGTH = 24
         private const val ARTICLE_ID = "articleId"
         private const val TITLE = "title"
         private const val BODY = "body"
@@ -79,6 +86,7 @@ class ArticleMongoRepository(
         private const val LIKE_COUNT = "likeCount"
         private const val USER_ID = "userId"
         private const val SAVED_AT = "savedAt"
+        private const val IS_DELETED = "isDeleted"
     }
 }
 

@@ -5,6 +5,7 @@ create table article
     body        text         not null,
     view_count  bigint       not null,
     user_id     bigint       not null,
+    is_deleted  boolean      not null,
     created_at  timestamp(6) not null,
     modified_at timestamp(6) not null,
     primary key (article_id)
