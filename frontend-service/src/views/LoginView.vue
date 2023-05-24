@@ -55,10 +55,7 @@ export default {
         return
       }
 
-      this.$store.commit('setUserToken', {
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-      })
+      this.$store.commit('setUserToken', data)
       this.$router.push('/')
     }
   }

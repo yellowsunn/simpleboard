@@ -31,10 +31,7 @@ export default {
     }
 
     if (data.isLogin === true) {
-      this.$store.commit('setUserToken', {
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-      })
+      this.$store.commit('setUserToken', data)
       this.$router.push('/')
     } else if (data.isLogin === false) {
       this.$router.push(`/oauth2/signup?token=${data.tempUserToken}`)

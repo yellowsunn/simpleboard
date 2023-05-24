@@ -1,5 +1,5 @@
 <template>
-    <div style="min-height: 400px">
+    <div>
         <CkEditor v-model="editorContent" :editor="editor" :config="editorConfig"/>
     </div>
 </template>
@@ -17,6 +17,7 @@ export default {
       editorContent: "",
       editor: ClassicEditor,
       editorConfig: {
+          language: 'ko',
         toolbar: ['heading', '|', 'imageUpload', 'mediaEmbed', 'link', '|', 'bold', 'italic', '|', 'bulletedList', 'numberedList', 'indent', 'outdent', '|', 'undo', 'redo'],
         table: {
           contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
@@ -36,8 +37,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .ck-editor__editable {
-    min-height: 400px;
+    min-height: 300px;
+    max-height: 600px;
 }
 </style>
