@@ -2,13 +2,13 @@ package com.yellowsunn.boardservice.mongodb.article
 
 import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
 import com.yellowsunn.boardservice.mongodb.MongoIntegrationTest
-import java.time.ZonedDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.mongodb.core.MongoTemplate
+import java.time.ZonedDateTime
 
 class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
     @Autowired
@@ -31,6 +31,30 @@ class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
         val savedArticleDocument = articleMongoRepository.save(articleDocument)
 
         assertThat(savedArticleDocument.id).isNotNull
+    }
+
+    @Test
+    fun upsertByArticleId_insert_article_when_not_found() {
+        val articleDocument = getTestArticle(1L)
+
+        val savedArticleDocument: ArticleDocument? = articleMongoRepository.upsertByArticleId(1L, articleDocument)
+
+        assertThat(savedArticleDocument?.id).isNotNull
+    }
+
+    @Test
+    fun upsertByArticleId_update_article_when_found() {
+        val articleDocument = getTestArticle(1L)
+        val savedArticleDocument: ArticleDocument? = articleMongoRepository.upsertByArticleId(1L, articleDocument)
+        articleDocument.title = "updated_title"
+        articleDocument.body = "updated_body"
+
+        val updatedArticleDocument: ArticleDocument? = articleMongoRepository.upsertByArticleId(1L, articleDocument)
+
+        assertThat(updatedArticleDocument?.id).isNotNull
+        assertThat(savedArticleDocument!!.id).isEqualTo(updatedArticleDocument!!.id)
+        assertThat(articleDocument.title).isEqualTo("updated_title")
+        assertThat(articleDocument.body).isEqualTo("updated_body")
     }
 
     @Test

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page
 
 interface ArticleDocumentRepository {
     fun save(entity: ArticleDocument): ArticleDocument
+    fun upsertByArticleId(articleId: Long, entity: ArticleDocument): ArticleDocument?
     fun findById(id: String): ArticleDocument?
     fun findArticles(page: Int, size: Int): Page<ArticleDocument>
     fun updateLikeCount(articleId: Long, likeCount: Long): Boolean

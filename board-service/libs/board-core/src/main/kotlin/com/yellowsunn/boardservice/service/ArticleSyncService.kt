@@ -13,20 +13,11 @@ class ArticleSyncService(
     private val articleLikeRepository: ArticleLikeRepository,
     private val articleDocumentRepository: ArticleDocumentRepository,
 ) {
-    fun syncArticle(articleId: Long): Boolean {
-        val article: Article = articleRepository.findById(articleId) ?: return false
+    fun syncArticle(articleId: Long) {
+        val article: Article = articleRepository.findById(articleId) ?: return
 
-        val articleDocument = ArticleDocument(
-            articleId = articleId,
-            title = article.title,
-            body = article.body,
-            viewCount = article.viewCount,
-            likeCount = article.viewCount,
-            userId = article.userId,
-            savedAt = article.createdAt,
-        )
-        articleDocumentRepository.save(articleDocument)
-        return true
+        val articleDocument = convertToArticleDocument(article)
+        articleDocumentRepository.upsertByArticleId(articleId, articleDocument)
     }
 
     fun syncArticleLike(articleId: Long): Boolean {
@@ -34,4 +25,14 @@ class ArticleSyncService(
 
         return articleDocumentRepository.updateLikeCount(articleId, likeCount)
     }
+
+    fun convertToArticleDocument(article: Article) = ArticleDocument(
+        articleId = article.id,
+        title = article.title,
+        body = article.body,
+        viewCount = article.viewCount,
+        likeCount = articleLikeRepository.countByArticleId(article.id),
+        userId = article.userId,
+        savedAt = article.createdAt,
+    )
 }
