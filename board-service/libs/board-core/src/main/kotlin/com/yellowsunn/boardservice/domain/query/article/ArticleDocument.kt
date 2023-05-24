@@ -12,8 +12,8 @@ class ArticleDocument(
     var articleId: Long,
     var title: String,
     var body: String,
-    var viewCount: Long,
-    var likeCount: Long,
+    var viewCount: Long = 0L,
+    var likeCount: Long = 0L,
     val userId: Long,
     @Indexed(direction = DESCENDING)
     val savedAt: ZonedDateTime,

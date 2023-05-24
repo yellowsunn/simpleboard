@@ -3,6 +3,7 @@ package com.yellowsunn.boardservice.service
 import com.yellowsunn.boardservice.domain.command.article.Article
 import com.yellowsunn.boardservice.domain.command.article.ArticleLike
 import com.yellowsunn.boardservice.domain.command.article.ArticleLikeId
+import com.yellowsunn.boardservice.dto.ArticleUpdateCommand
 import com.yellowsunn.boardservice.exception.ArticleNotFoundException
 import com.yellowsunn.boardservice.repository.article.ArticleLikeRepository
 import com.yellowsunn.boardservice.repository.article.ArticleRepository
@@ -25,6 +26,18 @@ class ArticleCommandService(
         )
 
         return articleRepository.save(article)
+    }
+
+    @Transactional
+    fun updateArticle(userId: Long, command: ArticleUpdateCommand): Boolean {
+        val article: Article = articleRepository.findById(command.articleId)
+            ?: throw ArticleNotFoundException()
+
+        if (article.id != command.articleId) {
+            throw IllegalArgumentException("게시글 작성자만 수정할 수 있습니다.")
+        }
+
+        return article.updateTitleAndBody(command.title, command.body)
     }
 
     fun likeArticle(userId: Long, articleId: Long): Boolean {

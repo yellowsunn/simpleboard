@@ -6,6 +6,7 @@ import com.yellowsunn.boardservice.repository.article.ArticleDocumentRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.data.mongodb.core.FindAndModifyOptions
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -24,6 +25,24 @@ class ArticleMongoRepository(
         return delegate.save(entity)
     }
 
+    override fun upsertByArticleId(articleId: Long, entity: ArticleDocument): ArticleDocument? {
+        val query = Query(Criteria.where(ARTICLE_ID).`is`(articleId))
+        val update = Update().apply {
+            set(ARTICLE_ID, entity.articleId)
+            set(TITLE, entity.title)
+            set(BODY, entity.body)
+            set(VIEW_COUNT, entity.viewCount)
+            set(LIKE_COUNT, entity.likeCount)
+            set(USER_ID, entity.userId)
+            set(SAVED_AT, entity.savedAt)
+        }
+        val options = FindAndModifyOptions()
+            .upsert(true)
+            .returnNew(true)
+
+        return mongoTemplate.findAndModify(query, update, options, ArticleDocument::class.java)
+    }
+
     override fun findById(id: String): ArticleDocument? {
         return delegate.findByIdOrNull(id)
     }
@@ -34,7 +53,7 @@ class ArticleMongoRepository(
             .with(pageable)
 
         val articles: List<ArticleDocument> = mongoTemplate.find(
-            Query.of(query).with(Sort.by(Sort.Direction.DESC, "savedAt")),
+            Query.of(query).with(Sort.by(Sort.Direction.DESC, SAVED_AT)),
             ArticleDocument::class.java,
         )
 
@@ -44,12 +63,22 @@ class ArticleMongoRepository(
     }
 
     override fun updateLikeCount(articleId: Long, likeCount: Long): Boolean {
-        val query = Query(Criteria.where("articleId").`is`(articleId))
-        val update = Update.update("likeCount", likeCount)
+        val query = Query(Criteria.where(ARTICLE_ID).`is`(articleId))
+        val update = Update.update(LIKE_COUNT, likeCount)
 
         val updateResult: UpdateResult = mongoTemplate.updateFirst(query, update, ArticleDocument::class.java)
 
         return updateResult.wasAcknowledged()
+    }
+
+    private companion object {
+        private const val ARTICLE_ID = "articleId"
+        private const val TITLE = "title"
+        private const val BODY = "body"
+        private const val VIEW_COUNT = "viewCount"
+        private const val LIKE_COUNT = "likeCount"
+        private const val USER_ID = "userId"
+        private const val SAVED_AT = "savedAt"
     }
 }
 

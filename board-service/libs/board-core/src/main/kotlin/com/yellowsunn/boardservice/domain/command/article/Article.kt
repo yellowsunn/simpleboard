@@ -11,7 +11,7 @@ import org.apache.commons.text.StringEscapeUtils
 
 @Entity
 class Article(
-    val title: String,
+    var title: String,
     body: String,
     val userId: Long,
 ) : BaseTimeEntity() {
@@ -20,8 +20,7 @@ class Article(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
 
-    // HTML 태그를 필터링하고, 이스케이프 문자로 치환한다.
-    val body: String = StringEscapeUtils.escapeHtml4(filterHtmlTag(body))
+    var body: String = filterAndEscapeHtmlTag(body)
 
     var viewCount: Long = 0L
         private set
@@ -31,8 +30,17 @@ class Article(
         return StringEscapeUtils.unescapeHtml4(body)
     }
 
-    // 허용하는 HTML 태그만 필터링
-    private fun filterHtmlTag(html: String): String {
-        return sanitizeHtml(html = html)
+    fun updateTitleAndBody(title: String, body: String): Boolean {
+        if (this.title == title && this.body == body) {
+            return false
+        }
+        this.title = title
+        this.body = filterAndEscapeHtmlTag(body)
+        return true
+    }
+
+    // HTML 태그를 필터링하고, 이스케이프 문자로 치환한다.
+    private fun filterAndEscapeHtmlTag(html: String): String {
+        return StringEscapeUtils.escapeHtml4(sanitizeHtml(html))
     }
 }
