@@ -1,5 +1,7 @@
 package com.yellowsunn.boardservice.event.producer
 
 interface ArticleEventProducer {
-    fun sendEvent(articleId: Long)
+    fun saveArticleEvent(articleId: Long)
+    fun updateArticleLikeEvent(articleId: Long)
+    fun updateArticleUndoLikeEvent(articleId: Long)
 }

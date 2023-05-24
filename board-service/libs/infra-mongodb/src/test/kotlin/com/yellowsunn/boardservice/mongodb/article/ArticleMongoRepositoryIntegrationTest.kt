@@ -2,14 +2,13 @@ package com.yellowsunn.boardservice.mongodb.article
 
 import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
 import com.yellowsunn.boardservice.mongodb.MongoIntegrationTest
+import java.time.ZonedDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.mongodb.core.MongoTemplate
-import java.time.ZonedDateTime
-import java.util.UUID
 
 class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
     @Autowired
@@ -59,10 +58,18 @@ class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
             .isSortedAccordingTo(Comparator.comparing<ArticleDocument, ZonedDateTime> { it.savedAt }.reversed())
     }
 
+    @Test
+    fun updateLikeCount() {
+        articleMongoRepository.save(getTestArticle(1L))
+
+        val isUpdated = articleMongoRepository.updateLikeCount(articleId = 1L, likeCount = 5L)
+
+        assertThat(isUpdated).isTrue
+    }
+
     private fun getTestArticle(articleId: Long): ArticleDocument = ArticleDocument(
         articleId = articleId,
         userId = 1L,
-        uuid = UUID.randomUUID().toString(),
         title = "title",
         body = "body",
         readCount = 0L,

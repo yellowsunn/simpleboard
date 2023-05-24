@@ -2,15 +2,19 @@ package com.yellowsunn.boardservice.controller
 
 import com.yellowsunn.boardservice.dto.ArticleDocumentDto
 import com.yellowsunn.boardservice.dto.ArticleDocumentPageDto
+import com.yellowsunn.boardservice.dto.ArticleLikeCommand
 import com.yellowsunn.boardservice.dto.ArticleSaveRequestDto
+import com.yellowsunn.boardservice.dto.ArticleUndoLikeCommand
 import com.yellowsunn.boardservice.facade.ArticleFacade
 import com.yellowsunn.boardservice.service.ArticleQueryService
 import com.yellowsunn.common.annotation.LoginUser
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -43,5 +47,23 @@ class ArticleController(
         @RequestParam(defaultValue = "10") size: Int,
     ): ArticleDocumentPageDto {
         return articleQueryService.findArticles(page, size)
+    }
+
+    @PutMapping("/api/v2/articles/{articleId}/like")
+    fun likeArticle(
+        @LoginUser userUUID: String,
+        @PathVariable articleId: Long,
+    ): Boolean {
+        val command = ArticleLikeCommand(userUUID, articleId)
+        return articleFacade.likeArticle(command)
+    }
+
+    @DeleteMapping("/api/v2/articles/{articleId}/like")
+    fun undoLikeArticle(
+        @LoginUser userUUID: String,
+        @PathVariable articleId: Long,
+    ): Boolean {
+        val command = ArticleUndoLikeCommand(userUUID, articleId)
+        return articleFacade.undoLikeArticle(command)
     }
 }

@@ -7,4 +7,5 @@ interface ArticleQueryRepository {
     fun save(entity: ArticleDocument): ArticleDocument
     fun findById(id: String): ArticleDocument?
     fun findArticles(page: Int, size: Int): Page<ArticleDocument>
+    fun updateLikeCount(articleId: Long, likeCount: Long): Boolean
 }

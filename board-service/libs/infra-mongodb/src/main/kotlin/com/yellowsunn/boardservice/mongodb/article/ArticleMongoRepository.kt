@@ -1,12 +1,15 @@
 package com.yellowsunn.boardservice.mongodb.article
 
+import com.mongodb.client.result.UpdateResult
 import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
 import com.yellowsunn.boardservice.repository.article.ArticleQueryRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.data.support.PageableExecutionUtils
@@ -38,6 +41,15 @@ class ArticleMongoRepository(
         return PageableExecutionUtils.getPage(articles, pageable) {
             mongoTemplate.count(Query.of(query).skip(-1).limit(-1), ArticleDocument::class.java)
         }
+    }
+
+    override fun updateLikeCount(articleId: Long, likeCount: Long): Boolean {
+        val query = Query(Criteria.where("articleId").`is`(articleId))
+        val update = Update.update("likeCount", likeCount)
+
+        val updateResult: UpdateResult = mongoTemplate.updateFirst(query, update, ArticleDocument::class.java)
+
+        return updateResult.wasAcknowledged()
     }
 }
 

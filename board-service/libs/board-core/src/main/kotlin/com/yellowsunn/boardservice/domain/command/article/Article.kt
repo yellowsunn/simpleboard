@@ -26,9 +26,6 @@ class Article(
     var readCount: Long = 0L
         private set
 
-    var likeCount: Long = 0L
-        private set
-
     // 이스케이프 문자로 저장된 데이터를, 로우한 HTML 데이터로 변환
     fun unescapedBody(): String {
         return StringEscapeUtils.unescapeHtml4(body)
