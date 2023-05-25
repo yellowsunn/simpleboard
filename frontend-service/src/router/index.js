@@ -1,11 +1,10 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: () => import(/* webpackChunkName: "article" */ '@/views/ArticleListView.vue'),
   },
   {
     path: "/login",
@@ -48,10 +47,20 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '@/views/callback/KakaoUserLinkCallbackView.vue'),
   },
   {
-    path: "/edit",
+    path: "/articles",
+    name: "Articles",
+    component: () => import(/* webpackChunkName: "login" */ '@/views/ArticleListView.vue'),
+  },
+  {
+    path: "/articles/new",
     name: "Edit",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/TextEditorView.vue'),
-  }
+    component: () => import(/* webpackChunkName: "login" */ '@/views/ArticleWriteView.vue'),
+  },
+  {
+    path: "/articles/:id",
+    name: "Article",
+    component: () => import(/* webpackChunkName: "article" */ '@/views/ArticleView.vue'),
+  },
 ]
 
 const router = createRouter({

@@ -1,6 +1,7 @@
 package com.yellowsunn.boardservice.dto
 
 import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
+import com.yellowsunn.boardservice.domain.user.SimpleUser
 import org.springframework.data.domain.Page
 import java.time.ZonedDateTime
 
@@ -15,16 +16,26 @@ data class ArticleDocumentPageDto(
     data class ArticleDocumentDto(
         val id: String,
         val articleId: Long,
+        val thumbnail: String,
         val title: String,
         val viewCount: Long,
         val likeCount: Long,
         val savedAt: ZonedDateTime,
+        val nickName: String,
     )
 
     companion object {
-        fun from(documentPage: Page<ArticleDocument>, viewCounts: Map<Long, Long>): ArticleDocumentPageDto {
+        fun from(
+            documentPage: Page<ArticleDocument>,
+            viewCounts: Map<Long, Long>,
+            users: Map<Long, SimpleUser>,
+        ): ArticleDocumentPageDto {
             val articles = documentPage.content.map {
-                convertArticleDocumentDto(it, viewCounts[it.articleId] ?: 0L)
+                convertArticleDocumentDto(
+                    it,
+                    users[it.userId]?.nickName ?: "",
+                    viewCounts[it.articleId] ?: 0L,
+                )
             }
 
             return ArticleDocumentPageDto(
@@ -37,13 +48,19 @@ data class ArticleDocumentPageDto(
             )
         }
 
-        private fun convertArticleDocumentDto(document: ArticleDocument, increasedViewCount: Long) = ArticleDocumentDto(
+        private fun convertArticleDocumentDto(
+            document: ArticleDocument,
+            nickName: String,
+            increasedViewCount: Long,
+        ): ArticleDocumentDto = ArticleDocumentDto(
             id = document.id,
             articleId = document.articleId,
+            thumbnail = document.thumbnail ?: "",
             title = document.title,
             viewCount = document.viewCount + increasedViewCount,
             likeCount = document.likeCount,
             savedAt = document.savedAt,
+            nickName = nickName,
         )
     }
 }

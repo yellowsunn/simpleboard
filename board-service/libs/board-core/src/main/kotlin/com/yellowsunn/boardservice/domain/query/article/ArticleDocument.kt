@@ -14,6 +14,7 @@ import java.time.ZonedDateTime
 class ArticleDocument(
     @Indexed
     var articleId: Long,
+    var thumbnail: String? = "",
     var title: String,
     var body: String,
     var viewCount: Long = 0L,

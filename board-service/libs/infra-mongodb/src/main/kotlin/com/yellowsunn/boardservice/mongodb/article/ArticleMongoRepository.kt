@@ -35,6 +35,7 @@ class ArticleMongoRepository(
             set(USER_ID, entity.userId)
             set(SAVED_AT, entity.savedAt)
             set(IS_DELETED, entity.isDeleted)
+            set(THUMBNAIL, entity.thumbnail)
         }
         val options = FindAndModifyOptions()
             .upsert(true)
@@ -87,6 +88,7 @@ class ArticleMongoRepository(
         private const val USER_ID = "userId"
         private const val SAVED_AT = "savedAt"
         private const val IS_DELETED = "isDeleted"
+        private const val THUMBNAIL = "thumbnail"
     }
 }
 

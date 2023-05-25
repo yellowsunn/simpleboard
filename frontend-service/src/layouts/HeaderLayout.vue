@@ -15,15 +15,12 @@
             </div>
         </section>
     </div>
-    <NavBar></NavBar>
 </template>
 
 <script>
-import NavBar from "@/layouts/NavBar.vue";
 
 export default {
   name: "HeaderLayout",
-  components: {NavBar},
   methods: {
     logoutClickEvent() {
       const isConfirmed = confirm('로그아웃 하시겠습니까?');
@@ -48,7 +45,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgb(0 0 0 / 10%);
-    width: 950px;
+    max-width: 950px;
 }
 
 .header-section {

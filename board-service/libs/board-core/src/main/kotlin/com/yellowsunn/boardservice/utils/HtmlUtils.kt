@@ -24,3 +24,23 @@ fun sanitizeHtml(html: String): String {
 
     return policyFactory.sanitize(html)
 }
+
+fun getFirstImageSrc(html: String): String {
+    val policyFactory: PolicyFactory = HtmlPolicyBuilder()
+        .allowElements("img")
+        .allowAttributes("alt", "align", "title", "img", "src").onElements("img")
+        .allowStandardUrlProtocols()
+        .toFactory()
+
+    val imageTags = policyFactory.sanitize(html)
+
+    val regex = Regex("<img[^>]+src=\"([^\">]+)")
+
+    val result: MatchResult? = regex.find(imageTags)
+
+    return try {
+        result?.groups?.get(1)?.value ?: ""
+    } catch (_: Exception) {
+        ""
+    }
+}

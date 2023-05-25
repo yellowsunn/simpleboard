@@ -16,13 +16,24 @@ services:
       - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: board
+      MYSQL_DATABASE: boards
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    restart: on-failure
+  mysql-user:
+    image: mysql:8.0.33
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: users
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     restart: on-failure
 
-      # 카프카 클러스터 (주키퍼 1, 브로커 3, UI 서버 1)
+  # 카프카 클러스터 (주키퍼 1, 브로커 3, UI 서버 1)
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.9
     environment:

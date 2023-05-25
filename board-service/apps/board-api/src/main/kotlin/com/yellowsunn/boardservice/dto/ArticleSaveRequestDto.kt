@@ -4,12 +4,12 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 
 data class ArticleSaveRequestDto(
-    @NotBlank
-    @Size(min = 1, max = 200)
+    @field:NotBlank
+    @field:Size(min = 1, max = 200)
     val title: String,
 
-    @NotBlank
-    @Size(max = 10_000)
+    @field:NotBlank
+    @field:Size(max = 10_000)
     val body: String,
 ) {
     fun toCommand(userUUID: String) = ArticleSaveCommand(

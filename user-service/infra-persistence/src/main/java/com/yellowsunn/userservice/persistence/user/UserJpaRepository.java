@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.yellowsunn.userservice.domain.user.QUser.user;
@@ -41,6 +42,7 @@ public class UserJpaRepository implements UserRepository {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<User> findByEmail(String email) {
         return Optional.ofNullable(
@@ -59,6 +61,7 @@ public class UserJpaRepository implements UserRepository {
         );
     }
 
+    @Transactional
     @Override
     public boolean delete(User entity) {
         long execute = jpaQueryFactory.delete(user).execute();
@@ -66,6 +69,7 @@ public class UserJpaRepository implements UserRepository {
         return execute >= 0;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean existsByNickName(String nickName) {
         Long count = jpaQueryFactory.select(user.id.count())
@@ -86,6 +90,7 @@ public class UserJpaRepository implements UserRepository {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<User> findByNickName(String nickName) {
         return Optional.ofNullable(
@@ -94,5 +99,14 @@ public class UserJpaRepository implements UserRepository {
                         .where(user.nickName.eq(nickName))
                         .fetchFirst()
         );
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<User> findByIds(List<Long> ids) {
+        return jpaQueryFactory
+                .selectFrom(user)
+                .where(user.id.in(ids))
+                .fetch();
     }
 }

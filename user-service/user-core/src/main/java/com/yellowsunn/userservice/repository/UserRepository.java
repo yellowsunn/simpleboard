@@ -2,6 +2,7 @@ package com.yellowsunn.userservice.repository;
 
 import com.yellowsunn.userservice.domain.user.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
@@ -20,4 +21,6 @@ public interface UserRepository {
     Optional<User> findByUUID(String uuid);
 
     Optional<User> findByNickName(String nickName);
+
+    List<User> findByIds(List<Long> ids);
 }

@@ -4,10 +4,10 @@ import router from './router'
 import mixins from "@/mixins";
 import store from "@/store";
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faBell} from '@fortawesome/free-regular-svg-icons'
+import {faBell, faEye, faHeart, faThumbsUp} from '@fortawesome/free-regular-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
-library.add(faBell)
+library.add(faBell, faEye, faThumbsUp, faHeart)
 
 createApp(App)
   .mixin(mixins)

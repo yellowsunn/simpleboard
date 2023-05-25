@@ -33,6 +33,14 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - AuthorizationHeaderFilter
+        - id: board-service
+          uri: ${endpoint.board-service}
+          predicates:
+            - Method=GET, POST, PUT, PATCH, DELETE, OPTIONS
+            - Path=/api/v2/articles/**, /api/v2/comments/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
 ---
 server:
   port: 8000
@@ -42,6 +50,7 @@ spring:
 
 endpoint:
   user-service: http://localhost:8080
+  board-service: http://localhost:8081
 
 token:
   access:

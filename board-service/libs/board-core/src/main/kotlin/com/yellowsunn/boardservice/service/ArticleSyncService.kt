@@ -5,6 +5,7 @@ import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
 import com.yellowsunn.boardservice.repository.article.ArticleDocumentRepository
 import com.yellowsunn.boardservice.repository.article.ArticleLikeRepository
 import com.yellowsunn.boardservice.repository.article.ArticleRepository
+import com.yellowsunn.boardservice.utils.getFirstImageSrc
 import org.springframework.stereotype.Service
 
 @Service
@@ -28,6 +29,7 @@ class ArticleSyncService(
 
     fun convertToArticleDocument(article: Article) = ArticleDocument(
         articleId = article.id,
+        thumbnail = getFirstImageSrc(article.unescapedBody()),
         title = article.title,
         body = article.body,
         viewCount = article.viewCount,
