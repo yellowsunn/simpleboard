@@ -3,8 +3,7 @@ package com.yellowsunn.userservice.service;
 import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
-import com.yellowsunn.userservice.exception.CustomUserException;
-import com.yellowsunn.userservice.exception.UserErrorCode;
+import com.yellowsunn.userservice.repository.UserProviderRepository;
 import com.yellowsunn.userservice.repository.UserRepository;
 import com.yellowsunn.userservice.utils.BCryptPasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,22 +19,23 @@ import static org.mockito.Mockito.mock;
 
 class UserServiceTest {
     UserRepository userRepository = mock(UserRepository.class);
+    UserProviderRepository userProviderRepository = mock(UserProviderRepository.class);
 
     UserService sut;
 
     @BeforeEach
     void setUp() {
-        sut = new UserService(userRepository);
+        sut = new UserService(userRepository, userProviderRepository);
     }
 
     @Test
     void findUserInfo() {
         // given
-        var userId = 1L;
-        given(userRepository.findById(userId)).willReturn(Optional.of(getTestUser()));
+        var uuid = "uuid";
+        given(userRepository.findByUUID(uuid)).willReturn(Optional.of(getTestUser()));
 
         // when
-        UserMyInfoDto userInfo = sut.findUserInfo(userId);
+        UserMyInfoDto userInfo = sut.findUserInfo(uuid);
 
         // then
         assertThat(userInfo.email()).isEqualTo("test@example.com");
@@ -44,11 +44,11 @@ class UserServiceTest {
     @Test
     void findUserInfo_failed_when_user_not_found() {
         // given
-        var userId = 1L;
-        given(userRepository.findById(userId)).willReturn(Optional.empty());
+        var uuid = "uuid";
+        given(userRepository.findByUUID(uuid)).willReturn(Optional.empty());
 
         // when
-        Throwable throwable = catchThrowable(() -> sut.findUserInfo(userId));
+        Throwable throwable = catchThrowable(() -> sut.findUserInfo(uuid));
 
         // then
         assertThat(throwable).isInstanceOf(UserNotFoundException.class);
@@ -57,12 +57,12 @@ class UserServiceTest {
     @Test
     void deleteUserInfo() {
         // given
-        var userId = 1L;
-        given(userRepository.findById(userId)).willReturn(Optional.of(getTestUser()));
+        var uuid = "uuid";
+        given(userRepository.findByUUID(uuid)).willReturn(Optional.of(getTestUser()));
         given(userRepository.delete(any(User.class))).willReturn(true);
 
         // when
-        boolean isDeleted = sut.deleteUserInfo(userId);
+        boolean isDeleted = sut.deleteUserInfo(uuid);
 
         assertThat(isDeleted).isTrue();
     }
@@ -70,11 +70,11 @@ class UserServiceTest {
     @Test
     void deleteUserInfo_return_true_when_already_deleted() {
         // given
-        var userId = 1L;
-        given(userRepository.findById(userId)).willReturn(Optional.empty());
+        var uuid = "uuid";
+        given(userRepository.findByUUID(uuid)).willReturn(Optional.empty());
 
         // when
-        boolean isDeleted = sut.deleteUserInfo(userId);
+        boolean isDeleted = sut.deleteUserInfo(uuid);
 
         // then
         assertThat(isDeleted).isTrue();
@@ -83,12 +83,12 @@ class UserServiceTest {
     @Test
     void changeUserThumbnail() {
         // given
-        var userId = 1L;
+        var uuid = "uuid";
         var user = getTestUser();
         var updatedThumbnail = "https://example.com/thubnail.png";
-        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+        given(userRepository.findByUUID(uuid)).willReturn(Optional.of(user));
 
-        boolean isSuccess = sut.changeUserThumbnail(userId, updatedThumbnail);
+        boolean isSuccess = sut.changeUserThumbnail(uuid, updatedThumbnail);
 
         assertThat(isSuccess).isTrue();
         assertThat(user.getThumbnail()).isEqualTo(updatedThumbnail);

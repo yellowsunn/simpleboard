@@ -33,7 +33,7 @@ public class ExternalUserAuthController {
     @PostMapping("/api/v2/auth/email/signup")
     public boolean signUpEmail(@Valid @RequestBody EmailSignUpRequestDto requestDto) {
         var command = requestDto.toUserSignUpCommand();
-        return userAuthFacade.signUpEmail(command);
+        return userAuthService.signUpEmail(command);
     }
 
     @PostMapping("/api/v2/auth/email/login")

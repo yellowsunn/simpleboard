@@ -3,7 +3,7 @@
         <div class="article-item" v-for="(article, idx) in articles" :key="idx" @click="handleClickArticle(article?.id)"
              style="cursor: pointer">
             <div class="article-image">
-                <img v-if="article?.thumbnail" :src="resizedThumbnail(article)" alt="thumbnail">
+                <img v-if="article?.thumbnail" :src="article.thumbnail" alt="thumbnail">
                 <img v-else src="../../assets/no-image.svg" alt="thumbnail">
             </div>
             <div class="article-info">
@@ -52,9 +52,6 @@ export default {
     handleClickArticle(id) {
       this.$router.push(`/articles/${id}`)
     },
-    resizedThumbnail(article) {
-      return `${article?.thumbnail}?width=45&height=45`
-    },
   }
 }
 </script>
@@ -73,9 +70,11 @@ export default {
 .article-image {
   img {
     background-repeat: no-repeat;
+    width: 55px;
     height: 45px;
     border-radius: 0.5rem;
     margin-right: 10px;
+    object-fit: cover;
   }
 }
 

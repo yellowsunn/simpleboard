@@ -1,6 +1,8 @@
 package com.yellowsunn.userservice.http.client;
 
-import com.yellowsunn.userservice.http.OAuth2UserInfo;
+import com.yellowsunn.userservice.constant.OAuth2Request;
+import com.yellowsunn.userservice.http.oauth2.GoogleOAuth2RestHttpClient;
+import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -24,7 +26,7 @@ class GoogleOAuth2RestHttpClientTest extends RestHttpClientTest {
         mockServer.expect(requestTo("https://oauth2.googleapis.com/tokeninfo?id_token=1234"))
                 .andRespond(withSuccess(getTestResponse(), MediaType.APPLICATION_JSON));
 
-        OAuth2UserInfo userInfo = httpClient.findUserInfo(token);
+        OAuth2UserInfo userInfo = httpClient.findUserInfo(token, OAuth2Request.LOGIN);
 
         assertThat(userInfo.email()).isEqualTo("user@example.com");
     }

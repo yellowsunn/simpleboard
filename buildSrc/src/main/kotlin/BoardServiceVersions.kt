@@ -4,4 +4,7 @@ object BoardServiceVersions {
     const val kotlin = "1.8.21"
     const val querydsl = "5.0.0"
     const val embeddedMongo = "4.6.2"
+    const val springCloudAws = "2.2.6.RELEASE"
+    const val commonsIo = "2.11.0"
+    const val jaxb = "2.3.1"
 }

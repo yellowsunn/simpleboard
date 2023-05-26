@@ -5,7 +5,7 @@ import AccessTokenExpiredError from "@/utils/AccessTokenExpiredError";
 import {setToken} from "@/utils/tokenUtils";
 
 async function uploadImage(formData) {
-  const response = await callBoardApi('PATCH', '/api/v2/users/my-info/thumbnail', formData, true, {
+  const response = await callBoardApi('POST', '/api/images/article', formData, true, {
     'Content-Type': 'multipart/form-data',
   });
   if (response?.isError) {
@@ -26,7 +26,7 @@ export default class UploadAdapter {
     return this.loader.file.then(
       async (file) => {
         const formData = new FormData()
-        formData.append('thumbnail', file)
+        formData.append('image', file)
 
         try {
           return await uploadImage(formData)

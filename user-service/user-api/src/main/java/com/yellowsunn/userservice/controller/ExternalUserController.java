@@ -72,8 +72,6 @@ public class ExternalUserController {
         return FileUploadRequest.builder()
                 .inputStream(inputStream)
                 .originalFileName(requireNonNull(thumbnail.getOriginalFilename()))
-                .contentType(requireNonNull(thumbnail.getContentType()))
-                .contentLength(thumbnail.getSize())
                 .build();
     }
 }

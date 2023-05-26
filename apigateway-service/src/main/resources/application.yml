@@ -10,6 +10,21 @@ spring:
             allowed-headers: "*"
             allowed-methods: "*"
       routes:
+        - id: image-proxy
+          uri: ${endpoint.image-service}
+          predicates:
+            - Path=/images/**
+            - Method=GET, OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: image-upload
+          uri: ${endpoint.image-service}
+          predicates:
+            - Path=/api/images/*
+            - Method=POST, OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
         - id: oauth2-link-complete
           uri: ${endpoint.user-service}
           predicates:
@@ -51,6 +66,7 @@ spring:
 endpoint:
   user-service: http://localhost:8080
   board-service: http://localhost:8081
+  image-service: http://localhost:8082
 
 token:
   access:

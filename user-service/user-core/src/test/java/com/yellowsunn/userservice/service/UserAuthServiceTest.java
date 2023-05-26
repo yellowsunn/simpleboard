@@ -11,7 +11,7 @@ import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
-import com.yellowsunn.userservice.http.OAuth2UserInfo;
+import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
 import com.yellowsunn.userservice.repository.TempUserCacheRepository;
 import com.yellowsunn.userservice.repository.UserProviderRepository;
 import com.yellowsunn.userservice.repository.UserRepository;
@@ -66,7 +66,7 @@ class UserAuthServiceTest {
         given(userProviderRepository.save(any(UserProvider.class))).willAnswer(i -> i.getArguments()[0]);
 
         // when
-        boolean isSuccess = sut.signUpEmail(command, "defaultThumbnail");
+        boolean isSuccess = sut.signUpEmail(command);
 
         // then
         assertThat(isSuccess).isTrue();
@@ -81,7 +81,7 @@ class UserAuthServiceTest {
         given(userRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
 
         // when
-        Throwable throwable = catchThrowable(() -> sut.signUpEmail(command, "defaultThumbnail"));
+        Throwable throwable = catchThrowable(() -> sut.signUpEmail(command));
 
         // then
         assertThat(throwable).isInstanceOf(CustomUserException.class);
@@ -98,7 +98,7 @@ class UserAuthServiceTest {
         given(userRepository.existsByNickName(nickName)).willReturn(true);
 
         // when
-        Throwable throwable = catchThrowable(() -> sut.signUpEmail(command, "defaultThumbnail"));
+        Throwable throwable = catchThrowable(() -> sut.signUpEmail(command));
 
         // then
         assertThat(throwable).isInstanceOf(CustomUserException.class);

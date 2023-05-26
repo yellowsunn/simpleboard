@@ -1,4 +1,5 @@
 dependencies {
+    implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("commons-codec:commons-codec:1.15")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 

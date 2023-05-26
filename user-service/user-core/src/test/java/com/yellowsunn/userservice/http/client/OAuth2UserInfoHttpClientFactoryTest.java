@@ -1,15 +1,14 @@
 package com.yellowsunn.userservice.http.client;
 
 import com.yellowsunn.userservice.constant.OAuth2Type;
-import org.assertj.core.api.Assertions;
+import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClient;
+import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClientFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 

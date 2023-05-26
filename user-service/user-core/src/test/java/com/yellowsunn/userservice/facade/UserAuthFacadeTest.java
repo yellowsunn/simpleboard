@@ -1,13 +1,13 @@
 package com.yellowsunn.userservice.facade;
 
+import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpCommand;
 import com.yellowsunn.userservice.exception.CustomUserException;
-import com.yellowsunn.userservice.file.FileStorage;
-import com.yellowsunn.userservice.http.OAuth2UserInfo;
-import com.yellowsunn.userservice.http.client.OAuth2UserInfoHttpClient;
-import com.yellowsunn.userservice.http.client.OAuth2UserInfoHttpClientFactory;
+import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
+import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClient;
+import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClientFactory;
 import com.yellowsunn.userservice.repository.TempUserCacheRepository;
 import com.yellowsunn.userservice.service.UserAuthService;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,6 @@ class UserAuthFacadeTest {
     UserAuthService userAuthService = mock(UserAuthService.class);
     OAuth2UserInfoHttpClient oAuth2UserInfoHttpClient = mock(OAuth2UserInfoHttpClient.class);
     TempUserCacheRepository tempUserCacheRepository = mock(TempUserCacheRepository.class);
-    FileStorage fileStorage = mock(FileStorage.class);
 
     UserAuthFacade sut;
 
@@ -35,8 +34,7 @@ class UserAuthFacadeTest {
         sut = new UserAuthFacade(
                 userAuthService,
                 new OAuth2UserInfoHttpClientFactory(List.of(oAuth2UserInfoHttpClient)),
-                tempUserCacheRepository,
-                fileStorage
+                tempUserCacheRepository
         );
     }
 
@@ -54,7 +52,7 @@ class UserAuthFacadeTest {
                 .accessToken("access-oAuth2Token")
                 .refreshToken("refresh-oAuth2Token")
                 .build();
-        given(oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token())).willReturn(oAuth2UserInfo);
+        given(oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token(), OAuth2Request.LOGIN)).willReturn(oAuth2UserInfo);
         given(userAuthService.loginOAuth2(oAuth2UserInfo, OAuth2Type.GOOGLE)).willReturn(userLoginDto);
 
         // when
@@ -74,7 +72,7 @@ class UserAuthFacadeTest {
                 .type(OAuth2Type.GOOGLE)
                 .build();
         var oAuth2UserInfo = new OAuth2UserInfo("test@example.com", "https://example.com/thumbnail.png");
-        given(oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token())).willReturn(oAuth2UserInfo);
+        given(oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token(), OAuth2Request.LOGIN)).willReturn(oAuth2UserInfo);
         given(userAuthService.loginOAuth2(oAuth2UserInfo, OAuth2Type.GOOGLE)).willReturn(null);
         given(userAuthService.saveTempOAuth2User(oAuth2UserInfo, OAuth2Type.GOOGLE, command.csrfToken()))
                 .willReturn("temp-user-oAuth2Token");
@@ -97,7 +95,7 @@ class UserAuthFacadeTest {
                 .type(OAuth2Type.GOOGLE)
                 .build();
         OAuth2UserInfo oAuth2UserInfo = new OAuth2UserInfo(null, null);
-        given(oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token())).willReturn(oAuth2UserInfo);
+        given(oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token(), OAuth2Request.LOGIN)).willReturn(oAuth2UserInfo);
 
         // when
         Throwable throwable = catchThrowable(() -> sut.loginOrSignUpRequest(command));

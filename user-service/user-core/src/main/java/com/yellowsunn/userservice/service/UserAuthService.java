@@ -16,7 +16,7 @@ import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2SignUpCommand;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
-import com.yellowsunn.userservice.http.OAuth2UserInfo;
+import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
 import com.yellowsunn.userservice.repository.TempUserCacheRepository;
 import com.yellowsunn.userservice.repository.UserProviderRepository;
 import com.yellowsunn.userservice.repository.UserRepository;
@@ -42,7 +42,7 @@ public class UserAuthService {
     private final Duration tempUserDuration = Duration.ofMinutes(30);
 
     @Transactional
-    public boolean signUpEmail(UserEmailSignUpCommand command, String thumbnail) {
+    public boolean signUpEmail(UserEmailSignUpCommand command) {
         verifyAlreadyExistEmail(command.email());
         verifyAlreadyExistNickName(command.nickName());
 
@@ -50,7 +50,7 @@ public class UserAuthService {
                 .email(command.email())
                 .password(passwordEncoder.encode(command.password()))
                 .nickName(command.nickName())
-                .thumbnail(thumbnail)
+                .thumbnail(null)
                 .build();
         var savedUser = userRepository.save(emailUser);
 
@@ -64,14 +64,14 @@ public class UserAuthService {
     }
 
     @Transactional
-    public UserLoginTokenDto signUpOAuth2(UserOAuth2SignUpCommand command, TempUser tempUser, String thumbnail) {
+    public UserLoginTokenDto signUpOAuth2(UserOAuth2SignUpCommand command, TempUser tempUser) {
         verifyAlreadyExistEmail(tempUser.getEmail());
         verifyAlreadyExistNickName(command.nickName());
 
         var user = User.oauth2UserBuilder()
                 .email(tempUser.getEmail())
                 .nickName(command.nickName())
-                .thumbnail(thumbnail)
+                .thumbnail(tempUser.getThumbnail())
                 .build();
         var savedUser = userRepository.save(user);
 

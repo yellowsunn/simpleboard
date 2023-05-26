@@ -7,9 +7,7 @@ import java.io.InputStream;
 
 @Builder
 public record FileUploadRequest(
-        @NonNull InputStream inputStream,
         @NonNull String originalFileName,
-        @NonNull String contentType,
-        long contentLength
+        @NonNull InputStream inputStream
 ) {
 }

@@ -1,0 +1,26 @@
+server:
+  port: 8082
+spring:
+  profiles:
+    default: local
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+      auto: false
+    credentials:
+      access-key: ${aws-access-key}
+      secret-key: ${aws-secret-key}
+---
+spring:
+  profiles:
+    active: local, dev
+cloud:
+  aws:
+    s3:
+      bucket: simpleboard-dev
+
+image-base-url: http://localhost:8000
+

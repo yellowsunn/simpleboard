@@ -3,7 +3,7 @@
         <div class="d-flex m-3 fs-5 fw-bold">회원 정보 변경</div>
         <!-- 썸네일 이미지 변경 -->
         <div class="my-4">
-            <img v-if="userInfo?.thumbnail" class="rounded-circle user-thumbnail" :src="resizedThumbnail"
+            <img v-if="userInfo?.thumbnail" class="rounded-circle user-thumbnail" :src="userInfo.thumbnail"
                  alt="thumbnail"
                  @click="$refs.fileInput.click()" :width="thumbnailWidth" :height="thumbnailHeight"
                  referrerpolicy="no-referrer"/>
@@ -50,11 +50,6 @@ export default {
   mounted() {
     this.nickName = this.userInfo?.nickName
   },
-  computed: {
-    resizedThumbnail() {
-      return `${this.userInfo?.thumbnail}?width=${this.thumbnailWidth}&height=${this.thumbnailHeight}`
-    },
-  },
   methods: {
     async handleThumbnailChange(e) {
       if (!e?.target?.files[0]) {
@@ -100,6 +95,9 @@ export default {
 <style scoped>
 .user-thumbnail {
     cursor: pointer;
+    object-fit: cover;
+    width: 80px;
+    height: 80px;
 }
 
 .input-edit-group {
