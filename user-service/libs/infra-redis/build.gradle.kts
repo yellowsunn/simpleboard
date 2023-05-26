@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":user-service:user-core"))
+    implementation(project(":user-service:libs:user-core"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("com.fasterxml.jackson.core:jackson-databind")

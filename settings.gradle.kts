@@ -8,12 +8,12 @@ include(
     "image-service",
 
     "user-service",
-    "user-service:user-api",
-    "user-service:user-core",
-    "user-service:infra-persistence",
-    "user-service:infra-redis",
-    "user-service:infra-oauth2",
-    "user-service:infra-http",
+    "user-service:apps:user-api",
+    "user-service:libs:user-core",
+    "user-service:libs:infra-persistence",
+    "user-service:libs:infra-redis",
+    "user-service:libs:infra-oauth2",
+    "user-service:libs:infra-http",
 
     "board-service",
     "board-service:apps:board-api",
