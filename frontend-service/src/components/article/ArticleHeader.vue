@@ -5,7 +5,7 @@
         </div>
         <div class="etc">
             <div class="user-image">
-                <img v-if="article.user?.thumbnail" class="rounded-circle" :src="resizedThumbnail"/>
+                <img v-if="article.user?.thumbnail" class="rounded-circle" :src="article.user.thumbnail"/>
                 <img v-else class="rounded-circle" src="../../assets/default-thumbnail.svg" :width="width"
                      :height="height"
                      alt="thumbnail"/>
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import {timeAgoFormat} from "../../utils/timeUtils";
+import {timeAgoFormat} from "@/utils/timeUtils";
 
 export default {
   name: "ArticleHeader",
@@ -49,87 +49,81 @@ export default {
     article: Object,
   },
   data() {
-    return {
-      width: "32px",
-      height: "32px",
-    }
+    return {}
   },
-  computed: {
-    resizedThumbnail() {
-      return `${this.article?.user?.thumbnail}?width=32&height=32`
-    },
-  }
+  computed: {}
 }
 </script>
 
-<style lang="scss"  scoped>
+<style lang="scss" scoped>
 .info {
-    padding: 20px 0;
-    border-bottom: 1px solid rgb(0 0 0 / 5%);
+  padding: 20px 0;
+  border-bottom: 1px solid rgb(0 0 0 / 5%);
 }
 
 .title-container {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 
-    .title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        text-align: left;
+  .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: left;
 
-        & {
-            @media (max-width: 950px) {
-                font-size: 1.3rem;
-            }
-        }
-
+    & {
+      @media (max-width: 950px) {
+        font-size: 1.3rem;
+      }
     }
+
+  }
 }
 
 .etc {
+  display: flex;
+  padding: 5px 0;
+  font-size: .875rem;
+  color: rgb(0 0 0 / 40%);
+  align-items: center;
+
+  .user-image {
+    margin-right: 5px;
+
+    img {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .nick-name {
     display: flex;
-    padding: 5px 0;
-    font-size: .875rem;
-    color: rgb(0 0 0 / 40%);
+    cursor: pointer;
+  }
+
+  .dot {
+    display: flex;
     align-items: center;
+    justify-content: center;
+    width: .875rem;
 
-    .user-image {
-        margin-right: 5px;
-        img {
-            width: 32px;
-            height: 32px;
-        }
+    &::after {
+      width: .125rem;
+      height: .125rem;
+      content: "";
+      background-color: rgb(0 0 0 / 10%);
     }
+  }
 
-    .nick-name {
-        display: flex;
-        cursor: pointer;
-    }
-
-    .dot {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: .875rem;
-
-        &::after {
-            width: .125rem;
-            height: .125rem;
-            content: "";
-            background-color: rgb(0 0 0 / 10%);
-        }
-    }
-
-    .like-count {
-        color: #000;
-    }
+  .like-count {
+    color: #000;
+  }
 }
 
 .dropdown-menu {
-    --bs-dropdown-min-with: none;
-    --bs-dropdown-font-size: none;
+  --bs-dropdown-min-with: none;
+  --bs-dropdown-font-size: none;
 }
 
 .dropdown-toggle::after {
-    content: none;
+  content: none;
 }
 </style>
