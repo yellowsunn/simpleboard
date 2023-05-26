@@ -1,6 +1,6 @@
 package com.yellowsunn.boardservice.redis.article
 
-import com.yellowsunn.boardservice.repository.article.ArticleViewCacheRepository
+import com.yellowsunn.boardservice.query.repository.ArticleViewCacheRepository
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Component
 

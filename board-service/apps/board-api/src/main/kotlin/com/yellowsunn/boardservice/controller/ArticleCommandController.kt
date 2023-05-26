@@ -1,10 +1,10 @@
 package com.yellowsunn.boardservice.controller
 
-import com.yellowsunn.boardservice.dto.ArticleLikeCommand
+import com.yellowsunn.boardservice.command.dto.ArticleLikeCommand
 import com.yellowsunn.boardservice.dto.ArticleSaveRequestDto
-import com.yellowsunn.boardservice.dto.ArticleUndoLikeCommand
+import com.yellowsunn.boardservice.command.dto.ArticleUndoLikeCommand
 import com.yellowsunn.boardservice.dto.ArticleUpdateRequestDto
-import com.yellowsunn.boardservice.facade.ArticleCommandFacade
+import com.yellowsunn.boardservice.command.facade.ArticleCommandFacade
 import com.yellowsunn.common.annotation.LoginUser
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus

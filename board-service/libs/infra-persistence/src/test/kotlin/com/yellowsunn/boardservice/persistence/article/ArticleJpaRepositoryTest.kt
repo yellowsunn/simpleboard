@@ -1,6 +1,6 @@
 package com.yellowsunn.boardservice.persistence.article
 
-import com.yellowsunn.boardservice.domain.command.article.Article
+import com.yellowsunn.boardservice.command.domain.article.Article
 import com.yellowsunn.boardservice.persistence.PersistenceIntegrationTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

@@ -1,11 +1,11 @@
 package com.yellowsunn.boardservice.persistence.article
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import com.yellowsunn.boardservice.domain.command.article.ArticleLike
-import com.yellowsunn.boardservice.domain.command.article.ArticleLikeId
-import com.yellowsunn.boardservice.domain.command.article.QArticleLike.articleLike
+import com.yellowsunn.boardservice.command.domain.article.ArticleLike
+import com.yellowsunn.boardservice.command.domain.article.ArticleLikeId
+import com.yellowsunn.boardservice.command.domain.article.QArticleLike.articleLike
 import com.yellowsunn.boardservice.persistence.BaseJpaRepository
-import com.yellowsunn.boardservice.repository.article.ArticleLikeRepository
+import com.yellowsunn.boardservice.command.repository.ArticleLikeRepository
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -32,12 +32,21 @@ class ArticleLikeJpaRepository(
 
     @Transactional(readOnly = true)
     override fun countByArticleId(articleId: Long): Long {
-        val count: Long? = jpaQueryFactory
+        return jpaQueryFactory
             .select(articleLike.count())
             .from(articleLike)
             .where(articleLike.articleId.eq(articleId))
-            .fetchOne()
+            .fetchOne() ?: 0L
+    }
 
-        return count ?: 0L
+    @Transactional(readOnly = true)
+    override fun existsByArticleIdAndUserId(articleId: Long, userId: Long): Boolean {
+        val count: Long = jpaQueryFactory
+            .select(articleLike.count())
+            .from(articleLike)
+            .where(articleLike.articleId.eq(articleId), articleLike.userId.eq(userId))
+            .fetchOne() ?: 0L
+
+        return count > 0L
     }
 }

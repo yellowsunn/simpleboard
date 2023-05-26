@@ -1,10 +1,10 @@
 package com.yellowsunn.boardservice.consumer
 
-import com.yellowsunn.boardservice.event.ArticleLikeSyncEvent
-import com.yellowsunn.boardservice.event.ArticleSyncEvent
+import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncData
+import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncData
 import com.yellowsunn.boardservice.service.ArticleSyncService
-import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_LIKE_SYNC_TOPIC
-import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_SYNC_TOPIC
+import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_DOCUMENT_SYNC_TOPIC
+import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_REACTION_DOCUMENT_SYNC_TOPIC
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
@@ -22,21 +22,18 @@ class ArticleEventConsumer(
     }
 
     @KafkaListener(
-        topics = [ARTICLE_SYNC_TOPIC],
+        topics = [ARTICLE_DOCUMENT_SYNC_TOPIC],
         groupId = ARTICLE_SYNC_GROUP,
     )
-    fun syncArticleDocument(@Payload event: ArticleSyncEvent) {
-        articleSyncService.syncArticle(event.articleId)
+    fun syncArticleDocument(@Payload payload: ArticleDocumentSyncData) {
+        articleSyncService.syncArticleDocument(payload.articleId)
     }
 
     @KafkaListener(
-        topics = [ARTICLE_LIKE_SYNC_TOPIC],
+        topics = [ARTICLE_REACTION_DOCUMENT_SYNC_TOPIC],
         groupId = ARTICLE_SYNC_GROUP,
     )
-    fun syncArticleLikeCount(@Payload event: ArticleLikeSyncEvent) {
-        val isUpdated = articleSyncService.syncArticleLike(event.articleId)
-        if (isUpdated.not()) {
-            logger.error("Failed to sync article like. article id={}", event.articleId)
-        }
+    fun syncArticleReactionDocument(@Payload payload: ArticleReactionDocumentSyncData) {
+        articleSyncService.syncArticleReactionDocument(payload.articleId, payload.userId)
     }
 }

@@ -1,7 +1,8 @@
 package com.yellowsunn.boardservice.http.client.user
 
-import com.yellowsunn.boardservice.domain.user.SimpleUser
-import com.yellowsunn.boardservice.domain.user.User
+import com.yellowsunn.boardservice.common.domain.user.SimpleUser
+import com.yellowsunn.boardservice.common.domain.user.User
+import com.yellowsunn.boardservice.common.http.client.user.UserHttpClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value

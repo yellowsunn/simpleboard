@@ -1,8 +1,9 @@
 package com.yellowsunn.boardservice.controller
 
-import com.yellowsunn.boardservice.dto.ArticleDocumentDto
-import com.yellowsunn.boardservice.dto.ArticleDocumentPageDto
-import com.yellowsunn.boardservice.service.ArticleQueryService
+import com.yellowsunn.boardservice.query.dto.ArticleDocumentDto
+import com.yellowsunn.boardservice.query.dto.ArticleDocumentPageDto
+import com.yellowsunn.boardservice.query.dto.ArticleReactionDocumentDto
+import com.yellowsunn.boardservice.query.service.ArticleQueryService
 import com.yellowsunn.common.annotation.LoginUser
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -26,12 +27,15 @@ class ArticleQueryController(
         return articleQueryService.findArticleByDocumentId(documentId)
     }
 
-    @GetMapping("/api/v2/articles/{documentId}/reaction")
+    @GetMapping("/api/v2/articles/{articleId}/reaction")
     fun getArticleReaction(
+        @PathVariable articleId: Long,
         @LoginUser(required = false) userUUID: String?,
-        @PathVariable documentId: String,
-    ) {
-        println()
-        return
+    ): ArticleReactionDocumentDto? {
+        return if (userUUID != null) {
+            articleQueryService.findReactionByArticleId(articleId, userUUID)
+        } else {
+            null
+        }
     }
 }

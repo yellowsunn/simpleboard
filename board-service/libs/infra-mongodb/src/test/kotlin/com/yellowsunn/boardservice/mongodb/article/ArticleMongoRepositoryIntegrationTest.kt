@@ -1,14 +1,14 @@
 package com.yellowsunn.boardservice.mongodb.article
 
-import com.yellowsunn.boardservice.domain.query.article.ArticleDocument
+import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import com.yellowsunn.boardservice.mongodb.MongoIntegrationTest
+import java.time.ZonedDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.mongodb.core.MongoTemplate
-import java.time.ZonedDateTime
 
 class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
     @Autowired
@@ -22,15 +22,6 @@ class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
     @BeforeEach
     fun setUp() {
         articleMongoRepository = ArticleMongoRepository(delegate, mongoTemplate)
-    }
-
-    @Test
-    fun save() {
-        val articleDocument = getTestArticle(1L)
-
-        val savedArticleDocument = articleMongoRepository.save(articleDocument)
-
-        assertThat(savedArticleDocument.id).isNotNull
     }
 
     @Test
@@ -60,18 +51,18 @@ class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
     @Test
     fun findById() {
         val articleDocument = getTestArticle(1L)
-        articleMongoRepository.save(articleDocument)
+        val upsertedArticleDocument = articleMongoRepository.upsertByArticleId(1L, articleDocument)
 
-        val savedArticleDocument: ArticleDocument? = articleMongoRepository.findById(articleDocument.id)
+        val foundDocument: ArticleDocument? = articleMongoRepository.findById(upsertedArticleDocument!!.id)
 
-        assertThat(savedArticleDocument).isNotNull
-        assertThat(savedArticleDocument!!.id).isEqualTo(articleDocument.id)
+        assertThat(foundDocument).isNotNull
+        assertThat(foundDocument!!.id).isEqualTo(upsertedArticleDocument.id)
     }
 
     @Test
     fun findArticles() {
         (1L..10L).forEach {
-            articleMongoRepository.save(getTestArticle(it))
+            articleMongoRepository.upsertByArticleId(it, getTestArticle(it))
         }
 
         val articleDocumentPage: Page<ArticleDocument> = articleMongoRepository.findArticles(1, 4)
@@ -80,15 +71,6 @@ class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
         assertThat(articleDocumentPage.number).isEqualTo(1)
         assertThat(articleDocumentPage.content)
             .isSortedAccordingTo(Comparator.comparing<ArticleDocument, ZonedDateTime> { it.savedAt }.reversed())
-    }
-
-    @Test
-    fun updateLikeCount() {
-        articleMongoRepository.save(getTestArticle(1L))
-
-        val isUpdated = articleMongoRepository.updateLikeCount(articleId = 1L, likeCount = 5L)
-
-        assertThat(isUpdated).isTrue
     }
 
     private fun getTestArticle(articleId: Long): ArticleDocument = ArticleDocument(

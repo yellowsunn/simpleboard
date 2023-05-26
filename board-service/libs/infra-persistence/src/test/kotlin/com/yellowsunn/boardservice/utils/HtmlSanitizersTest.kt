@@ -1,5 +1,6 @@
 package com.yellowsunn.boardservice.utils
 
+import com.yellowsunn.boardservice.common.utils.sanitizeHtml
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +19,7 @@ class HtmlSanitizersTest {
     fun getFirstImageSrc() {
         val html = "<p><img src='http://example1.com'></p><p><img src='http://example2.com'></p>"
 
-        val result = getFirstImageSrc(html)
+        val result = com.yellowsunn.boardservice.common.utils.getFirstImageSrc(html)
 
         assertThat(result).isEqualTo("http://example1.com")
     }

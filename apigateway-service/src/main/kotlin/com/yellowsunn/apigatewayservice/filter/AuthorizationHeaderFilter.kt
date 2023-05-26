@@ -1,6 +1,7 @@
 package com.yellowsunn.apigatewayservice.filter
 
 import com.yellowsunn.common.constant.CommonHeaderConst.USER_UUID_HEADER
+import com.yellowsunn.common.exception.JwtTokenParseException
 import com.yellowsunn.common.utils.token.AccessTokenParser
 import com.yellowsunn.common.utils.token.AccessTokenPayload
 import org.slf4j.Logger
@@ -23,19 +24,36 @@ class AuthorizationHeaderFilter(
 
     override fun apply(config: Any?) = GatewayFilter { exchange, chain ->
         val request: ServerHttpRequest = exchange.request
-        val authorizationHeader: String? = request.headers[HttpHeaders.AUTHORIZATION]?.getOrNull(0)
-
-        val isStartsWithBearer = authorizationHeader?.startsWith(BEARER, ignoreCase = true) ?: false
-        if (isStartsWithBearer.not()) {
-            chain.filter(exchange)
+        val authorization = getAuthorizationValue(request)
+        val userUUID = if (authorization.isNotBlank()) {
+            getUserUuidByAccessToken(authorization)
         } else {
-            val jwt = authorizationHeader?.replace(BEARER, "", ignoreCase = true)?.trim() ?: ""
-            val accessTokenPayload: AccessTokenPayload = accessTokenParser.parseEncodedToken(jwt)
-            val changedRequest = exchange.request.mutate()
-                .header(USER_UUID_HEADER, accessTokenPayload.uuid)
-                .build()
+            ""
+        }
+        val changedRequest = exchange.request.mutate()
+            .header(USER_UUID_HEADER, userUUID)
+            .build()
 
-            chain.filter(exchange.mutate().request(changedRequest).build())
+        chain.filter(exchange.mutate().request(changedRequest).build())
+    }
+
+    private fun getAuthorizationValue(request: ServerHttpRequest): String {
+        val authorization: String = request.headers[HttpHeaders.AUTHORIZATION]?.getOrNull(0)
+            ?: return ""
+
+        if (authorization.startsWith(BEARER, ignoreCase = true).not()) {
+            return ""
+        }
+        return authorization.replace(BEARER, "", ignoreCase = true).trim()
+    }
+
+    private fun getUserUuidByAccessToken(encodedAccessToken: String): String {
+        return try {
+            val accessTokenPayload: AccessTokenPayload = accessTokenParser.parseEncodedToken(encodedAccessToken)
+            accessTokenPayload.uuid
+        } catch (e: JwtTokenParseException) {
+            logger.warn("토큰 값을 조회하는데 실패하였습니다.")
+            ""
         }
     }
 }

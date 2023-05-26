@@ -1,7 +1,7 @@
 package com.yellowsunn.boardservice.persistence.article
 
-import com.yellowsunn.boardservice.domain.command.article.ArticleLike
-import com.yellowsunn.boardservice.domain.command.article.ArticleLikeId
+import com.yellowsunn.boardservice.command.domain.article.ArticleLike
+import com.yellowsunn.boardservice.command.domain.article.ArticleLikeId
 import com.yellowsunn.boardservice.persistence.PersistenceIntegrationTest
 import jakarta.persistence.EntityExistsException
 import org.assertj.core.api.Assertions.assertThat
