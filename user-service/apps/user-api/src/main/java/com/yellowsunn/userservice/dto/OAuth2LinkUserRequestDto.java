@@ -14,9 +14,9 @@ public class OAuth2LinkUserRequestDto {
     @NotBlank
     private String type;
 
-    public UserOAuth2LinkCommand toCommand(String userUUID) {
+    public UserOAuth2LinkCommand toCommand(Long userId) {
         return UserOAuth2LinkCommand.builder()
-                .userUUID(userUUID)
+                .userId(userId)
                 .oAuth2Token(token)
                 .type(OAuth2Type.convertFrom(type))
                 .build();

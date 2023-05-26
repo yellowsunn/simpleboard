@@ -19,16 +19,16 @@ class UserRestHttpClient(
 ) : UserHttpClient {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun findUserByUserUUID(userUUID: String): User? {
+    override fun findUserByUserId(userId: Long): User? {
         val uri = UriComponentsBuilder.fromHttpUrl(userServiceUrl)
-            .path("/api/internal/v1/users/uuid/{userUUID}")
-            .buildAndExpand(userUUID)
+            .path("/api/internal/v1/users/{userId}")
+            .buildAndExpand(userId)
             .toUri()
 
         return try {
             restTemplate.getForObject(uri, User::class.java)
         } catch (e: Exception) {
-            logger.warn("Failed to get user. uuid={}", userUUID, e)
+            logger.warn("Failed to get user. userId={}", userId, e)
             null
         }
     }

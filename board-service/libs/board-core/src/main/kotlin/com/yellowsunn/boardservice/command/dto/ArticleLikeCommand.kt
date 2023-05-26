@@ -1,6 +1,6 @@
 package com.yellowsunn.boardservice.command.dto
 
 class ArticleLikeCommand(
-    val userUUID: String,
+    val userId: Long,
     val articleId: Long,
 )

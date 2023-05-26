@@ -73,9 +73,9 @@ export default {
         return
       }
 
-      const data = await this.$boardApi('DELETE', '/api/v2/auth/oauth2/link?type=google', null, true);
-      if (data?.code) {
-        alert(data.message)
+      const {isError, data} = await this.$boardApi('DELETE', '/api/v2/auth/oauth2/link?type=google', null, true);
+      if (isError) {
+        alert(data?.message)
       }
       if (data === true) {
         this.$store.commit('deleteUserProvider', 'GOOGLE')

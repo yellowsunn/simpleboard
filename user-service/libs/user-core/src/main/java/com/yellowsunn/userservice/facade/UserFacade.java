@@ -12,9 +12,9 @@ public class UserFacade {
     private final UserService userService;
     private final ImageHttpClient imageHttpClient;
 
-    public String updateUserThumbnail(String uuid, FileUploadRequest request) {
+    public String updateUserThumbnail(Long userId, FileUploadRequest request) {
         String updatedThumbnail = imageHttpClient.uploadThumbnailImage(request.originalFileName(), request.inputStream());
-        userService.changeUserThumbnail(uuid, updatedThumbnail);
+        userService.changeUserThumbnail(userId, updatedThumbnail);
         return updatedThumbnail;
     }
 }

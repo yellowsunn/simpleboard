@@ -67,7 +67,7 @@ public class UserAuthFacade {
         OAuth2UserInfo userInfo = oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token(), OAuth2Request.USER_LINK);
         verifyOAuth2ProviderEmailIsNotBlank(userInfo);
 
-        return userAuthService.linkOAuth2User(command.userUUID(), userInfo.email(), command.type());
+        return userAuthService.linkOAuth2User(command.userId(), userInfo.email(), command.type());
     }
 
     // OAuth2 계정 이메일을 조회할 수 없는 경우 예외 발생 (이메일 조회에 동의 하지 않은 경우)

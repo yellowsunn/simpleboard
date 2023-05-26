@@ -13,8 +13,8 @@ data class ArticleSaveRequestDto(
     @field:Size(max = 10_000)
     val body: String,
 ) {
-    fun toCommand(userUUID: String) = ArticleSaveCommand(
-        userUUID = userUUID,
+    fun toCommand(userId: Long) = ArticleSaveCommand(
+        userId = userId,
         title = this.title,
         body = this.body,
     )

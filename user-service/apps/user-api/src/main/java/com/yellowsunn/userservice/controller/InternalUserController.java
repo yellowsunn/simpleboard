@@ -19,9 +19,9 @@ import java.util.List;
 public class InternalUserController {
     private final InternalUserService internalUserService;
 
-    @GetMapping("/api/internal/v1/users/uuid/{userUUID}")
-    public InternalUserInfoDto findUser(@PathVariable String userUUID) {
-        return internalUserService.findUserInfo(userUUID);
+    @GetMapping("/api/internal/v1/users/{userId}")
+    public InternalUserInfoDto findUser(@PathVariable Long userId) {
+        return internalUserService.findUserInfo(userId);
     }
 
     @GetMapping("/api/internal/v1/users")

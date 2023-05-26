@@ -21,7 +21,7 @@ class ImageController(
 ) {
     @PostMapping("/api/images/{type}")
     fun uploadImageFile(
-        @LoginUser userUUID: String,
+        @LoginUser userId: Long,
         @PathVariable type: String,
         @RequestParam image: MultipartFile,
     ): String {

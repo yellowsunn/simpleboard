@@ -1,6 +1,6 @@
 package com.yellowsunn.apigatewayservice.filter
 
-import com.yellowsunn.common.constant.CommonHeaderConst.USER_UUID_HEADER
+import com.yellowsunn.common.constant.CommonHeaderConst.USER_ID
 import com.yellowsunn.common.exception.JwtTokenParseException
 import com.yellowsunn.common.utils.token.AccessTokenParser
 import com.yellowsunn.common.utils.token.AccessTokenPayload
@@ -25,13 +25,14 @@ class AuthorizationHeaderFilter(
     override fun apply(config: Any?) = GatewayFilter { exchange, chain ->
         val request: ServerHttpRequest = exchange.request
         val authorization = getAuthorizationValue(request)
-        val userUUID = if (authorization.isNotBlank()) {
-            getUserUuidByAccessToken(authorization)
+        val userId: Long? = if (authorization.isNotBlank()) {
+            getUserIdByAccessToken(authorization)
         } else {
-            ""
+            null
         }
+
         val changedRequest = exchange.request.mutate()
-            .header(USER_UUID_HEADER, userUUID)
+            .header(USER_ID, userId?.toString())
             .build()
 
         chain.filter(exchange.mutate().request(changedRequest).build())
@@ -47,13 +48,13 @@ class AuthorizationHeaderFilter(
         return authorization.replace(BEARER, "", ignoreCase = true).trim()
     }
 
-    private fun getUserUuidByAccessToken(encodedAccessToken: String): String {
+    private fun getUserIdByAccessToken(encodedAccessToken: String): Long? {
         return try {
             val accessTokenPayload: AccessTokenPayload = accessTokenParser.parseEncodedToken(encodedAccessToken)
-            accessTokenPayload.uuid
+            accessTokenPayload.id
         } catch (e: JwtTokenParseException) {
             logger.warn("토큰 값을 조회하는데 실패하였습니다.")
-            ""
+            null
         }
     }
 }

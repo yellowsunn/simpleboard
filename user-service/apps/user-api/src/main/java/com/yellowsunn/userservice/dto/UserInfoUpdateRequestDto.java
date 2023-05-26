@@ -13,9 +13,9 @@ public class UserInfoUpdateRequestDto {
     @Pattern(regexp = VALID_NICKNAME_REGEX, message = VALID_NICKNAME_MESSAGE)
     private String nickName;
 
-    public UserInfoUpdateCommand toCommand(String uuid) {
+    public UserInfoUpdateCommand toCommand(Long userId) {
         return UserInfoUpdateCommand.builder()
-                .userUUID(uuid)
+                .userId(userId)
                 .nickName(nickName)
                 .build();
     }

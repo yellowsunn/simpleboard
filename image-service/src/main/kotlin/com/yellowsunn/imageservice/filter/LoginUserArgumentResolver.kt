@@ -1,8 +1,8 @@
-package com.yellowsunn.boardservice.filter
+package com.yellowsunn.imageservice.filter
 
 import com.yellowsunn.common.annotation.LoginUser
-import com.yellowsunn.common.constant.CommonHeaderConst.USER_UUID_HEADER
-import com.yellowsunn.common.exception.InvalidAuthenticationException
+import com.yellowsunn.common.constant.CommonHeaderConst.USER_ID
+import com.yellowsunn.common.exception.LoginRequireException
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
@@ -20,11 +20,11 @@ class LoginUserArgumentResolver : HandlerMethodArgumentResolver {
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?,
     ): Any? {
-        val uuid: String? = webRequest.getHeader(USER_UUID_HEADER)
+        val userId: Long? = webRequest.getHeader(USER_ID)?.toLongOrNull()
         val loginUser: LoginUser? = parameter.getParameterAnnotation(LoginUser::class.java)
-        if (loginUser?.required == true && uuid.isNullOrBlank()) {
-            throw InvalidAuthenticationException()
+        if (loginUser?.required == true && userId == null) {
+            throw LoginRequireException()
         }
-        return uuid
+        return userId
     }
 }

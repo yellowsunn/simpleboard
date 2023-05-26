@@ -11,6 +11,7 @@ public enum UserErrorCode {
     NOT_FOUND_OAUTH_PROVIDER_EMAIL("소셜 계정을 사용하기 위해서는 이메일 조회 동의가 필요합니다.", 400),
     LINK_AT_OTHER_USER_PROVIDER("이미 다른 계정에 연동되어 있습니다.", 400),
     LINK_AT_LEAST_ONE_USER_PROVIDER("최소 1개의 계정이 연결되어 있어야 합니다.", 400),
+    REQUIRED_LOGIN("로그인이 필요합니다.", 401),
     ;
 
     private final String description;

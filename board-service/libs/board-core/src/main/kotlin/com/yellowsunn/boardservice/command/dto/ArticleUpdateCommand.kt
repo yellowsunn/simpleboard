@@ -1,7 +1,7 @@
 package com.yellowsunn.boardservice.command.dto
 
 data class ArticleUpdateCommand(
-    val userUUID: String,
+    val userId: Long,
     val articleId: Long,
     val title: String,
     val body: String,

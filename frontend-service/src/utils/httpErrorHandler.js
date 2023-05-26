@@ -11,7 +11,7 @@ const isAccessTokenExpired = (errorResponse) => {
 }
 
 const isInvalidUser = (errorResponse) => {
-  return errorResponse.code === 'NOT_FOUND_USER' || errorResponse.code === 'ACCESS_TOKEN_EXPIRED'
+  return errorResponse.code === 'NOT_FOUND_USER' || errorResponse.code === 'REQUIRE_LOGIN'
 }
 
 const isUnknownServerError = (errorResponse) => {

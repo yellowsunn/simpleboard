@@ -23,48 +23,39 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserProviderRepository userProviderRepository;
 
-    private static final String USER_UUID_ID_NULL_MESSAGE = "User userUUID must not be null.";
-
     @Transactional(readOnly = true)
-    public UserMyInfoDto findUserInfo(String uuid) {
-        Assert.notNull(uuid, USER_UUID_ID_NULL_MESSAGE);
+    public UserMyInfoDto findUserInfo(Long userId) {
+        User user = getUserById(userId);
 
-        User user = getUserByUUID(uuid);
         List<Provider> providers = userProviderRepository.findProvidersByUserId(user.getId());
 
         return UserMyInfoDto.fromUser(user, providers);
     }
 
     @Transactional
-    public boolean deleteUserInfo(String uuid) {
-        Assert.notNull(uuid, USER_UUID_ID_NULL_MESSAGE);
-
-        return userRepository.findByUUID(uuid)
+    public boolean deleteUserInfo(Long userId) {
+        return userRepository.findById(userId)
                 .filter(user -> userProviderRepository.deleteByUserId(user.getId()))
                 .map(userRepository::delete)
                 .orElse(true);
     }
 
     @Transactional
-    public boolean changeUserThumbnail(String uuid, String thumbnail) {
-        Assert.notNull(uuid, USER_UUID_ID_NULL_MESSAGE);
-
-        User user = getUserByUUID(uuid);
+    public boolean changeUserThumbnail(Long userId, String thumbnail) {
+        User user = getUserById(userId);
         return user.changeThumbnail(thumbnail);
     }
 
     @Transactional
     public boolean changeUserInfo(UserInfoUpdateCommand command) {
-        Assert.notNull(command.userUUID(), USER_UUID_ID_NULL_MESSAGE);
-
-        User user = getUserByUUID(command.userUUID());
+        User user = getUserById(command.userId());
         checkValidNickName(user.getId(), command.nickName());
 
         return user.changeNickName(command.nickName());
     }
 
-    private User getUserByUUID(String uuid) {
-        return userRepository.findByUUID(uuid)
+    private User getUserById(Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
     }
 

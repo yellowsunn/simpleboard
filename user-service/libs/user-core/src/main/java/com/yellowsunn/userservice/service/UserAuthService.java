@@ -120,11 +120,11 @@ public class UserAuthService {
     }
 
     @Transactional
-    public boolean linkOAuth2User(String userUUID, String providerEmail, OAuth2Type type) {
+    public boolean linkOAuth2User(Long userId, String providerEmail, OAuth2Type type) {
         Provider provider = type.toProvider();
         Assert.notNull(provider, "OAuth2 provider must not be null.");
 
-        User user = userRepository.findByUUID(userUUID)
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         boolean isAlreadyFinished = checkAlreadyExistProvider(user.getId(), providerEmail, provider);
@@ -142,11 +142,11 @@ public class UserAuthService {
 
 
     @Transactional
-    public boolean unlinkOAuth2User(String userUUID, OAuth2Type type) {
+    public boolean unlinkOAuth2User(Long userId, OAuth2Type type) {
         Provider provider = type.toProvider();
         Assert.notNull(provider, "OAuth2 provider must not be null.");
 
-        User user = userRepository.findByUUID(userUUID)
+        User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         // TODO: 동시성 이슈 고려 필요
@@ -204,7 +204,7 @@ public class UserAuthService {
     }
 
     private UserLoginTokenDto generateUserToken(User user) {
-        String accessToken = accessTokenHandler.generateEncodedToken(new AccessTokenPayload(user.getUuid(), user.getEmail()));
+        String accessToken = accessTokenHandler.generateEncodedToken(new AccessTokenPayload(user.getId(), user.getUuid(), user.getEmail()));
         String refreshToken = refreshTokenHandler.generateEncodedToken();
 
         return UserLoginTokenDto.builder()
@@ -221,18 +221,22 @@ public class UserAuthService {
     }
 
     private AccessTokenPayload generateNewEncodedAccessToken(String encodedAccessToken) {
+        Long userId;
         String email;
         String userUUID;
         try {
             var tokenPayload = accessTokenHandler.parseEncodedToken(encodedAccessToken);
+            userId = tokenPayload.id();
             email = tokenPayload.email();
             userUUID = tokenPayload.uuid();
         } catch (ExpiredAccessTokenException e) {
+            userId = e.getUserId();
             email = e.getEmail();
             userUUID = e.getUserUUID();
         }
 
         return AccessTokenPayload.builder()
+                .id(userId)
                 .email(email)
                 .uuid(userUUID)
                 .build();

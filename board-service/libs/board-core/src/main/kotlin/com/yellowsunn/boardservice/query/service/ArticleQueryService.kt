@@ -1,6 +1,5 @@
 package com.yellowsunn.boardservice.query.service
 
-import com.yellowsunn.boardservice.common.domain.user.User
 import com.yellowsunn.boardservice.common.exception.ArticleNotFoundException
 import com.yellowsunn.boardservice.common.http.client.user.UserHttpClient
 import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
@@ -55,10 +54,9 @@ class ArticleQueryService(
         return ArticleDocumentPageDto.from(articleDocumentPage, viewCounts, users)
     }
 
-    fun findReactionByArticleId(articleId: Long, userUUID: String): ArticleReactionDocumentDto? {
-        val user: User = userHttpClient.findUserByUserUUID(userUUID) ?: return null
+    fun findReactionByArticleId(articleId: Long, userId: Long): ArticleReactionDocumentDto? {
         val articleReactionDocument =
-            articleReactionDocumentRepository.findByArticleIdAndUserId(articleId, user.userId) ?: return null
+            articleReactionDocumentRepository.findByArticleIdAndUserId(articleId, userId) ?: return null
 
         return ArticleReactionDocumentDto.from(articleReactionDocument)
     }

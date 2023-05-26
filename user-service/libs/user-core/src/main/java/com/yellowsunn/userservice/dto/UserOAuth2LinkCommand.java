@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record UserOAuth2LinkCommand(
-        String userUUID,
+        Long userId,
         String oAuth2Token,
         OAuth2Type type,
         String state

@@ -13,8 +13,8 @@ data class ArticleUpdateRequestDto(
     @field:Size(max = 10_000)
     val body: String,
 ) {
-    fun toCommand(userUUID: String, articleId: Long) = ArticleUpdateCommand(
-        userUUID = userUUID,
+    fun toCommand(userId: Long, articleId: Long) = ArticleUpdateCommand(
+        userId = userId,
         articleId = articleId,
         title = this.title,
         body = this.body,

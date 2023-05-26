@@ -30,10 +30,10 @@ class ArticleQueryController(
     @GetMapping("/api/v2/articles/{articleId}/reaction")
     fun getArticleReaction(
         @PathVariable articleId: Long,
-        @LoginUser(required = false) userUUID: String?,
+        @LoginUser(required = false) userId: Long?,
     ): ArticleReactionDocumentDto? {
-        return if (userUUID != null) {
-            articleQueryService.findReactionByArticleId(articleId, userUUID)
+        return if (userId != null) {
+            articleQueryService.findReactionByArticleId(articleId, userId)
         } else {
             null
         }

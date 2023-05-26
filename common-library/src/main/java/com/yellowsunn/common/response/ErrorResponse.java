@@ -8,6 +8,14 @@ public record ErrorResponse(
         String code,
         String message
 ) {
+    public static ErrorResponse requireLogin() {
+        return ErrorResponse.builder()
+                .status(401)
+                .code("REQUIRE_LOGIN")
+                .message("로그인이 필요합니다.")
+                .build();
+    }
+
     public static ErrorResponse accessTokenExpired() {
         return ErrorResponse.builder()
                 .status(403)

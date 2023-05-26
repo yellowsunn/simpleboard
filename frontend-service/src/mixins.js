@@ -1,5 +1,6 @@
 import {callBoardApi, reAcquireAccessToken} from "@/utils/apiUtils";
 import AccessTokenExpiredError from "@/utils/AccessTokenExpiredError";
+import {isInvalidUser} from "@/utils/httpErrorHandler";
 
 export default {
   methods: {
@@ -10,7 +11,11 @@ export default {
     },
     async $boardApi(method, url, data, isRequireAuth = false, headers = {"Content-Type": "application/json"}) {
       try {
-        return await callBoardApi(method, url, data, isRequireAuth, headers)
+        const response = await callBoardApi(method, url, data, isRequireAuth, headers);
+        if (response?.isError && isInvalidUser(response?.data)) {
+          this.$store.commit('deleteUserToken')
+        }
+        return response
       } catch (e) {
         if (e instanceof AccessTokenExpiredError) {
           const res = await reAcquireAccessToken()

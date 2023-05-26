@@ -33,24 +33,24 @@ public class ExternalUserController {
     private final UserService userService;
 
     @GetMapping("/api/v2/users/my-info")
-    public UserMyInfoDto findMyInfo(@LoginUser String uuid) {
-        return userService.findUserInfo(uuid);
+    public UserMyInfoDto findMyInfo(@LoginUser Long userId) {
+        return userService.findUserInfo(userId);
     }
 
     @DeleteMapping("/api/v2/users/my-info")
-    public boolean deleteMyInfo(@LoginUser String uuid) {
-        return userService.deleteUserInfo(uuid);
+    public boolean deleteMyInfo(@LoginUser Long userId) {
+        return userService.deleteUserInfo(userId);
     }
 
     @PutMapping("/api/v2/users/my-info")
-    public boolean updateMyInfo(@LoginUser String uuid,
+    public boolean updateMyInfo(@LoginUser Long userId,
                                 @Valid @RequestBody UserInfoUpdateRequestDto requestDto) {
-        var command = requestDto.toCommand(uuid);
+        var command = requestDto.toCommand(userId);
         return userService.changeUserInfo(command);
     }
 
     @PatchMapping("/api/v2/users/my-info/thumbnail")
-    public String updateMyThumbnail(@LoginUser String uuid,
+    public String updateMyThumbnail(@LoginUser Long userId,
                                     @RequestParam MultipartFile thumbnail) {
         if (isNotImageType(thumbnail.getContentType())) {
             throw new IllegalArgumentException("This file is not an image type.");
@@ -58,7 +58,7 @@ public class ExternalUserController {
 
         try (var inputStream = thumbnail.getInputStream()) {
             var fileUploadRequest = generateFileUploadRequest(thumbnail, inputStream);
-            return userFacade.updateUserThumbnail(uuid, fileUploadRequest);
+            return userFacade.updateUserThumbnail(userId, fileUploadRequest);
         } catch (IOException e) {
             throw new CustomIOException(e);
         }

@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.exception;
 
-import com.yellowsunn.common.exception.InvalidAuthenticationException;
+import com.yellowsunn.common.exception.LoginRequireException;
 import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.common.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -54,20 +54,16 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(InvalidAuthenticationException.class)
-    protected ErrorResponse handleInvalidAuthorizationException(InvalidAuthenticationException e) {
-        log.warn("Unauthorized request. message={}", e.getMessage(), e);
-        return ErrorResponse.builder()
-                .code(HttpStatus.UNAUTHORIZED.name())
-                .message(e.getMessage())
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .build();
+    @ExceptionHandler(LoginRequireException.class)
+    protected ErrorResponse handleInvalidAuthorizationException(LoginRequireException e) {
+        log.warn("Login required. message={}", e.getMessage(), e);
+        return ErrorResponse.requireLogin();
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UserNotFoundException.class)
     protected ErrorResponse handleUserNotFoundException(UserNotFoundException e) {
-        log.warn("Unauthorized request. message={}", e.getMessage(), e);
+        log.warn("Not found user. message={}", e.getMessage(), e);
         return ErrorResponse.notFoundUser();
     }
 

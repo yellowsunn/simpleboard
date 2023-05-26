@@ -56,17 +56,17 @@ public class ExternalUserAuthController {
     }
 
     @PutMapping("/api/v2/auth/oauth2/link")
-    public boolean linkOAuth2(@LoginUser String userUUID,
+    public boolean linkOAuth2(@LoginUser Long userId,
                               @Valid @RequestBody OAuth2LinkUserRequestDto requestDto) {
-        var command = requestDto.toCommand(userUUID);
+        var command = requestDto.toCommand(userId);
         return userAuthFacade.linkOAuth2User(command);
     }
 
     @DeleteMapping("/api/v2/auth/oauth2/link")
-    public boolean unlinkOAuth2(@LoginUser String userUUID,
+    public boolean unlinkOAuth2(@LoginUser Long userId,
                                 @RequestParam String type) {
         var oAuth2Type = OAuth2Type.convertFrom(type);
-        return userAuthService.unlinkOAuth2User(userUUID, oAuth2Type);
+        return userAuthService.unlinkOAuth2User(userId, oAuth2Type);
     }
 
     @PostMapping("/api/v2/auth/token")

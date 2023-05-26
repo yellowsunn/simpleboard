@@ -1,6 +1,6 @@
 package com.yellowsunn.boardservice.command.dto
 
 data class ArticleUndoLikeCommand(
-    val userUUID: String,
+    val userId: Long,
     val articleId: Long,
 )
