@@ -82,12 +82,23 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  overflow: hidden;
+  width: 80%;
 
   .title-container {
     display: flex;
     font-size: .875rem;
 
     .title {
+      display: flex;
+      overflow: hidden;
+
+      .text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .comment-count {
         font-size: .9rem;
         font-weight: 700;

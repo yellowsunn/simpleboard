@@ -1,20 +1,20 @@
 <template>
-    <div v-if="userInfo" class="mx-auto" style="width: 950px">
+    <div v-if="userInfo" class="mx-auto" style="max-width: 950px">
         <div class="mb-2">
             <MyPageHeader></MyPageHeader>
         </div>
-        <div class="d-flex justify-content-between">
-            <div class="ms-3" style="width: 360px">
+        <div class="d-flex justify-content-between user-info-content">
+            <div class="mx-3" style="width: 360px">
                 <MyPageUserInfo :userInfo="userInfo"
                                 @update-thumbnail="updateThumbnail"
                                 @update-user-info="updateUserInfo"></MyPageUserInfo>
             </div>
             <div class="vr my-3"></div>
-            <div class="me-3" style="width: 360px">
+            <div class="mx-3" style="width: 360px">
                 <MyPageUserLink v-if="userProviders" :userProviders="userProviders"></MyPageUserLink>
             </div>
         </div>
-        <div class="d-flex justify-content-end mt-5">
+        <div class="d-flex justify-content-end my-5 me-3">
             <button type="button" class="btn btn-danger btn-lg" @click="deleteUserInfo">회원탈퇴</button>
         </div>
     </div>
@@ -88,5 +88,10 @@ export default {
 </script>
 
 <style scoped>
-
+@media (max-width: 720px) {
+    .user-info-content {
+        align-items: center;
+        flex-direction: column;
+    }
+}
 </style>
