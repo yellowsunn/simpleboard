@@ -22,9 +22,9 @@ class ArticleQueryController(
         return articleQueryService.findArticles(page, size)
     }
 
-    @GetMapping("/api/v2/articles/{documentId}")
-    fun getArticle(@PathVariable documentId: String): ArticleDocumentDto {
-        return articleQueryService.findArticleByDocumentId(documentId)
+    @GetMapping("/api/v2/articles/{articleId}")
+    fun getArticle(@PathVariable articleId: Long): ArticleDocumentDto {
+        return articleQueryService.findArticleById(articleId)
     }
 
     @GetMapping("/api/v2/articles/{articleId}/reaction")

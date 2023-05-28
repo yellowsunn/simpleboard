@@ -1,6 +1,6 @@
 package com.yellowsunn.boardservice.mongodb
 
-import com.yellowsunn.boardservice.mongodb.config.MongoConfiguration
+import com.yellowsunn.boardservice.config.MongoConfiguration
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource

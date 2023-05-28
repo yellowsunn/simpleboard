@@ -1,14 +1,14 @@
 package com.yellowsunn.boardservice.mongodb.article
 
-import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import com.yellowsunn.boardservice.mongodb.MongoIntegrationTest
-import java.time.ZonedDateTime
+import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.mongodb.core.MongoTemplate
+import java.time.ZonedDateTime
 
 class ArticleMongoRepositoryIntegrationTest : MongoIntegrationTest() {
     @Autowired

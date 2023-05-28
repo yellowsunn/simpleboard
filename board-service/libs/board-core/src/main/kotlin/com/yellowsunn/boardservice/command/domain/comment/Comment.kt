@@ -12,9 +12,9 @@ class Comment(
     val articleId: Long,
     val userId: Long,
     content: String?,
-    parentCommentId: Long? = null,
-    parentUserId: Long? = null,
     imageUrl: String? = null,
+    val parentCommentId: Long? = null,
+    var baseCommentId: Long = -1L,
 ) : BaseTimeEntity() {
     @Id
     @Column(name = "comment_id")
@@ -24,17 +24,15 @@ class Comment(
     var content: String? = content
         private set
 
-    var parentCommentId: Long? = parentCommentId
-        private set
-
-    var parentUserId: Long? = parentCommentId
-        private set
-
     var imageUrl: String? = imageUrl
         private set
 
     var likeCount: Long = 0L
         private set
+
+    fun changeBaseCommentId(baseCommentId: Long) {
+        this.baseCommentId = baseCommentId
+    }
 
     fun isReply(): Boolean {
         return parentCommentId != null

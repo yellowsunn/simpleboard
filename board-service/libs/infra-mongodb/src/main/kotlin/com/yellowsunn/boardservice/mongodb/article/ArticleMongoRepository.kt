@@ -37,6 +37,10 @@ class ArticleMongoRepository(
             .orElse(null)
     }
 
+    override fun findByArticleId(id: Long): ArticleDocument? {
+        return delegate.findByArticleId(id)
+    }
+
     override fun findArticles(page: Int, size: Int): Page<ArticleDocument> {
         val pageable = PageRequest.of(page, size)
         val query = Query(Criteria.where(IS_DELETED).`is`(false))
@@ -60,4 +64,6 @@ class ArticleMongoRepository(
     }
 }
 
-interface ArticleMongoRepositoryDelegate : MongoRepository<ArticleDocument, String>
+interface ArticleMongoRepositoryDelegate : MongoRepository<ArticleDocument, String> {
+    fun findByArticleId(articleId: Long): ArticleDocument?
+}

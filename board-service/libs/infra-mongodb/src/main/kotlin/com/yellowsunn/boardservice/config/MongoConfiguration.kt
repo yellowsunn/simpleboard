@@ -1,4 +1,4 @@
-package com.yellowsunn.boardservice.mongodb.config
+package com.yellowsunn.boardservice.config
 
 import com.yellowsunn.boardservice.mongodb.MongoModule
 import java.time.ZoneId

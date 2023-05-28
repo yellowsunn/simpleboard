@@ -12,25 +12,33 @@
                 <div style="user-select: none">좋아요</div>
             </div>
         </section>
+        <section v-if="commentPage">
+            <CommentList :commentPage="commentPage"></CommentList>
+        </section>
     </div>
 </template>
 
 <script>
 import ArticleHeader from "@/components/article/ArticleHeader.vue";
+import CommentList from "@/components/comment/CommentList.vue";
 
 export default {
   name: "ArticleView",
-  components: {ArticleHeader},
+  components: {CommentList, ArticleHeader},
   data() {
     return {
       id: this.$route.params.id,
       article: null,
       isArticleLiked: false,
+      commentPage: null,
     }
   },
   async mounted() {
-    const article = await this.getArticle();
+    // const article = await this.getArticle();
+    const currentCommentPage = this.$route.query?.['comment-page'] || 1
+    const [article, commentPage] = await Promise.all([this.getArticle(), this.getCommentPage(currentCommentPage)]);
     this.article = article
+    this.commentPage = commentPage
     if (article) {
       const reaction = await this.getArticleReaction(article.articleId);
       this.isArticleLiked = reaction?.isArticleLiked || false
@@ -41,6 +49,14 @@ export default {
       const {isError, data} = await this.$boardApi('GET', `/api/v2/articles/${this.id}`, null)
       if (isError) {
         alert('게시글을 조회할 수 없습니다.')
+        return
+      }
+      return data
+    },
+    async getCommentPage(page) {
+      const {isError, data} = await this.$boardApi('GET', `/api/v2/articles/${this.id}/comments?page=${page}`, null);
+      if (isError) {
+        alert('댓글 목록을 조회할 수 없습니다.')
         return
       }
       return data

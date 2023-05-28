@@ -1,6 +1,6 @@
 <template>
     <section class="article-list" v-if="articles">
-        <div class="article-item" v-for="(article, idx) in articles" :key="idx" @click="handleClickArticle(article?.id)"
+        <div class="article-item" v-for="(article, idx) in articles" :key="idx" @click="handleClickArticle(article?.articleId)"
              style="cursor: pointer">
             <div class="article-image">
                 <img v-if="article?.thumbnail" :src="article.thumbnail" alt="thumbnail">

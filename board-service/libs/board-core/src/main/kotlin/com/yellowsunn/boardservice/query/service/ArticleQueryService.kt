@@ -9,10 +9,10 @@ import com.yellowsunn.boardservice.query.dto.ArticleReactionDocumentDto
 import com.yellowsunn.boardservice.query.repository.ArticleDocumentRepository
 import com.yellowsunn.boardservice.query.repository.ArticleReactionDocumentRepository
 import com.yellowsunn.boardservice.query.repository.ArticleViewCacheRepository
-import kotlin.math.max
-import kotlin.math.min
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
+import kotlin.math.max
+import kotlin.math.min
 
 @Service
 class ArticleQueryService(
@@ -26,8 +26,8 @@ class ArticleQueryService(
         private const val MAX_ELEM_SIZE = 100
     }
 
-    fun findArticleByDocumentId(id: String): ArticleDocumentDto {
-        val articleDocument = articleDocumentRepository.findById(id)
+    fun findArticleById(articleId: Long): ArticleDocumentDto {
+        val articleDocument = articleDocumentRepository.findByArticleId(articleId)
             ?: throw ArticleNotFoundException()
 
         val users = userHttpClient.findUsersByIds(listOf(articleDocument.userId))

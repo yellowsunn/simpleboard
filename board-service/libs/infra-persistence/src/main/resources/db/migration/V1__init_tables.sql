@@ -23,9 +23,9 @@ create table article_like
 create table comment
 (
     comment_id        bigint       not null auto_increment,
-    content           varchar(500) null,
+    content           varchar(150) null,
     parent_comment_id bigint null,
-    parent_user_id    bigint null,
+    base_comment_id   bigint       not null,
     image_url         varchar(500) null,
     like_count        bigint       not null,
     article_id        bigint       not null,
