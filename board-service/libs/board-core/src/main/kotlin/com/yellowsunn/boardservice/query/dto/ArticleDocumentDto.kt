@@ -31,7 +31,7 @@ data class ArticleDocumentDto(
 
     data class ArticleDocumentUser(
         val uuid: String,
-        val thumbnail: String,
+        val thumbnail: String?,
         val nickName: String,
     ) {
         companion object {

@@ -2,12 +2,19 @@ package com.yellowsunn.boardservice.command.service
 
 import com.yellowsunn.boardservice.command.domain.article.Article
 import com.yellowsunn.boardservice.command.domain.comment.Comment
+import com.yellowsunn.boardservice.command.domain.comment.CommentLike
+import com.yellowsunn.boardservice.command.domain.comment.CommentLikeId
+import com.yellowsunn.boardservice.command.dto.CommentLikeDto
 import com.yellowsunn.boardservice.command.dto.CommentSaveCommand
 import com.yellowsunn.boardservice.command.dto.CommentSavedDto
 import com.yellowsunn.boardservice.command.repository.ArticleRepository
+import com.yellowsunn.boardservice.command.repository.CommentLikeRepository
 import com.yellowsunn.boardservice.command.repository.CommentRepository
 import com.yellowsunn.boardservice.common.domain.user.User
 import com.yellowsunn.boardservice.common.exception.ArticleNotFoundException
+import com.yellowsunn.boardservice.common.exception.CommentNotFoundException
+import jakarta.persistence.EntityExistsException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -15,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional
 class CommentCommandService(
     private val articleRepository: ArticleRepository,
     private val commentRepository: CommentRepository,
+    private val commentLikeRepository: CommentLikeRepository,
 ) {
 
     @Transactional
@@ -33,6 +41,50 @@ class CommentCommandService(
         savedComment.changeBaseCommentId(getBaseCommentId(savedComment))
 
         return CommentSavedDto.from(savedComment, user.nickName, user.thumbnail)
+    }
+
+    fun likeComment(userId: Long, commentId: Long): CommentLikeDto? {
+        val comment = commentRepository.findById(commentId)
+            ?: throw CommentNotFoundException()
+
+        val commentLike = CommentLike(
+            commentId = comment.id,
+            userId = userId,
+            articleId = comment.articleId,
+        )
+
+        return try {
+            val savedCommentLike = commentLikeRepository.save(commentLike)
+            CommentLikeDto(
+                articleId = savedCommentLike.articleId,
+                commentId = savedCommentLike.commentId,
+            )
+        } catch (_: EntityExistsException) {
+            null
+        } catch (_: DataIntegrityViolationException) {
+            null
+        }
+    }
+
+    @Transactional
+    fun undoLikeComment(userId: Long, commentId: Long): CommentLikeDto? {
+        val comment = commentRepository.findById(commentId)
+            ?: throw CommentNotFoundException()
+
+        val id = CommentLikeId(
+            commentId = comment.id,
+            userId = userId,
+        )
+
+        val isDeleted: Boolean = commentLikeRepository.deleteById(id)
+        return if (isDeleted) {
+            CommentLikeDto(
+                articleId = comment.articleId,
+                commentId = comment.id,
+            )
+        } else {
+            null
+        }
     }
 
     private fun getBaseCommentId(comment: Comment): Long {

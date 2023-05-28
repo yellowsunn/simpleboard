@@ -4,5 +4,5 @@ data class SimpleUser(
     val userId: Long,
     val uuid: String,
     val nickName: String,
-    val thumbnail: String,
+    val thumbnail: String?,
 )

@@ -8,20 +8,23 @@
                     <div class="left">
                         <div class="nick-name d-flex">
                             <div class="text">{{ comment.nickName }}</div>
-                            <div class="author border border-danger rounded">작성자</div>
+                            <div class="author border border-danger rounded" v-if="writerUUID === comment.userUUID">
+                                작성자
+                            </div>
                         </div>
                         <div class="d-flex">
                             <div class="saved-at">{{ timeAgoFormat(comment.savedAt) }}</div>
                             <div class="dot"></div>
-                            <div class="like-count">
-                                <font-awesome-icon icon="fa-regular fa-thumbs-up"/>
-                                {{ comment.likeCount }}
+                            <div class="like-count" @click="isCommentLiked ? handleUndoLike() : handleLike()">
+                                <font-awesome-icon icon="fa-solid fa-thumbs-up" v-if="isCommentLiked"/>
+                                <font-awesome-icon icon="fa-regular fa-thumbs-up" v-else/>
+                                {{ commentLikeCount }}
                             </div>
                         </div>
                     </div>
                     <div class="right d-flex justify-content-between">
                         <div class="comment-reply p-1" @click="clickReply">{{ replyToggle ? '닫기' : '댓글' }}</div>
-                        <div class="comment-delete p-1">삭제</div>
+                        <div class="comment-delete p-1" v-if="userUUID === comment.userUUID">삭제</div>
                     </div>
                 </div>
                 <div class="comment-content">
@@ -46,15 +49,49 @@ export default {
   props: {
     comment: Object,
   },
+  inject: ['likedCommentIds', 'writerUUID'],
   data() {
     return {
       replyToggle: false,
+      isCommentLiked: this.likedCommentIds.has(this.comment?.commentId) || false,
+      commentLikeCount: this.comment?.likeCount,
     }
+  },
+  computed: {
+    userUUID() {
+      return this.$store.state.userInfo?.uuid
+    },
   },
   methods: {
     timeAgoFormat,
     clickReply() {
       this.replyToggle = !this.replyToggle
+    },
+    async handleLike() {
+      const commentId = this.comment?.commentId
+      if (!commentId) {
+        return
+      }
+      const {isError, data} = await this.$boardApi('PUT', `/api/v2/comments/${commentId}/like`, null, true);
+      if (isError) {
+        alert(data?.message)
+        return
+      }
+      this.isCommentLiked = true
+      this.commentLikeCount += 1
+    },
+    async handleUndoLike() {
+      const commentId = this.comment?.commentId
+      if (!commentId) {
+        return
+      }
+      const {isError, data} = await this.$boardApi('DELETE', `/api/v2/comments/${commentId}/like`, null, true);
+      if (isError) {
+        alert(data?.message)
+        return
+      }
+      this.isCommentLiked = false
+      this.commentLikeCount -= 1
     }
   }
 }

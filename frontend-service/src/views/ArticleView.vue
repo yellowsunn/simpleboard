@@ -21,6 +21,7 @@
 <script>
 import ArticleHeader from "@/components/article/ArticleHeader.vue";
 import CommentList from "@/components/comment/CommentList.vue";
+import {computed} from "vue";
 
 export default {
   name: "ArticleView",
@@ -31,18 +32,22 @@ export default {
       article: null,
       isArticleLiked: false,
       commentPage: null,
+      likedCommentIds: null,
+    }
+  },
+  provide() {
+    return {
+      likedCommentIds: computed(() => this.likedCommentIds),
+      writerUUID: computed(() => this.article?.user?.uuid),
     }
   },
   async mounted() {
-    // const article = await this.getArticle();
     const currentCommentPage = this.$route.query?.['comment-page'] || 1
-    const [article, commentPage] = await Promise.all([this.getArticle(), this.getCommentPage(currentCommentPage)]);
+    const [article, commentPage, reaction] = await Promise.all([this.getArticle(), this.getCommentPage(currentCommentPage), this.getArticleReaction()]);
     this.article = article
     this.commentPage = commentPage
-    if (article) {
-      const reaction = await this.getArticleReaction(article.articleId);
-      this.isArticleLiked = reaction?.isArticleLiked || false
-    }
+    this.likedCommentIds = new Set(reaction?.likedCommentIds || [])
+    this.isArticleLiked = reaction?.isArticleLiked || false
   },
   methods: {
     async getArticle() {
@@ -61,8 +66,8 @@ export default {
       }
       return data
     },
-    async getArticleReaction(articleId) {
-      const {isError, data} = await this.$boardApi('GET', `/api/v2/articles/${articleId}/reaction`, null, true)
+    async getArticleReaction() {
+      const {isError, data} = await this.$boardApi('GET', `/api/v2/articles/${this.id}/reaction`, null, true)
       if (isError) {
         return
       }

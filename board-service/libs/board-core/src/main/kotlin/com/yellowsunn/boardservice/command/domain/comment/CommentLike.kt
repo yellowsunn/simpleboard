@@ -8,8 +8,7 @@ import jakarta.persistence.IdClass
 @Entity
 @IdClass(CommentLikeId::class)
 class CommentLike(
-    @Id
-    val commentId: Long,
-    @Id
-    val userId: Long,
+    @Id val commentId: Long,
+    @Id val userId: Long,
+    val articleId: Long,
 ) : BaseTimeEntity()

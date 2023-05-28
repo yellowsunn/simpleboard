@@ -12,7 +12,7 @@ data class CommentSavedDto(
     val baseCommentId: Long,
 ) {
     companion object {
-        fun from(comment: Comment, userNickName: String, userThumbnail: String) = CommentSavedDto(
+        fun from(comment: Comment, userNickName: String, userThumbnail: String?) = CommentSavedDto(
             commentId = comment.id,
             nickName = userNickName,
             thumbnail = userThumbnail,

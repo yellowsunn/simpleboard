@@ -5,6 +5,6 @@ data class User(
     val uuid: String,
     val email: String,
     val nickName: String,
-    val thumbnail: String,
+    val thumbnail: String?,
     val providers: List<String>,
 )

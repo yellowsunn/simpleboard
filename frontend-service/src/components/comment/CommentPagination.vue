@@ -46,7 +46,7 @@ export default {
       }
 
       const articlePage = this.$route.query?.page || 1
-      this.$router.push(`/articles/${articlePage}?comment-page=${page}#comments`)
+      this.$router.replace(`/articles/${articlePage}?comment-page=${page}#comments`)
     }
   }
 }

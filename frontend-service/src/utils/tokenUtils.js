@@ -25,8 +25,19 @@ function setToken({accessToken, refreshToken}) {
 }
 
 function clearToken() {
-  document.cookie = `${ACCESS_TOKEN}=; max-age=0; Domain=${process.env.VUE_APP_DOMAIN}`
-  document.cookie = `${REFRESH_TOKEN}=; max-age=0; Domain=${process.env.VUE_APP_DOMAIN}`
+  document.cookie = `${ACCESS_TOKEN}=; max-age=0; SameSite=Strict;  Domain=${process.env.VUE_APP_DOMAIN}; path=/;`
+  document.cookie = `${REFRESH_TOKEN}=; max-age=0; SameSite=Strict;  Domain=${process.env.VUE_APP_DOMAIN}; path=/;`
 }
 
-export {getAccessToken, getRefreshToken, setToken, clearToken, ACCESS_TOKEN, REFRESH_TOKEN}
+function getUserInfo() {
+  try {
+    const accessToken = atob(getAccessToken());
+    const base64Payload = accessToken.split('.')[1]
+    const payload = atob(base64Payload)
+    return JSON.parse(payload.toString())
+  } catch (e) {
+    return null
+  }
+}
+
+export {getAccessToken, getRefreshToken, setToken, clearToken, getUserInfo, ACCESS_TOKEN, REFRESH_TOKEN}

@@ -6,8 +6,10 @@ import com.yellowsunn.boardservice.dto.CommentSaveRequestDto
 import com.yellowsunn.common.annotation.LoginUser
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
@@ -40,5 +42,21 @@ class CommentCommandController(
     ): CommentSavedDto {
         val command = requestDto.toCommand(userId, articleId, commentId)
         return commentCommandFacade.saveComment(command)
+    }
+
+    @PutMapping("/api/v2/comments/{commentId}/like")
+    fun likeComment(
+        @LoginUser userId: Long,
+        @PathVariable commentId: Long,
+    ): Boolean {
+        return commentCommandFacade.likeComment(userId, commentId)
+    }
+
+    @DeleteMapping("/api/v2/comments/{commentId}/like")
+    fun undoLikeComment(
+        @LoginUser userId: Long,
+        @PathVariable commentId: Long,
+    ): Boolean {
+        return commentCommandFacade.undoLikeComment(userId, commentId)
     }
 }

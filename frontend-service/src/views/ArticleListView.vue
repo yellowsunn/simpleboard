@@ -1,5 +1,4 @@
 <template>
-    <a href="http://localhost:3000/articles/6471e9421e5ed55392603f57#comment1">앵커 적용 테스트</a>
     <div class="mx-auto" style="max-width: 950px">
         <section class="d-flex">
             <div class="board-title" @click="$router.push('/')">유저게시판</div>

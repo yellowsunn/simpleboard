@@ -48,6 +48,6 @@ class CommentQueryService(
     }
 
     private fun filterUserIds(commetDocumentPage: Page<CommentDocument>): List<Long> {
-        return commetDocumentPage.content.map { it.userId }
+        return commetDocumentPage.content.map { it.userId }.distinct()
     }
 }

@@ -4,9 +4,9 @@ import com.yellowsunn.boardservice.command.domain.article.Article
 import com.yellowsunn.boardservice.command.domain.article.ArticleLike
 import com.yellowsunn.boardservice.command.domain.article.ArticleLikeId
 import com.yellowsunn.boardservice.command.dto.ArticleUpdateCommand
-import com.yellowsunn.boardservice.common.exception.ArticleNotFoundException
 import com.yellowsunn.boardservice.command.repository.ArticleLikeRepository
 import com.yellowsunn.boardservice.command.repository.ArticleRepository
+import com.yellowsunn.boardservice.common.exception.ArticleNotFoundException
 import jakarta.persistence.EntityExistsException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service

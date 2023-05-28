@@ -3,6 +3,7 @@ package com.yellowsunn.boardservice.service
 import com.yellowsunn.boardservice.command.domain.article.Article
 import com.yellowsunn.boardservice.command.repository.ArticleLikeRepository
 import com.yellowsunn.boardservice.command.repository.ArticleRepository
+import com.yellowsunn.boardservice.command.repository.CommentLikeRepository
 import com.yellowsunn.boardservice.common.utils.getFirstImageSrc
 import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import com.yellowsunn.boardservice.query.domain.article.ArticleReactionDocument
@@ -19,6 +20,7 @@ class ArticleSyncService(
     private val articleLikeRepository: ArticleLikeRepository,
     private val articleDocumentRepository: ArticleDocumentRepository,
     private val articleReactionDocumentRepository: ArticleReactionDocumentRepository,
+    private val commentLikeRepository: CommentLikeRepository,
 ) {
     fun syncArticleDocument(articleId: Long) {
         val article: Article = articleRepository.findById(articleId) ?: return
@@ -29,12 +31,14 @@ class ArticleSyncService(
     }
 
     fun syncArticleReactionDocument(articleId: Long, userId: Long) {
-        val isLiked = articleLikeRepository.existsByArticleIdAndUserId(articleId, userId)
+        val isLiked: Boolean = articleLikeRepository.existsByArticleIdAndUserId(articleId, userId)
+        val commentIds: List<Long> = commentLikeRepository.findCommentIdByArticleIdAndUserId(articleId, userId)
 
         val articleReactionDocument = ArticleReactionDocument(
             articleId = articleId,
             userId = userId,
             isArticleLiked = isLiked,
+            likedCommentIds = commentIds,
         )
 
         articleReactionDocumentRepository.upsertByArticleIdAndUserId(

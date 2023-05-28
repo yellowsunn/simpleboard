@@ -38,6 +38,7 @@ create table comment
 create table comment_like
 (
     comment_id  bigint       not null,
+    article_id  bigint       not null,
     user_id     bigint       not null,
     created_at  timestamp(6) not null,
     modified_at timestamp(6) not null,
