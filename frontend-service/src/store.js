@@ -1,5 +1,5 @@
 import {createStore} from "vuex";
-import {clearToken, getAccessToken, getUserInfo, getRefreshToken, setToken} from "@/utils/tokenUtils";
+import {clearToken, getAccessToken, getRefreshToken, getUserInfo, setToken} from "@/utils/tokenUtils";
 
 
 const store = createStore({
@@ -27,10 +27,12 @@ const store = createStore({
 
       state.userToken = userToken
       setToken(userToken)
+      state.userInfo = getUserInfo()
     },
     deleteUserToken(state) {
       state.userToken = {}
       clearToken()
+      state.userInfo = null
     },
     setUserProviders(state, providers) {
       state.userProviders = new Set(providers)

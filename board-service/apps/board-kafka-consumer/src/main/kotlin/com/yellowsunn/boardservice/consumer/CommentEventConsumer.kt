@@ -19,4 +19,6 @@ class CommentEventConsumer(
     fun syncCommentDocument(@Payload payload: CommentDocumentSyncData) {
         commentSyncService.syncCommentDocument(payload.commentId)
     }
+
+
 }

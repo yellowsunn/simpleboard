@@ -12,6 +12,11 @@
                 <div style="user-select: none">좋아요</div>
             </div>
         </section>
+        <section class="button-group">
+            <button class="btn btn-outline-secondary py-2" @click="$router.push('/articles')">목록</button>
+            <button class="btn btn-outline-success py-2" @click="$router.push('/articles')">수정</button>
+            <button class="btn btn-outline-danger py-2" v-if="userUUID = article?.user?.uuid">삭제</button>
+        </section>
         <section v-if="commentPage">
             <CommentList :commentPage="commentPage"></CommentList>
         </section>
@@ -34,6 +39,11 @@ export default {
       commentPage: null,
       likedCommentIds: null,
     }
+  },
+  computed: {
+    userUUID() {
+      return this.$store.state.userInfo?.uuid
+    },
   },
   provide() {
     return {
@@ -64,7 +74,32 @@ export default {
         alert('댓글 목록을 조회할 수 없습니다.')
         return
       }
-      return data
+      return {
+        ...data,
+        comments: this.replaceDeletedComments(data)
+      }
+    },
+    // 답글이 있는데 삭제된 댓글은 빈 객체 추가
+    replaceDeletedComments(data) {
+      console.log(data)
+      const comments = data?.comments || []
+      const newComments = []
+      const baseIdSet = new Set()
+      comments.reverse().forEach(it => {
+        if (it.commentId === it.baseCommentId) {
+          newComments.push(it)
+          baseIdSet.add(it.baseCommentId)
+        } else {
+          // 마지막 페이지면 첫번째 원소에도 삭제 표시하기 위한 조건
+          const isCondition = data.totalPages === data.page || newComments.length > 0
+          if (isCondition && !baseIdSet.has(it.baseCommentId)) {
+            newComments.push({})
+            baseIdSet.add(it.baseCommentId)
+          }
+          newComments.push(it)
+        }
+      })
+      return newComments.reverse()
     },
     async getArticleReaction() {
       const {isError, data} = await this.$boardApi('GET', `/api/v2/articles/${this.id}/reaction`, null, true)
@@ -116,5 +151,11 @@ export default {
   display: flex;
   justify-content: center;
   font-size: 1.125rem;
+}
+.button-group {
+    button {
+        padding: 10px 30px;
+        margin: 10px;
+    }
 }
 </style>

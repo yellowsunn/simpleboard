@@ -19,6 +19,7 @@ class ArticleDocument(
     var body: String,
     var viewCount: Long = 0L,
     var likeCount: Long = 0L,
+    var commentCount: Long = 0L,
     val userId: Long,
     val savedAt: ZonedDateTime,
     var isDeleted: Boolean = false,

@@ -32,6 +32,7 @@ create table comment
     user_id           bigint       not null,
     created_at        timestamp(6) not null,
     modified_at       timestamp(6) not null,
+    is_deleted        boolean      not null,
     primary key (comment_id)
 );
 

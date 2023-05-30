@@ -15,6 +15,7 @@ class Comment(
     imageUrl: String? = null,
     val parentCommentId: Long? = null,
     var baseCommentId: Long = -1L,
+    var isDeleted: Boolean = false,
 ) : BaseTimeEntity() {
     @Id
     @Column(name = "comment_id")
@@ -36,5 +37,13 @@ class Comment(
 
     fun isReply(): Boolean {
         return parentCommentId != null
+    }
+
+    fun delete(): Boolean {
+        if (isDeleted) {
+            return false
+        }
+        this.isDeleted = true
+        return true
     }
 }

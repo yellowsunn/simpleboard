@@ -25,6 +25,13 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - AuthorizationHeaderFilter
+            - name: RequestRateLimiter
+              args:
+                # 2초에 한번 업로드 가능
+                key-resolver: "#{@userIdKeyResolver}"
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 2
+                redis-rate-limiter.requestedTokens: 2
         - id: oauth2-link-complete
           uri: ${endpoint.user-service}
           predicates:
@@ -62,6 +69,12 @@ server:
 spring:
   profiles:
     active: local
+  data:
+    redis:
+      host: localhost
+      port: 6389
+      connect-timeout: 3000
+      timeout: 1000
 
 endpoint:
   user-service: http://localhost:8080

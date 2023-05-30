@@ -1,10 +1,12 @@
 package com.yellowsunn.boardservice.command.facade
 
+import com.yellowsunn.boardservice.command.dto.CommentDeleteDto
 import com.yellowsunn.boardservice.command.dto.CommentLikeDto
 import com.yellowsunn.boardservice.command.dto.CommentSaveCommand
 import com.yellowsunn.boardservice.command.dto.CommentSavedDto
 import com.yellowsunn.boardservice.command.event.producer.ArticleEventProducer
 import com.yellowsunn.boardservice.command.event.producer.CommentEventProducer
+import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncData
 import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncData
 import com.yellowsunn.boardservice.command.event.producer.data.CommentDocumentSyncData
 import com.yellowsunn.boardservice.command.service.CommentCommandService
@@ -25,7 +27,19 @@ class CommentCommandFacade(
 
         return commentCommandService.saveComment(user, command).also {
             commentEventProducer.syncCommentDocument(CommentDocumentSyncData(it.commentId))
+            articleEventProducer.syncArticleDocument(ArticleDocumentSyncData(command.articleId))
         }
+    }
+
+    fun deleteComment(userId: Long, commentId: Long): Boolean {
+        checkValidUser(userId)
+
+        val commentDeleteDto: CommentDeleteDto? = commentCommandService.deleteComment(commentId)?.also {
+            commentEventProducer.syncCommentDocument(CommentDocumentSyncData(commentId))
+            articleEventProducer.syncArticleDocument(ArticleDocumentSyncData(it.articleId))
+        }
+
+        return commentDeleteDto != null
     }
 
     fun likeComment(userId: Long, commentId: Long): Boolean {
@@ -41,15 +55,20 @@ class CommentCommandFacade(
     fun undoLikeComment(userId: Long, commentId: Long): Boolean {
         val user: User = getUserById(userId)
 
-        val commentLikeDto: CommentLikeDto? = commentCommandService.undoLikeComment(user.userId, commentId)?.also {
+        commentCommandService.undoLikeComment(user.userId, commentId).also {
             commentEventProducer.syncCommentDocument(CommentDocumentSyncData(it.commentId))
             articleEventProducer.syncArticleReactionDocument(ArticleReactionDocumentSyncData(it.articleId, userId))
         }
-        return commentLikeDto != null
+
+        return true
     }
 
     private fun getUserById(userId: Long): User {
         return userHttpClient.findUserByUserId(userId)
             ?: throw UserNotFoundException()
+    }
+
+    private fun checkValidUser(userId: Long) {
+        getUserById(userId)
     }
 }

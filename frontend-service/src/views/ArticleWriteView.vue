@@ -15,7 +15,6 @@
 <script>
 
 import ArticleWriteEditor from "@/components/article/ArticleWriteEditor.vue";
-import sleep from "@/utils/sleepUtils";
 
 export default {
   name: "ArticleWriteView",
@@ -37,8 +36,10 @@ export default {
         return
       }
 
-      await sleep(400)
-      await this.$router.push('/articles')
+      this.title = ""
+      setTimeout(() => {
+        this.$router.push('/articles')
+      }, 300)
     }
   }
 }

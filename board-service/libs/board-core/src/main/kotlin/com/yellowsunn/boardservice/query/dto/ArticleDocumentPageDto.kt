@@ -20,6 +20,7 @@ data class ArticleDocumentPageDto(
         val title: String,
         val viewCount: Long,
         val likeCount: Long,
+        val commentCount: Long,
         val savedAt: ZonedDateTime,
         val nickName: String,
     )
@@ -59,6 +60,7 @@ data class ArticleDocumentPageDto(
             title = document.title,
             viewCount = document.viewCount + increasedViewCount,
             likeCount = document.likeCount,
+            commentCount = document.commentCount,
             savedAt = document.savedAt,
             nickName = nickName,
         )

@@ -27,6 +27,7 @@ class CommentSyncService(
             savedAt = comment.createdAt,
             parentCommentId = comment.parentCommentId,
             baseCommentId = comment.baseCommentId,
+            isDeleted = comment.isDeleted,
         )
 
         commentDocumentRepository.upsertByCommentId(commentId, commentDocument)

@@ -12,6 +12,7 @@ data class ArticleDocumentDto(
     val body: String,
     val viewCount: Long,
     val likeCount: Long,
+    val commentCount: Long,
     val savedAt: ZonedDateTime,
     val user: ArticleDocumentUser?,
 ) {
@@ -24,6 +25,7 @@ data class ArticleDocumentDto(
                 body = StringEscapeUtils.unescapeHtml4(articleDocument.body),
                 viewCount = articleDocument.viewCount + increasedViewCount,
                 likeCount = articleDocument.likeCount,
+                commentCount = articleDocument.commentCount,
                 savedAt = articleDocument.savedAt,
                 user = ArticleDocumentUser.from(users[articleDocument.userId]),
             )

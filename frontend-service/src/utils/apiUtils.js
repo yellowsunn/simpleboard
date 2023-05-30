@@ -28,12 +28,14 @@ async function callBoardApi(method, url, data, isRequireAuth, headers = {"Conten
       data: responseData,
     }
   } catch (e) {
+    const message = e?.response?.status === 429 ?
+      "허용된 API 요청 횟수를 초과하였습니다. 잠시 후 다시 시도해주세요" : "알 수 없는 에러가 발생하였습니다."
     const errorResponse = e?.response?.data
     checkAccessTokenExpired(isRequireAuth, errorResponse)
     return {
       isError: true,
       data: {
-        message: "알 수 없는 에러가 발생하였습니다.",
+        message,
         ...errorResponse
       }
     }

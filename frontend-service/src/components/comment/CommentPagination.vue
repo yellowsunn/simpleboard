@@ -1,5 +1,5 @@
 <template>
-    <section class="pagination-section">
+    <section class="pagination-section" v-if="pageInfo?.totalPages">
         <ul class="pagination">
             <li class="page-item" :class="[startIdx === 1 ? 'disabled': '']"
                 @click="clickPage(startIdx - 1)">
@@ -45,8 +45,8 @@ export default {
         return
       }
 
-      const articlePage = this.$route.query?.page || 1
-      this.$router.replace(`/articles/${articlePage}?comment-page=${page}#comments`)
+      const articleId = this.$route.params.id
+      this.$router.replace(`/articles/${articleId}?comment-page=${page}#comments`)
     }
   }
 }

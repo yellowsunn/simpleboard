@@ -4,6 +4,7 @@ import com.yellowsunn.boardservice.command.domain.article.Article
 import com.yellowsunn.boardservice.command.domain.comment.Comment
 import com.yellowsunn.boardservice.command.domain.comment.CommentLike
 import com.yellowsunn.boardservice.command.domain.comment.CommentLikeId
+import com.yellowsunn.boardservice.command.dto.CommentDeleteDto
 import com.yellowsunn.boardservice.command.dto.CommentLikeDto
 import com.yellowsunn.boardservice.command.dto.CommentSaveCommand
 import com.yellowsunn.boardservice.command.dto.CommentSavedDto
@@ -43,6 +44,16 @@ class CommentCommandService(
         return CommentSavedDto.from(savedComment, user.nickName, user.thumbnail)
     }
 
+    @Transactional
+    fun deleteComment(commentId: Long): CommentDeleteDto? {
+        val comment = commentRepository.findById(commentId)
+            ?: return null
+
+        comment.delete()
+
+        return CommentDeleteDto(articleId = comment.articleId)
+    }
+
     fun likeComment(userId: Long, commentId: Long): CommentLikeDto? {
         val comment = commentRepository.findById(commentId)
             ?: throw CommentNotFoundException()
@@ -67,7 +78,7 @@ class CommentCommandService(
     }
 
     @Transactional
-    fun undoLikeComment(userId: Long, commentId: Long): CommentLikeDto? {
+    fun undoLikeComment(userId: Long, commentId: Long): CommentLikeDto {
         val comment = commentRepository.findById(commentId)
             ?: throw CommentNotFoundException()
 
@@ -75,16 +86,12 @@ class CommentCommandService(
             commentId = comment.id,
             userId = userId,
         )
+        commentLikeRepository.deleteById(id)
 
-        val isDeleted: Boolean = commentLikeRepository.deleteById(id)
-        return if (isDeleted) {
-            CommentLikeDto(
-                articleId = comment.articleId,
-                commentId = comment.id,
-            )
-        } else {
-            null
-        }
+        return CommentLikeDto(
+            articleId = comment.articleId,
+            commentId = comment.id,
+        )
     }
 
     private fun getBaseCommentId(comment: Comment): Long {

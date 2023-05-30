@@ -10,7 +10,7 @@
                 <div class="title-container">
                             <span class="title">
                                 <span class="text">{{ article.title }}</span>
-                                <span class="comment-count">11</span>
+                                <span class="comment-count" v-if="article.commentCount">{{ article.commentCount }}</span>
                             </span>
                 </div>
                 <div class="etc">

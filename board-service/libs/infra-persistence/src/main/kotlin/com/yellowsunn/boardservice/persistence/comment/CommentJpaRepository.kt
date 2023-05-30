@@ -1,5 +1,7 @@
 package com.yellowsunn.boardservice.persistence.comment
 
+import com.querydsl.core.types.Predicate
+import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.yellowsunn.boardservice.command.domain.comment.Comment
 import com.yellowsunn.boardservice.command.domain.comment.QComment.comment
@@ -20,5 +22,17 @@ class CommentJpaRepository(
             .selectFrom(comment)
             .where(comment.id.eq(id))
             .fetchOne()
+    }
+
+    override fun countByArticleId(articleId: Long): Long {
+        return jpaQueryFactory
+            .select(comment.id.count())
+            .from(comment)
+            .validWhere(comment.articleId.eq(articleId))
+            .fetchOne() ?: 0L
+    }
+
+    private fun <T> JPAQuery<T>.validWhere(vararg o: Predicate): JPAQuery<T> {
+        return this.where(*o, comment.isDeleted.isFalse)
     }
 }

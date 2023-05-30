@@ -4,6 +4,7 @@ import com.yellowsunn.boardservice.command.domain.article.Article
 import com.yellowsunn.boardservice.command.repository.ArticleLikeRepository
 import com.yellowsunn.boardservice.command.repository.ArticleRepository
 import com.yellowsunn.boardservice.command.repository.CommentLikeRepository
+import com.yellowsunn.boardservice.command.repository.CommentRepository
 import com.yellowsunn.boardservice.common.utils.getFirstImageSrc
 import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import com.yellowsunn.boardservice.query.domain.article.ArticleReactionDocument
@@ -20,13 +21,16 @@ class ArticleSyncService(
     private val articleLikeRepository: ArticleLikeRepository,
     private val articleDocumentRepository: ArticleDocumentRepository,
     private val articleReactionDocumentRepository: ArticleReactionDocumentRepository,
+    private val commentRepository: CommentRepository,
     private val commentLikeRepository: CommentLikeRepository,
 ) {
     fun syncArticleDocument(articleId: Long) {
         val article: Article = articleRepository.findById(articleId) ?: return
         val likeCount: Long = articleLikeRepository.countByArticleId(articleId)
+        val commentCount: Long = commentRepository.countByArticleId(articleId)
 
-        val articleDocument = convertToArticleDocument(article, likeCount)
+        val articleDocument = convertToArticleDocument(article, likeCount, commentCount)
+
         articleDocumentRepository.upsertByArticleId(articleId, articleDocument)
     }
 
@@ -48,13 +52,14 @@ class ArticleSyncService(
         )
     }
 
-    private fun convertToArticleDocument(article: Article, likeCount: Long) = ArticleDocument(
+    private fun convertToArticleDocument(article: Article, likeCount: Long, commentCount: Long) = ArticleDocument(
         articleId = article.id,
         thumbnail = getFirstImageSrc(article.unescapedBody()),
         title = article.title,
         body = article.body,
         viewCount = article.viewCount,
         likeCount = likeCount,
+        commentCount = commentCount,
         userId = article.userId,
         savedAt = article.createdAt,
         isDeleted = article.isDeleted,

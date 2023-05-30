@@ -44,6 +44,14 @@ class CommentCommandController(
         return commentCommandFacade.saveComment(command)
     }
 
+    @DeleteMapping("/api/v2/comments/{commentId}")
+    fun deleteComment(
+        @LoginUser userId: Long,
+        @PathVariable commentId: Long,
+    ): Boolean {
+        return commentCommandFacade.deleteComment(userId, commentId)
+    }
+
     @PutMapping("/api/v2/comments/{commentId}/like")
     fun likeComment(
         @LoginUser userId: Long,

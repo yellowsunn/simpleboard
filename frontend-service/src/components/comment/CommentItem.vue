@@ -1,6 +1,6 @@
 <template>
-    <div class="comment" v-if="comment">
-        <div class="main d-flex">
+    <div class="comment" v-if="comment && !isDeleted">
+        <div class="main d-flex" v-if="!isEmptyObject(comment)">
             <img v-if="comment.userThumbnail" class="rounded-circle" :src="comment.userThumbnail" alt="thumbnail"/>
             <img v-else class="rounded-circle" src="@/assets/default-thumbnail.svg" alt="thumbnail"/>
             <div class="comment-wrapper">
@@ -13,7 +13,7 @@
                             </div>
                         </div>
                         <div class="d-flex">
-                            <div class="saved-at">{{ timeAgoFormat(comment.savedAt) }}</div>
+                            <div class="saved-at" v-if="comment?.savedAt">{{ timeAgoFormat(comment.savedAt) }}</div>
                             <div class="dot"></div>
                             <div class="like-count" @click="isCommentLiked ? handleUndoLike() : handleLike()">
                                 <font-awesome-icon icon="fa-solid fa-thumbs-up" v-if="isCommentLiked"/>
@@ -24,7 +24,8 @@
                     </div>
                     <div class="right d-flex justify-content-between">
                         <div class="comment-reply p-1" @click="clickReply">{{ replyToggle ? '닫기' : '댓글' }}</div>
-                        <div class="comment-delete p-1" v-if="userUUID === comment.userUUID">삭제</div>
+                        <div class="comment-delete p-1" v-if="userUUID === comment.userUUID" @click="deleteComment">삭제
+                        </div>
                     </div>
                 </div>
                 <div class="comment-content">
@@ -36,12 +37,14 @@
                 <CommentWrite :parentCommentId="comment.commentId" v-if="replyToggle"></CommentWrite>
             </div>
         </div>
+        <div class="main d-flex deleted-comment" v-else>[삭제된 댓글입니다.]</div>
     </div>
 </template>
 
 <script>
 import CommentWrite from "@/components/comment/CommentWrite.vue";
 import {timeAgoFormat} from "@/utils/timeUtils";
+import {isEmptyObject} from "@/utils/commonUtils";
 
 export default {
   name: "CommentItem",
@@ -55,6 +58,7 @@ export default {
       replyToggle: false,
       isCommentLiked: this.likedCommentIds.has(this.comment?.commentId) || false,
       commentLikeCount: this.comment?.likeCount,
+      isDeleted: false,
     }
   },
   computed: {
@@ -63,9 +67,30 @@ export default {
     },
   },
   methods: {
+    isEmptyObject,
     timeAgoFormat,
     clickReply() {
       this.replyToggle = !this.replyToggle
+    },
+    async deleteComment() {
+      const commentId = this.comment?.commentId
+      if (!commentId) {
+        return
+      }
+      const isConfirmed = confirm('댓글을 삭제 하시겠습니까?');
+      if (!isConfirmed) {
+        return true
+      }
+      const {isError, data} = await this.$boardApi('DELETE', `/api/v2/comments/${commentId}`, null, true)
+      if (isError) {
+        alert(data?.message)
+        return
+      }
+      this.isDeleted = true
+
+      setTimeout(() => {
+        this.$router.push(this.$route.path)
+      }, 300)
     },
     async handleLike() {
       const commentId = this.comment?.commentId
@@ -172,5 +197,10 @@ export default {
 .like-count {
   cursor: pointer;
   user-select: none;
+}
+
+.deleted-comment {
+  font-style: italic;
+  font-size: .875rem;
 }
 </style>
