@@ -1,7 +1,8 @@
 <template>
     <div class="comment" v-if="comment && !isDeleted">
         <div class="main d-flex" v-if="!isEmptyObject(comment)">
-            <img v-if="comment.userThumbnail" class="rounded-circle" :src="comment.userThumbnail" alt="thumbnail"/>
+            <img v-if="comment.userThumbnail" class="rounded-circle" :src="comment.userThumbnail" alt="thumbnail"
+                 referrerpolicy="no-referrer-when-downgrade"/>
             <img v-else class="rounded-circle" src="@/assets/default-thumbnail.svg" alt="thumbnail"/>
             <div class="comment-wrapper">
                 <div class="info d-flex justify-content-between">

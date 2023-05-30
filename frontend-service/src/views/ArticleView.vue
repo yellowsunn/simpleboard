@@ -14,8 +14,10 @@
         </section>
         <section class="button-group">
             <button class="btn btn-outline-secondary py-2" @click="$router.push('/articles')">목록</button>
-            <button class="btn btn-outline-success py-2" @click="$router.push('/articles')">수정</button>
-            <button class="btn btn-outline-danger py-2" v-if="userUUID = article?.user?.uuid">삭제</button>
+            <button class="btn btn-outline-success py-2" @click="routeArticleEdit">수정</button>
+            <button class="btn btn-outline-danger py-2" v-if="userUUID = article?.user?.uuid"
+                    @click="handleRemoveArticle">삭제
+            </button>
         </section>
         <section v-if="commentPage">
             <CommentList :commentPage="commentPage"></CommentList>
@@ -133,6 +135,22 @@ export default {
       }
       this.isArticleLiked = false
       this.article.likeCount -= 1
+    },
+    async handleRemoveArticle() {
+      const isConfirmed = confirm('게시글을 삭제하시겠습니까?')
+      if (!isConfirmed) {
+        return
+      }
+
+      const {isError, data} = await this.$boardApi('DELETE', `/api/v2/articles/${this.id}`, null, true)
+      if (isError) {
+        alert(data?.message)
+        return
+      }
+      setTimeout(() => this.$router.push('/articles'), 300)
+    },
+    routeArticleEdit() {
+      this.$router.push(`/articles/${this.id}/edit`)
     }
   }
 }
@@ -152,10 +170,11 @@ export default {
   justify-content: center;
   font-size: 1.125rem;
 }
+
 .button-group {
-    button {
-        padding: 10px 30px;
-        margin: 10px;
-    }
+  button {
+    padding: 10px 30px;
+    margin: 10px;
+  }
 }
 </style>

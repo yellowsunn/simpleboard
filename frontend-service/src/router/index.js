@@ -53,7 +53,7 @@ const routes = [
   },
   {
     path: "/articles/new",
-    name: "Edit",
+    name: "ArticleNew",
     component: () => import(/* webpackChunkName: "login" */ '@/views/ArticleWriteView.vue'),
   },
   {
@@ -61,6 +61,11 @@ const routes = [
     name: "Article",
     component: () => import(/* webpackChunkName: "article" */ '@/views/ArticleView.vue'),
   },
+  {
+    path: "/articles/:id/edit",
+    name: "ArticleEdit",
+    component: () => import(/* webpackChunkName: "articleEdit" */ '@/views/ArticleWriteView.vue'),
+  }
 ]
 
 const router = createRouter({

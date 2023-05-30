@@ -5,7 +5,7 @@
         </div>
         <div class="etc">
             <div class="user-image">
-                <img v-if="article.user?.thumbnail" class="rounded-circle" :src="article.user.thumbnail"/>
+                <img v-if="article.user?.thumbnail" class="rounded-circle" :src="article.user.thumbnail" referrerpolicy="no-referrer-when-downgrade"/>
                 <img v-else class="rounded-circle" src="../../assets/default-thumbnail.svg" :width="width"
                      :height="height"
                      alt="thumbnail"/>

@@ -3,7 +3,7 @@
         <div class="article-item" v-for="(article, idx) in articles" :key="idx" @click="handleClickArticle(article?.articleId)"
              style="cursor: pointer">
             <div class="article-image">
-                <img v-if="article?.thumbnail" :src="article.thumbnail" alt="thumbnail">
+                <img v-if="article?.thumbnail" :src="article.thumbnail" alt="thumbnail" referrerpolicy="no-referrer-when-downgrade">
                 <img v-else src="../../assets/no-image.svg" alt="thumbnail">
             </div>
             <div class="article-info">

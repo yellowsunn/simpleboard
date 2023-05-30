@@ -5,11 +5,11 @@
         <div class="my-4">
             <img v-if="userInfo?.thumbnail" class="rounded-circle user-thumbnail" :src="userInfo.thumbnail"
                  alt="thumbnail"
-                 @click="$refs.fileInput.click()" :width="thumbnailWidth" :height="thumbnailHeight"
-                 referrerpolicy="no-referrer"/>
+                 @click="$refs.fileInput.click()"
+                 referrerpolicy="no-referrer-when-downgrade"/>
             <img v-else class="rounded-circle user-thumbnail" src="../../assets/default-thumbnail.svg"
                  alt="default_thumbnail"
-                 @click="$refs.fileInput.click()" :width="thumbnailWidth" :height="thumbnailHeight">
+                 @click="$refs.fileInput.click()">
             <input ref="fileInput" type="file" accept="image/*" @change="handleThumbnailChange" v-show="false">
         </div>
         <div class="input-edit-group mx-auto">

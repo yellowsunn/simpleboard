@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CkEditor :editor="editor" :config="editorConfig" @input="onEditorInput"/>
+        <CkEditor :editor="editor" :config="editorConfig" v-model="editorContent"/>
     </div>
 </template>
 
@@ -12,6 +12,9 @@ import UploadAdapter from "@/utils/UploadAdapter";
 export default {
   name: "ArticleWriteEditor",
   components: {'CkEditor': CKEditor.component},
+  props: {
+    content: String,
+  },
   data() {
     return {
       editorContent: "",
@@ -34,10 +37,8 @@ export default {
       }
     }
   },
-  methods: {
-    onEditorInput(e) {
-      this.editorContent = e
-    }
+  mounted() {
+    this.editorContent = this.content
   }
 }
 </script>
