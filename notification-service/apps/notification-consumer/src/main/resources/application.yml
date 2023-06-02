@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    default: local
+  kafka:
+    consumer:
+      bootstrap-servers: ${my-kafka.bootstrap-servers}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"
+  config:
+    import:
+      - 'classpath:application-mongodb.yml'
+---
+server:
+  port: 8183
+spring:
+  profiles:
+    active: local
+
+my-kafka:
+  bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
+

@@ -24,4 +24,10 @@ include(
     "board-service:libs:infra-kafka-producer",
     "board-service:libs:infra-mongodb",
     "board-service:libs:infra-redis",
+
+    "notification-service",
+    "notification-service:apps:notification-consumer",
+    "notification-service:libs:notification-core",
+    "notification-service:libs:infra-http",
+    "notification-service:libs:infra-mongodb",
 )

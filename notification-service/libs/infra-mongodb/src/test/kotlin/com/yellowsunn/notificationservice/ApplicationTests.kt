@@ -1,0 +1,6 @@
+package com.yellowsunn.notificationservice
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+
+@SpringBootApplication
+class ApplicationTests
