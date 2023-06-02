@@ -20,7 +20,7 @@ class CommentJpaRepository(
     override fun findById(id: Long): Comment? {
         return jpaQueryFactory
             .selectFrom(comment)
-            .where(comment.id.eq(id))
+            .validWhere(comment.id.eq(id))
             .fetchOne()
     }
 

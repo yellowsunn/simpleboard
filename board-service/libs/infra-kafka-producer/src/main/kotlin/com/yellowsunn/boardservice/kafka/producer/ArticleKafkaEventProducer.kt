@@ -19,7 +19,17 @@ class ArticleKafkaEventProducer(
         kafkaTemplate.sendData(ARTICLE_DOCUMENT_SYNC_TOPIC, data)
     }
 
+    override fun syncArticleDocument(articleId: Long) {
+        val data = ArticleDocumentSyncData(articleId)
+        kafkaTemplate.sendData(ARTICLE_DOCUMENT_SYNC_TOPIC, data)
+    }
+
     override fun syncArticleReactionDocument(data: ArticleReactionDocumentSyncData) {
+        kafkaTemplate.sendData(ARTICLE_REACTION_DOCUMENT_SYNC_TOPIC, data)
+    }
+
+    override fun syncArticleReactionDocument(articleId: Long, userId: Long) {
+        val data = ArticleReactionDocumentSyncData(articleId = articleId, userId = userId)
         kafkaTemplate.sendData(ARTICLE_REACTION_DOCUMENT_SYNC_TOPIC, data)
     }
 }

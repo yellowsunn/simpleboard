@@ -1,45 +1,45 @@
 <template>
-    <div class="comment" v-if="comment && !isDeleted">
-        <div class="main d-flex" v-if="!isEmptyObject(comment)">
-            <img v-if="comment.userThumbnail" class="rounded-circle" :src="comment.userThumbnail" alt="thumbnail"
-                 referrerpolicy="no-referrer-when-downgrade"/>
-            <img v-else class="rounded-circle" src="@/assets/default-thumbnail.svg" alt="thumbnail"/>
-            <div class="comment-wrapper">
-                <div class="info d-flex justify-content-between">
-                    <div class="left">
-                        <div class="nick-name d-flex">
-                            <div class="text">{{ comment.nickName }}</div>
-                            <div class="author border border-danger rounded" v-if="writerUUID === comment.userUUID">
-                                작성자
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="saved-at" v-if="comment?.savedAt">{{ timeAgoFormat(comment.savedAt) }}</div>
-                            <div class="dot"></div>
-                            <div class="like-count" @click="isCommentLiked ? handleUndoLike() : handleLike()">
-                                <font-awesome-icon icon="fa-solid fa-thumbs-up" v-if="isCommentLiked"/>
-                                <font-awesome-icon icon="fa-regular fa-thumbs-up" v-else/>
-                                {{ commentLikeCount }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="right d-flex justify-content-between">
-                        <div class="comment-reply p-1" @click="clickReply">{{ replyToggle ? '닫기' : '댓글' }}</div>
-                        <div class="comment-delete p-1" v-if="userUUID === comment.userUUID" @click="deleteComment">삭제
-                        </div>
-                    </div>
-                </div>
-                <div class="comment-content">
-                    <div v-if="comment.imageUrl">
-                        <img :src="comment.imageUrl">
-                    </div>
-                    <div>{{ comment.content }}</div>
-                </div>
-                <CommentWrite :parentCommentId="comment.commentId" v-if="replyToggle"></CommentWrite>
+  <div class="comment" v-if="comment && !isDeleted">
+    <div class="main d-flex" v-if="!isEmptyObject(comment)">
+      <img v-if="comment.userThumbnail" class="rounded-circle" :src="comment.userThumbnail" alt="thumbnail"
+           referrerpolicy="no-referrer-when-downgrade"/>
+      <img v-else class="rounded-circle" src="@/assets/default-thumbnail.svg" alt="thumbnail"/>
+      <div class="comment-wrapper">
+        <div class="info d-flex justify-content-between">
+          <div class="left">
+            <div class="nick-name d-flex">
+              <div class="text">{{ comment.nickName }}</div>
+              <div class="author border border-danger rounded" v-if="writerUUID === comment.userUUID">
+                작성자
+              </div>
             </div>
+            <div class="d-flex">
+              <div class="saved-at" v-if="comment?.savedAt">{{ timeAgoFormat(comment.savedAt) }}</div>
+              <div class="dot"></div>
+              <div class="like-count" @click="isCommentLiked ? handleUndoLike() : handleLike()">
+                <font-awesome-icon icon="fa-solid fa-thumbs-up" v-if="isCommentLiked"/>
+                <font-awesome-icon icon="fa-regular fa-thumbs-up" v-else/>
+                {{ commentLikeCount }}
+              </div>
+            </div>
+          </div>
+          <div class="right d-flex justify-content-between">
+            <div class="comment-reply p-1" @click="clickReply">{{ replyToggle ? '닫기' : '댓글' }}</div>
+            <div class="comment-delete p-1" v-if="userUUID === comment.userUUID" @click="deleteComment">삭제
+            </div>
+          </div>
         </div>
-        <div class="main d-flex deleted-comment" v-else>[삭제된 댓글입니다.]</div>
+        <div class="comment-content">
+          <div v-if="comment.imageUrl">
+            <img :src="comment.imageUrl">
+          </div>
+          <div>{{ comment.content }}</div>
+        </div>
+        <CommentWrite :parentCommentId="comment.commentId" v-if="replyToggle"></CommentWrite>
+      </div>
     </div>
+    <div class="main d-flex deleted-comment" v-else>[삭제된 댓글입니다.]</div>
+  </div>
 </template>
 
 <script>
@@ -56,6 +56,7 @@ export default {
   inject: ['likedCommentIds', 'writerUUID'],
   data() {
     return {
+      articleId: this.$route.params.id,
       replyToggle: false,
       isCommentLiked: this.likedCommentIds.has(this.comment?.commentId) || false,
       commentLikeCount: this.comment?.likeCount,
@@ -82,7 +83,7 @@ export default {
       if (!isConfirmed) {
         return true
       }
-      const {isError, data} = await this.$boardApi('DELETE', `/api/v2/comments/${commentId}`, null, true)
+      const {isError, data} = await this.$boardApi('DELETE', `/api/v2/articles/${this.articleId}/comments/${commentId}`, undefined, true)
       if (isError) {
         alert(data?.message)
         return
@@ -98,7 +99,7 @@ export default {
       if (!commentId) {
         return
       }
-      const {isError, data} = await this.$boardApi('PUT', `/api/v2/comments/${commentId}/like`, null, true);
+      const {isError, data} = await this.$boardApi('PUT', `/api/v2/articles/${this.articleId}/comments/${commentId}/like`, undefined, true);
       if (isError) {
         alert(data?.message)
         return
@@ -111,7 +112,7 @@ export default {
       if (!commentId) {
         return
       }
-      const {isError, data} = await this.$boardApi('DELETE', `/api/v2/comments/${commentId}/like`, null, true);
+      const {isError, data} = await this.$boardApi('DELETE', `/api/v2/articles/${this.articleId}/comments/${commentId}/like`, undefined, true);
       if (isError) {
         alert(data?.message)
         return

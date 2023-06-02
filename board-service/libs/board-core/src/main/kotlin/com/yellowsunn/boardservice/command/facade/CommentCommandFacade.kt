@@ -1,66 +1,61 @@
 package com.yellowsunn.boardservice.command.facade
 
-import com.yellowsunn.boardservice.command.dto.CommentDeleteDto
-import com.yellowsunn.boardservice.command.dto.CommentLikeDto
 import com.yellowsunn.boardservice.command.dto.CommentSaveCommand
 import com.yellowsunn.boardservice.command.dto.CommentSavedDto
-import com.yellowsunn.boardservice.command.event.producer.ArticleEventProducer
-import com.yellowsunn.boardservice.command.event.producer.CommentEventProducer
-import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncData
-import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncData
-import com.yellowsunn.boardservice.command.event.producer.data.CommentDocumentSyncData
+import com.yellowsunn.boardservice.command.event.data.comment.CommentDeleteEvent
+import com.yellowsunn.boardservice.command.event.data.comment.CommentLikeEvent
+import com.yellowsunn.boardservice.command.event.data.comment.CommentSaveEvent
 import com.yellowsunn.boardservice.command.service.CommentCommandService
 import com.yellowsunn.boardservice.common.domain.user.User
 import com.yellowsunn.boardservice.common.http.client.user.UserHttpClient
 import com.yellowsunn.common.exception.UserNotFoundException
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 
 @Component
 class CommentCommandFacade(
     private val userHttpClient: UserHttpClient,
     private val commentCommandService: CommentCommandService,
-    private val commentEventProducer: CommentEventProducer,
-    private val articleEventProducer: ArticleEventProducer,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     fun saveComment(command: CommentSaveCommand): CommentSavedDto {
         val user: User = getUserById(command.userId)
 
-        return commentCommandService.saveComment(user, command).also {
-            commentEventProducer.syncCommentDocument(CommentDocumentSyncData(it.commentId))
-            articleEventProducer.syncArticleDocument(ArticleDocumentSyncData(command.articleId))
-        }
+        val commentSavedDto: CommentSavedDto = commentCommandService.saveComment(command, user)
+
+        applicationEventPublisher.publishEvent(CommentSaveEvent(commentSavedDto.commentId, command.articleId))
+        return commentSavedDto
     }
 
-    fun deleteComment(userId: Long, commentId: Long): Boolean {
+    fun deleteComment(commentId: Long, articleId: Long, userId: Long): Boolean {
         checkValidUser(userId)
 
-        val commentDeleteDto: CommentDeleteDto? = commentCommandService.deleteComment(commentId)?.also {
-            commentEventProducer.syncCommentDocument(CommentDocumentSyncData(commentId))
-            articleEventProducer.syncArticleDocument(ArticleDocumentSyncData(it.articleId))
-        }
+        val isDeleted: Boolean = commentCommandService.deleteComment(commentId, articleId)
 
-        return commentDeleteDto != null
+        applicationEventPublisher.publishEvent(CommentDeleteEvent(commentId, articleId))
+        return isDeleted
     }
 
-    fun likeComment(userId: Long, commentId: Long): Boolean {
-        val user: User = getUserById(userId)
+    fun likeComment(commentId: Long, articleId: Long, userId: Long): Boolean {
+        checkValidUser(userId)
 
-        val commentLikeDto: CommentLikeDto? = commentCommandService.likeComment(user.userId, commentId)?.also {
-            commentEventProducer.syncCommentDocument(CommentDocumentSyncData(it.commentId))
-            articleEventProducer.syncArticleReactionDocument(ArticleReactionDocumentSyncData(it.articleId, userId))
-        }
-        return commentLikeDto != null
+        val isUpdated: Boolean = commentCommandService.likeComment(commentId, articleId, userId)
+
+        applicationEventPublisher.publishEvent(
+            CommentLikeEvent(commentId, articleId, userId),
+        )
+        return isUpdated
     }
 
-    fun undoLikeComment(userId: Long, commentId: Long): Boolean {
-        val user: User = getUserById(userId)
+    fun undoLikeComment(commentId: Long, articleId: Long, userId: Long): Boolean {
+        checkValidUser(userId)
 
-        commentCommandService.undoLikeComment(user.userId, commentId).also {
-            commentEventProducer.syncCommentDocument(CommentDocumentSyncData(it.commentId))
-            articleEventProducer.syncArticleReactionDocument(ArticleReactionDocumentSyncData(it.articleId, userId))
-        }
+        val isDeleted: Boolean = commentCommandService.undoLikeComment(commentId, articleId, userId)
 
-        return true
+        applicationEventPublisher.publishEvent(
+            CommentLikeEvent(commentId, articleId, userId),
+        )
+        return isDeleted
     }
 
     private fun getUserById(userId: Long): User {

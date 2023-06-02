@@ -89,7 +89,7 @@ export default {
       return data
     },
     async findCommentPage(commentId) {
-      const {isError, data} = await this.$boardApi('GET', `/api/v2/comments/${commentId}/page`, null);
+      const {isError, data} = await this.$boardApi('GET', `/api/v2/articles/${this.articleId}/comments/${commentId}/page`, null);
       if (isError) {
         return 1
       }

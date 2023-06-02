@@ -13,7 +13,8 @@ class CommentKafkaEventProducer(
 ) : CommentEventProducer,
     DefaultKafkaEventProducer() {
 
-    override fun syncCommentDocument(data: CommentDocumentSyncData) {
+    override fun syncCommentDocument(commentId: Long) {
+        val data = CommentDocumentSyncData(commentId)
         kafkaTemplate.sendData(COMMENT_DOCUMENT_SYNC_TOPIC, data)
     }
 }

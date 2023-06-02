@@ -44,27 +44,30 @@ class CommentCommandController(
         return commentCommandFacade.saveComment(command)
     }
 
-    @DeleteMapping("/api/v2/comments/{commentId}")
+    @DeleteMapping("/api/v2/articles/{articleId}/comments/{commentId}")
     fun deleteComment(
         @LoginUser userId: Long,
+        @PathVariable articleId: Long,
         @PathVariable commentId: Long,
     ): Boolean {
-        return commentCommandFacade.deleteComment(userId, commentId)
+        return commentCommandFacade.deleteComment(commentId, articleId, userId)
     }
 
-    @PutMapping("/api/v2/comments/{commentId}/like")
+    @PutMapping("/api/v2/articles/{articleId}/comments/{commentId}/like")
     fun likeComment(
         @LoginUser userId: Long,
+        @PathVariable articleId: Long,
         @PathVariable commentId: Long,
     ): Boolean {
-        return commentCommandFacade.likeComment(userId, commentId)
+        return commentCommandFacade.likeComment(commentId, articleId, userId)
     }
 
-    @DeleteMapping("/api/v2/comments/{commentId}/like")
+    @DeleteMapping("/api/v2/articles/{articleId}/comments/{commentId}/like")
     fun undoLikeComment(
         @LoginUser userId: Long,
+        @PathVariable articleId: Long,
         @PathVariable commentId: Long,
     ): Boolean {
-        return commentCommandFacade.undoLikeComment(userId, commentId)
+        return commentCommandFacade.undoLikeComment(commentId, articleId, userId)
     }
 }
