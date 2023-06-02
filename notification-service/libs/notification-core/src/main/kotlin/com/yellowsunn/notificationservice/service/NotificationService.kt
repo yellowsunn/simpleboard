@@ -1,7 +1,7 @@
 package com.yellowsunn.notificationservice.service
 
-import com.yellowsunn.common.notification.NotificationEvent
 import com.yellowsunn.notificationservice.domain.NotificationDocument
+import com.yellowsunn.notificationservice.event.NotificationMessage
 import com.yellowsunn.notificationservice.repository.NotificationDocumentRepository
 import org.springframework.stereotype.Service
 
@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service
 class NotificationService(
     private val notificationDocumentRepository: NotificationDocumentRepository,
 ) {
-    fun notify(event: NotificationEvent) {
+    fun notify(message: NotificationMessage) {
         val notificationDocument = NotificationDocument(
-            userId = event.userId,
-            tag = event.tag,
-            title = event.title,
-            content = event.content,
-            contentLink = event.contentLink,
+            userId = message.userId,
+            title = message.title,
+            content = message.content,
+            data = message.data,
         )
 
         notificationDocumentRepository.save(notificationDocument)

@@ -23,7 +23,15 @@ class CommentCommandFacade(
 
         val commentSavedDto: CommentSavedDto = commentCommandService.saveComment(command, user)
 
-        applicationEventPublisher.publishEvent(CommentSaveEvent(commentSavedDto.commentId, command.articleId))
+        applicationEventPublisher.publishEvent(
+            CommentSaveEvent(
+                commentId = commentSavedDto.commentId,
+                articleId = command.articleId,
+                userId = user.userId,
+                content = commentSavedDto.content,
+                isReply = commentSavedDto.parentCommentId != null,
+            ),
+        )
         return commentSavedDto
     }
 

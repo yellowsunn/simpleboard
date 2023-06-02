@@ -1,7 +1,8 @@
 package com.yellowsunn.notificationservice.mongodb
 
+import com.yellowsunn.common.notification.CommentNotificationData
 import com.yellowsunn.notificationservice.domain.NotificationDocument
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,10 +29,9 @@ class NotificationDocumentMongoRepositoryTest : MongoIntegrationTest() {
     fun save() {
         val notificationDocument = NotificationDocument(
             userId = 1L,
-            tag = "댓글 알림",
             title = "게시글에 댓글이 달렸습니다.",
-            content = "댓글입니다.",
-            contentLink = "http://example.com/comments",
+            content = "댓글 입니다.",
+            data = CommentNotificationData(1L, 1L),
         )
 
         val savedDocument: NotificationDocument = sut.save(notificationDocument)
