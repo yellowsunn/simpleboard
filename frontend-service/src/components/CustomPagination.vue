@@ -1,5 +1,5 @@
 <template>
-    <section class="pagination-section" v-if="pageInfo?.totalPages">
+    <section class="pagination-section" v-if="pages">
         <ul class="pagination">
             <li class="page-item" :class="[startIdx === 1 ? 'disabled': '']"
                 @click="clickPage(startIdx - 1)">
@@ -21,9 +21,10 @@
 import getPageList from "@/utils/pageUtils";
 
 export default {
-  name: "CommentPagination",
+  name: "ArticlePagination",
   props: {
-    pageInfo: null
+    pageInfo: Object,
+    pageSize: Number,
   },
   data() {
     return {
@@ -34,7 +35,7 @@ export default {
   },
   mounted() {
     const {page, totalPages} = this.pageInfo
-    const pages = getPageList(page, totalPages, 2)
+    const pages = getPageList(page, totalPages, this.pageSize)
     this.startIdx = pages[0]
     this.endIdx = pages[pages.length - 1]
     this.pages = pages
@@ -44,9 +45,7 @@ export default {
       if (page <= 0 || page > this.pageInfo.totalPages) {
         return
       }
-
-      const articleId = this.$route.params.id
-      this.$router.replace(`/articles/${articleId}?comment-page=${page}#comments`)
+      this.$emit('click-page', page)
     }
   }
 }
@@ -57,7 +56,6 @@ export default {
     display: flex;
     justify-content: center;
 }
-
 .page-link {
     cursor: pointer;
 }

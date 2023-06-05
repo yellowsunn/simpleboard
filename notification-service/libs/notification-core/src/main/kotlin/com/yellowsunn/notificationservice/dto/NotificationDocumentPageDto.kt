@@ -3,6 +3,7 @@ package com.yellowsunn.notificationservice.dto
 import com.yellowsunn.common.notification.NotificationData
 import com.yellowsunn.notificationservice.domain.NotificationDocument
 import org.springframework.data.domain.Page
+import java.time.ZonedDateTime
 
 data class NotificationDocumentPageDto(
     val notifications: List<NotificationDocumentDto>,
@@ -16,6 +17,8 @@ data class NotificationDocumentPageDto(
         val userId: Long,
         val title: String,
         val content: String,
+        val readAt: ZonedDateTime?,
+        val createdAt: ZonedDateTime,
         val data: NotificationData,
     )
 
@@ -26,6 +29,8 @@ data class NotificationDocumentPageDto(
                     userId = it.userId,
                     title = it.title,
                     content = it.content,
+                    readAt = it.readAt,
+                    createdAt = it.createdAt,
                     data = it.data,
                 )
             }

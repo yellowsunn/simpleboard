@@ -83,7 +83,6 @@ export default {
     },
     // 답글이 있는데 삭제된 댓글은 빈 객체 추가
     replaceDeletedComments(data) {
-      console.log(data)
       const comments = data?.comments || []
       const newComments = []
       const baseIdSet = new Set()

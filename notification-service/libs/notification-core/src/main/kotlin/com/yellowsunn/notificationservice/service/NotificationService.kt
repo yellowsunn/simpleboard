@@ -7,6 +7,7 @@ import com.yellowsunn.notificationservice.event.NotificationMessage
 import com.yellowsunn.notificationservice.repository.NotificationDocumentRepository
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
+import java.time.ZonedDateTime
 
 @Service
 class NotificationService(
@@ -27,7 +28,7 @@ class NotificationService(
         notificationDocumentRepository.save(notificationDocument)
     }
 
-    fun findNotifications(userId: Long, page: Int, size: Int): NotificationDocumentPageDto {
+    fun findUserNotifications(userId: Long, page: Int, size: Int): NotificationDocumentPageDto {
         val curPage = PageUtils.currentPage(page - 1)
         val curSize = PageUtils.currentSize(size, MAX_PAGE_SIZE)
 
@@ -35,5 +36,13 @@ class NotificationService(
             notificationDocumentRepository.findUserNotifications(userId, curPage, curSize)
 
         return NotificationDocumentPageDto.from(notificationPage)
+    }
+
+    fun readUserNotifications(userId: Long): Long {
+        return notificationDocumentRepository.updateReadAtByUserId(userId, ZonedDateTime.now())
+    }
+
+    fun existUserUnreadNotifications(userId: Long): Boolean {
+        return notificationDocumentRepository.existUnreadNotifications(userId)
     }
 }

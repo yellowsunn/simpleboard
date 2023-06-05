@@ -63,6 +63,14 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - AuthorizationHeaderFilter
+        - id: notification-service
+          uri: ${endpoint.notification-service}
+          predicates:
+            - Method=GET, POST, PUT, PATCH, DELETE, OPTIONS
+            - Path=/api/v1/notifications/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
 ---
 server:
   port: 8000
@@ -80,6 +88,7 @@ endpoint:
   user-service: http://localhost:8080
   board-service: http://localhost:8081
   image-service: http://localhost:8082
+  notification-service: http://localhost:8083
 
 token:
   access:
