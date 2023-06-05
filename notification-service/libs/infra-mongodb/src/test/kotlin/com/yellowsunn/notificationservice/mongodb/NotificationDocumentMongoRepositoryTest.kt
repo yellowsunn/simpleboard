@@ -2,10 +2,12 @@ package com.yellowsunn.notificationservice.mongodb
 
 import com.yellowsunn.common.notification.CommentNotificationData
 import com.yellowsunn.notificationservice.domain.NotificationDocument
+import java.util.Comparator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
 import org.springframework.data.mongodb.core.MongoTemplate
 
 class NotificationDocumentMongoRepositoryTest : MongoIntegrationTest() {
@@ -27,15 +29,31 @@ class NotificationDocumentMongoRepositoryTest : MongoIntegrationTest() {
 
     @Test
     fun save() {
-        val notificationDocument = NotificationDocument(
-            userId = 1L,
-            title = "게시글에 댓글이 달렸습니다.",
-            content = "댓글 입니다.",
-            data = CommentNotificationData(1L, 1L),
-        )
+        val notificationDocument = getTestNotification()
 
         val savedDocument: NotificationDocument = sut.save(notificationDocument)
 
         assertThat(savedDocument.id).isNotBlank()
     }
+
+    @Test
+    fun findUserNotifications() {
+        repeat(10) {
+            val notificationDocument = getTestNotification()
+            sut.save(notificationDocument)
+        }
+
+        val notifications: Page<NotificationDocument> = sut.findUserNotifications(1L, 1, 3)
+
+        assertThat(notifications.totalElements).isEqualTo(10L)
+        assertThat(notifications.totalPages).isEqualTo(4L)
+        assertThat(notifications.content.map { it.createdAt }).isSortedAccordingTo(Comparator.reverseOrder())
+    }
+
+    private fun getTestNotification() = NotificationDocument(
+        userId = 1L,
+        title = "게시글에 댓글이 달렸습니다.",
+        content = "댓글 입니다.",
+        data = CommentNotificationData(1L, 1L),
+    )
 }

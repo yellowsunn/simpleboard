@@ -4,10 +4,9 @@ import com.yellowsunn.boardservice.common.http.client.user.UserHttpClient
 import com.yellowsunn.boardservice.query.domain.comment.CommentDocument
 import com.yellowsunn.boardservice.query.dto.CommentDocumentPageDto
 import com.yellowsunn.boardservice.query.repository.CommentDocumentRepository
+import com.yellowsunn.common.utils.PageUtils
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
-import kotlin.math.max
-import kotlin.math.min
 
 @Service
 class CommentQueryService(
@@ -15,17 +14,12 @@ class CommentQueryService(
     private val userHttpClient: UserHttpClient,
 ) {
     private companion object {
-        private const val DEFAULT_ELEM_SIZE = 10
         private const val MAX_ELEM_SIZE = 100
     }
 
     fun findComments(articleId: Long, page: Int, size: Int): CommentDocumentPageDto {
-        val curPage = max(page, 1) - 1
-        val curSize = if (size <= 0) {
-            DEFAULT_ELEM_SIZE
-        } else {
-            min(size, MAX_ELEM_SIZE)
-        }
+        val curPage = PageUtils.currentPage(page - 1)
+        val curSize = PageUtils.currentSize(size, MAX_ELEM_SIZE)
 
         val commentDocumentPage: Page<CommentDocument> =
             commentDocumentRepository.findComments(articleId, curPage, curSize)

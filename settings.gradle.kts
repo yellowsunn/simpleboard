@@ -26,6 +26,7 @@ include(
     "board-service:libs:infra-redis",
 
     "notification-service",
+    "notification-service:apps:notification-api",
     "notification-service:apps:notification-consumer",
     "notification-service:libs:notification-core",
     "notification-service:libs:infra-http",
