@@ -4,13 +4,12 @@ import com.yellowsunn.boardservice.query.domain.comment.CommentDocument
 import com.yellowsunn.boardservice.query.repository.CommentDocumentRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Pageable
 import org.springframework.data.mongodb.core.FindAndReplaceOptions
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.repository.MongoRepository
-import org.springframework.data.support.PageableExecutionUtils
 import org.springframework.stereotype.Component
 import kotlin.math.max
 
@@ -34,26 +33,12 @@ class CommentMongoRepository(
 
     override fun findComments(articleId: Long, page: Int, size: Int): Page<CommentDocument> {
         val pageable = PageRequest.of(max(page, 0), size)
-        val query = Query(Criteria.where(ARTICLE_ID).`is`(articleId))
-            .addCriteria(Criteria.where(IS_DELETED).`is`(false))
-            .with(pageable)
+        return delegate.findByArticleIdAndIsDeletedIsFalseOrderByBaseCommentIdDescCommentIdDesc(articleId, pageable)
+    }
 
-        val comments: List<CommentDocument> = mongoTemplate.find(
-            Query.of(query)
-                .with(
-                    Sort.by(
-                        listOf(
-                            Sort.Order(Sort.Direction.DESC, BASE_COMMENT_ID),
-                            Sort.Order(Sort.Direction.DESC, COMMENT_ID),
-                        ),
-                    ),
-                ),
-            CommentDocument::class.java,
-        )
-
-        return PageableExecutionUtils.getPage(comments, pageable) {
-            mongoTemplate.count(Query.of(query).skip(-1).limit(-1), CommentDocument::class.java)
-        }
+    override fun findUserComments(userId: Long, page: Int, size: Int): Page<CommentDocument> {
+        val pageable = PageRequest.of(max(page, 0), size)
+        return delegate.findByUserIdAndIsDeletedIsFalseOrderBySavedAtDesc(userId, pageable)
     }
 
     override fun findOffsetByCommentId(articleId: Long, baseCommentId: Long, commentId: Long): Long {
@@ -84,4 +69,10 @@ class CommentMongoRepository(
 
 interface CommentMongoRepositoryDelegate : MongoRepository<CommentDocument, String> {
     fun findByCommentId(commentId: Long): CommentDocument?
+    fun findByArticleIdAndIsDeletedIsFalseOrderByBaseCommentIdDescCommentIdDesc(
+        articleId: Long,
+        pageable: Pageable,
+    ): Page<CommentDocument>
+
+    fun findByUserIdAndIsDeletedIsFalseOrderBySavedAtDesc(articleId: Long, pageable: Pageable): Page<CommentDocument>
 }

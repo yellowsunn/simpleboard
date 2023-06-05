@@ -7,5 +7,6 @@ interface CommentDocumentRepository {
     fun upsertByCommentId(commentId: Long, entity: CommentDocument): CommentDocument?
     fun findByCommentId(commentId: Long): CommentDocument?
     fun findComments(articleId: Long, page: Int, size: Int): Page<CommentDocument>
+    fun findUserComments(userId: Long, page: Int, size: Int): Page<CommentDocument>
     fun findOffsetByCommentId(articleId: Long, baseCommentId: Long, commentId: Long): Long
 }

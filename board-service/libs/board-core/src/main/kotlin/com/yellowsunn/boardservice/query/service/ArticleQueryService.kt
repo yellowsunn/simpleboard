@@ -6,13 +6,13 @@ import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import com.yellowsunn.boardservice.query.dto.ArticleDocumentDto
 import com.yellowsunn.boardservice.query.dto.ArticleDocumentPageDto
 import com.yellowsunn.boardservice.query.dto.ArticleReactionDocumentDto
+import com.yellowsunn.boardservice.query.dto.UserArticleDocumentPageDto
 import com.yellowsunn.boardservice.query.repository.ArticleDocumentRepository
 import com.yellowsunn.boardservice.query.repository.ArticleReactionDocumentRepository
 import com.yellowsunn.boardservice.query.repository.ArticleViewCacheRepository
+import com.yellowsunn.common.utils.PageUtils
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
-import kotlin.math.max
-import kotlin.math.min
 
 @Service
 class ArticleQueryService(
@@ -22,7 +22,6 @@ class ArticleQueryService(
     private val userHttpClient: UserHttpClient,
 ) {
     private companion object {
-        private const val DEFAULT_ELEM_SIZE = 10
         private const val MAX_ELEM_SIZE = 100
     }
 
@@ -38,12 +37,8 @@ class ArticleQueryService(
     }
 
     fun findArticles(page: Int, size: Int): ArticleDocumentPageDto {
-        val curPage = max(page, 1) - 1
-        val curSize = if (size <= 0) {
-            DEFAULT_ELEM_SIZE
-        } else {
-            min(size, MAX_ELEM_SIZE)
-        }
+        val curPage = PageUtils.currentPage(page - 1)
+        val curSize = PageUtils.currentSize(size, MAX_ELEM_SIZE)
 
         val articleDocumentPage: Page<ArticleDocument> = articleDocumentRepository.findArticles(curPage, curSize)
 
@@ -59,6 +54,16 @@ class ArticleQueryService(
             articleReactionDocumentRepository.findByArticleIdAndUserId(articleId, userId) ?: return null
 
         return ArticleReactionDocumentDto.from(articleReactionDocument)
+    }
+
+    fun findUserArticles(userId: Long, page: Int, size: Int): UserArticleDocumentPageDto {
+        val curPage = PageUtils.currentPage(page - 1)
+        val curSize = PageUtils.currentSize(size, MAX_ELEM_SIZE)
+
+        val articleDocumentPage: Page<ArticleDocument> =
+            articleDocumentRepository.findUserArticles(userId, curPage, curSize)
+
+        return UserArticleDocumentPageDto.from(articleDocumentPage)
     }
 
     private fun filterUserIds(articleDocumentPage: Page<ArticleDocument>): List<Long> {

@@ -3,6 +3,7 @@ package com.yellowsunn.boardservice.query.service
 import com.yellowsunn.boardservice.common.http.client.user.UserHttpClient
 import com.yellowsunn.boardservice.query.domain.comment.CommentDocument
 import com.yellowsunn.boardservice.query.dto.CommentDocumentPageDto
+import com.yellowsunn.boardservice.query.dto.UserCommentDocumentPageDto
 import com.yellowsunn.boardservice.query.repository.CommentDocumentRepository
 import com.yellowsunn.common.utils.PageUtils
 import org.springframework.data.domain.Page
@@ -27,6 +28,15 @@ class CommentQueryService(
         val users = userHttpClient.findUsersByIds(userIds)
 
         return CommentDocumentPageDto.from(commentDocumentPage, users)
+    }
+
+    fun findUserComments(userId: Long, page: Int, size: Int): UserCommentDocumentPageDto {
+        val curPage = PageUtils.currentPage(page - 1)
+        val curSize = PageUtils.currentSize(size, MAX_ELEM_SIZE)
+
+        val commentDocumentPage: Page<CommentDocument> = commentDocumentRepository.findUserComments(userId, curPage, curSize)
+
+        return UserCommentDocumentPageDto.from(commentDocumentPage)
     }
 
     fun findCommentPage(commentId: Long, size: Int): Long? {

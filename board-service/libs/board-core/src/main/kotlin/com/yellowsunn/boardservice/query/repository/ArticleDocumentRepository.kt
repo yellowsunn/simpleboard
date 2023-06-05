@@ -8,4 +8,5 @@ interface ArticleDocumentRepository {
     fun findById(id: String): ArticleDocument?
     fun findByArticleId(id: Long): ArticleDocument?
     fun findArticles(page: Int, size: Int): Page<ArticleDocument>
+    fun findUserArticles(userId: Long, page: Int, size: Int): Page<ArticleDocument>
 }

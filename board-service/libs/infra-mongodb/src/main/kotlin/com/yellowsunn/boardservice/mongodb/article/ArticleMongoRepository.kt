@@ -4,6 +4,7 @@ import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import com.yellowsunn.boardservice.query.repository.ArticleDocumentRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.FindAndReplaceOptions
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -43,17 +44,12 @@ class ArticleMongoRepository(
 
     override fun findArticles(page: Int, size: Int): Page<ArticleDocument> {
         val pageable = PageRequest.of(page, size)
-        val query = Query(Criteria.where(IS_DELETED).`is`(false))
-            .with(pageable)
+        return delegate.findByIsDeletedIsFalseOrderBySavedAtDesc(pageable)
+    }
 
-        val articles: List<ArticleDocument> = mongoTemplate.find(
-            Query.of(query).with(Sort.by(Sort.Direction.DESC, SAVED_AT)),
-            ArticleDocument::class.java,
-        )
-
-        return PageableExecutionUtils.getPage(articles, pageable) {
-            mongoTemplate.count(Query.of(query).skip(-1).limit(-1), ArticleDocument::class.java)
-        }
+    override fun findUserArticles(userId: Long, page: Int, size: Int): Page<ArticleDocument> {
+        val pageable = PageRequest.of(page, size)
+        return delegate.findByUserIdAndIsDeletedIsFalseOrderBySavedAtDesc(userId, pageable)
     }
 
     private companion object {
@@ -61,9 +57,12 @@ class ArticleMongoRepository(
         private const val ARTICLE_ID = "articleId"
         private const val SAVED_AT = "savedAt"
         private const val IS_DELETED = "isDeleted"
+        private const val USER_ID = "userId"
     }
 }
 
 interface ArticleMongoRepositoryDelegate : MongoRepository<ArticleDocument, String> {
     fun findByArticleId(articleId: Long): ArticleDocument?
+    fun findByIsDeletedIsFalseOrderBySavedAtDesc(pageable: Pageable): Page<ArticleDocument>
+    fun findByUserIdAndIsDeletedIsFalseOrderBySavedAtDesc(userId: Long, pageable: Pageable): Page<ArticleDocument>
 }

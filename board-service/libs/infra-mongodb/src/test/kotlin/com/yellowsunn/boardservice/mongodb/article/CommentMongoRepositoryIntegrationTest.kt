@@ -38,5 +38,6 @@ class CommentMongoRepositoryIntegrationTest : MongoIntegrationTest() {
         userId = 1L,
         content = "content",
         savedAt = ZonedDateTime.now(),
+        baseCommentId = commentId,
     )
 }
