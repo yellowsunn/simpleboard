@@ -51,10 +51,6 @@ tasks {
         configurations(asciidoctorExtensions.name)
         dependsOn(test)
     }
-
-    build {
-        dependsOn(asciidoctor)
-    }
 }
 
 configure<JibExtension> {
