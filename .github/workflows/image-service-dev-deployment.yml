@@ -1,4 +1,6 @@
 name: image-service dev 배포 파이프라인
+on:
+  workflow_dispatch:
 jobs:
   build-deploy:
     runs-on:
