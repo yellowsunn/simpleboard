@@ -38,7 +38,5 @@ jobs:
             -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
             -Djib.container.jvmFlags=-Dspring.profiles.active=dev,-Daws-access-key=${{ secrets.AWS_ACCESS_KEY }},-Daws-secret-key=${{ secrets.AWS_SECRET_KEY }}
             --stacktrace
-      - name: Update api document
-        uses: ./.github/workflows/image-service-restdocs.yml
   trigger-update-api-document:
     uses: ./.github/workflows/image-service-restdocs.yml

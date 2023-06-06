@@ -2,7 +2,7 @@ name: image-service rest docs api 업데이트 파이프라인
 on:
   workflow_call:
 jobs:
-  build-deploy:
+  update-api-document:
     runs-on:
       - ubuntu-latest
     steps:
