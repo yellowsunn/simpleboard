@@ -29,7 +29,8 @@ class ImageService(
     }
 
     private fun isNotImageType(contentType: String?): Boolean {
-        return !(contentType?.startsWith("image/") ?: false)
+        val isImageType = contentType?.startsWith("image/") ?: false
+        return isImageType.not()
     }
 
     private fun generateFileUploadRequest(imageFile: MultipartFile): FileUploadRequest = FileUploadRequest(

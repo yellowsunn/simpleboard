@@ -1,0 +1,18 @@
+= 이미지 서비스
+:toc: left
+
+== API 목록
+=== 이미지 업로드 API (회원용)
+operation::post-upload-image[snippets='curl-request,http-request,http-response,path-parameters,request-headers,request-parts,response-fields']
+
+'''
+=== 이미지 업로드 API (내부용)
+operation::post-internal-upload-image[snippets='curl-request,http-request,http-response,path-parameters,request-parts,response-fields']
+
+'''
+=== 이미지 조회 API
+operation::get-image[snippets='curl-request,http-request,http-response,path-parameters']
+
+'''
+=== 이미지 조회 API (존재하지 않는 이미지)
+operation::get-image-not-found[snippets='curl-request,http-request,http-response,path-parameters']

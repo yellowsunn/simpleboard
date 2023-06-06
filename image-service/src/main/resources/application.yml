@@ -1,3 +1,4 @@
+server.port: 8080
 spring.profiles.default: local
 cloud:
   aws:
@@ -11,7 +12,7 @@ cloud:
       secret-key: ${aws-secret-key}
 ---
 server.port: 8082
-spring.profiles.active: local
+spring.config.activate.on-profile: local
 cloud:
   aws:
     s3:
@@ -19,8 +20,7 @@ cloud:
 
 image-base-url: http://localhost:8000
 ---
-server.port: 8080
-spring.profiles.active: dev
+spring.config.activate.on-profile: dev
 cloud:
   aws:
     s3:

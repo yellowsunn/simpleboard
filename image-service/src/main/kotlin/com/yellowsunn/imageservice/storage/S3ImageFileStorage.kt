@@ -6,10 +6,10 @@ import com.amazonaws.services.s3.model.PutObjectRequest
 import com.amazonaws.services.s3.model.S3Object
 import com.yellowsunn.common.constant.StorageType
 import com.yellowsunn.imageservice.dto.FileUploadRequest
-import java.util.UUID
 import org.apache.commons.io.FilenameUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.util.UUID
 
 @Component
 class S3ImageFileStorage(

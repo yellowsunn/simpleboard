@@ -1,5 +1,6 @@
 package com.yellowsunn.imageservice.controller
 
+import com.yellowsunn.common.response.ResultResponse
 import com.yellowsunn.imageservice.service.ImageService
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -15,7 +16,7 @@ class InternalImageController(
     fun uploadImageFile(
         @PathVariable type: String,
         @RequestParam image: MultipartFile,
-    ): String {
-        return imageService.uploadImageFile(type, image)
+    ): ResultResponse<String> {
+        return ResultResponse.ok(imageService.uploadImageFile(type, image))
     }
 }
