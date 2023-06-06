@@ -1,13 +1,12 @@
 rootProject.name = "simpleforum"
 
 include(
-    "board-monolithic-service",
-    "apigateway-service",
     "common-library",
+
+    "apigateway-service",
 
     "image-service",
 
-    "user-service",
     "user-service:apps:user-api",
     "user-service:libs:user-core",
     "user-service:libs:infra-persistence",
