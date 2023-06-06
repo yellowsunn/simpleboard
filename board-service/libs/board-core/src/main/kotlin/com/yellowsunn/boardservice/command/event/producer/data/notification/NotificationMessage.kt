@@ -1,6 +1,8 @@
 package com.yellowsunn.boardservice.command.event.producer.data.notification
 
 import com.yellowsunn.boardservice.command.event.producer.data.ProducerData
+import com.yellowsunn.common.notification.ArticleLikeNotificationData
+import com.yellowsunn.common.notification.CommentLikeNotificationData
 import com.yellowsunn.common.notification.CommentNotificationData
 import com.yellowsunn.common.notification.NotificationData
 
@@ -28,6 +30,34 @@ data class NotificationMessage(
                 title = title,
                 content = content,
                 data = CommentNotificationData(commentId, articleId),
+            )
+        }
+
+        fun buildCommentLikeMessage(
+            commentId: Long,
+            articleId: Long,
+            userId: Long,
+            content: String,
+            imageUrl: String,
+        ): NotificationMessage {
+            return NotificationMessage(
+                userId = userId,
+                title = "다른 사용자가 댓글에 좋아요를 표시했습니다.",
+                content = content,
+                data = CommentLikeNotificationData(commentId, articleId, imageUrl),
+            )
+        }
+
+        fun buildArticleLikeMessage(
+            articleId: Long,
+            userId: Long,
+            content: String,
+        ): NotificationMessage {
+            return NotificationMessage(
+                userId = userId,
+                title = "다른 사용자가 게시글에 좋아요를 표시했습니다.",
+                content = content,
+                data = ArticleLikeNotificationData(articleId),
             )
         }
     }

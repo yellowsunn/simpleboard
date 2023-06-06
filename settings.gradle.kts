@@ -15,7 +15,6 @@ include(
     "user-service:libs:infra-oauth2",
     "user-service:libs:infra-http",
 
-    "board-service",
     "board-service:apps:board-api",
     "board-service:apps:board-kafka-consumer",
     "board-service:libs:board-core",
