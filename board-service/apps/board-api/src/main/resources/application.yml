@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    default: local
+  config:
+    import:
+      - 'classpath:application-persistence.yml'
+      - 'classpath:application-http.yml'
+      - 'classpath:application-kafka-producer.yml'
+      - 'classpath:application-mongodb.yml'
+      - 'classpath:application-redis.yml'
+---
+server:
+  port: 8081
+spring:
+  profiles:
+    active: local

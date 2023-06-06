@@ -1,0 +1,95 @@
+spring:
+  profiles:
+    default: local
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/api/**]':
+            allowed-origins: "*"
+            allowed-headers: "*"
+            allowed-methods: "*"
+      routes:
+        - id: image-proxy
+          uri: ${endpoint.image-service}
+          predicates:
+            - Path=/images/**
+            - Method=GET, OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: image-upload
+          uri: ${endpoint.image-service}
+          predicates:
+            - Path=/api/images/*
+            - Method=POST, OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+            - name: RequestRateLimiter
+              args:
+                # 2초에 한번 업로드 가능
+                key-resolver: "#{@userIdKeyResolver}"
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 2
+                redis-rate-limiter.requestedTokens: 2
+        - id: oauth2-link-complete
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/api/v2/auth/oauth2/link
+            - Method=PUT, DELETE, OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: user-auth
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/api/v2/auth/**
+            - Method=POST, PUT, DELETE, OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+        - id: user-service
+          uri: ${endpoint.user-service}
+          predicates:
+            - Path=/api/v2/users/**
+            - Method=GET, POST, PUT, PATCH, DELETE, OPTIONS
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: board-service
+          uri: ${endpoint.board-service}
+          predicates:
+            - Method=GET, POST, PUT, PATCH, DELETE, OPTIONS
+            - Path=/api/v2/articles/**, /api/v2/comments/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+        - id: notification-service
+          uri: ${endpoint.notification-service}
+          predicates:
+            - Method=GET, POST, PUT, PATCH, DELETE, OPTIONS
+            - Path=/api/v1/notifications/**
+          filters:
+            - RemoveRequestHeader=Cookie
+            - AuthorizationHeaderFilter
+---
+server:
+  port: 8000
+spring:
+  profiles:
+    active: local
+  data:
+    redis:
+      host: localhost
+      port: 6389
+      connect-timeout: 3000
+      timeout: 1000
+
+endpoint:
+  user-service: http://localhost:8080
+  board-service: http://localhost:8081
+  image-service: http://localhost:8082
+  notification-service: http://localhost:8083
+
+token:
+  access:
+    secret: jekmrsrhPKOwSUnR7m8WtcWv_K5SdKygftw3x99BrCs

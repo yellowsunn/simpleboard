@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    default: local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      # Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+      jakarta.persistence.sharedCache.mode: ALL
+  flyway:
+    encoding: utf-8
+    baseline-version: 0
+    baseline-on-migrate: true
+    enabled: false
+---
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:mysql://localhost:3308/users
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: password
+  jpa:
+    show-sql: true
+  flyway:
+    enabled: true

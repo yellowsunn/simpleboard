@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    default: local
+---
+spring:
+  profiles:
+    active: local
+
+micro-services:
+  user-service-url: http://localhost:8080
