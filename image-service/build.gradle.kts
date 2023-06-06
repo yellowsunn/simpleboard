@@ -1,8 +1,10 @@
+import com.google.cloud.tools.jib.gradle.JibExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version ImageServiceVersions.springBoot
     id("io.spring.dependency-management") version ImageServiceVersions.springDependencyManagement
+    id("com.google.cloud.tools.jib") version ImageServiceVersions.jib
     kotlin("jvm") version ImageServiceVersions.kotlin
     kotlin("plugin.spring") version ImageServiceVersions.kotlin
 }
@@ -28,5 +30,14 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
+    }
+}
+
+configure<JibExtension> {
+    from {
+        image = "eclipse-temurin:17-jre-alpine"
+    }
+    container {
+        ports = listOf("8080")
     }
 }
