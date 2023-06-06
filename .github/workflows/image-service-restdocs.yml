@@ -13,14 +13,24 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Set git config
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Merge main -> gh-pages branch
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: main
+          target_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update rest docs api document
+        run: |
+          ./gradlew :image-service:asciidoctor
+          mv ./image-service/build/docs/asciidoc/index.html ./docs/image-service.html
+          ls -al docs
+      - name: commit api document
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Change imag tag
-        run: |
-          git merge main
-          ./gradlew :image-service:asciidoctor
-          ls -al
+          git add .
+          git commit -m "[github-action] update api document"
+          git push
