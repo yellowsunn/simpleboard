@@ -2,18 +2,15 @@ package com.yellowsunn.userservice.dto;
 
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
 
-@Getter
-public class OAuth2LinkUserRequestDto {
-    // OAuth2 Token
-    @NotBlank
-    private String token;
-
-    // OAuth2 Type
-    @NotBlank
-    private String type;
-
+/**
+ * @param token OAuth2 Token
+ * @param type  OAuth2 Type
+ */
+public record OAuth2LinkUserRequestDto(
+        @NotBlank String token,
+        @NotBlank String type
+) {
     public UserOAuth2LinkCommand toCommand(Long userId) {
         return UserOAuth2LinkCommand.builder()
                 .userId(userId)

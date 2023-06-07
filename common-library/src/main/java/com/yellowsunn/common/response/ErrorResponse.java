@@ -24,11 +24,11 @@ public record ErrorResponse(
                 .build();
     }
 
-    public static ErrorResponse notFoundUser() {
+    public static ErrorResponse notFoundLoginUser() {
         return ErrorResponse.builder()
                 .status(401)
-                .code("NOT_FOUND_USER")
-                .message("유저를 찾을 수 없습니다.")
+                .code("NOT_FOUND_LOGIN_USER")
+                .message("로그인한 유저를 찾을 수 없습니다.")
                 .build();
     }
 

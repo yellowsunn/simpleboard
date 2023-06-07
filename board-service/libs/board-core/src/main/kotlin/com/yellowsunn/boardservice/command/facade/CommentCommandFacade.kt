@@ -8,7 +8,7 @@ import com.yellowsunn.boardservice.command.event.data.comment.CommentSaveEvent
 import com.yellowsunn.boardservice.command.service.CommentCommandService
 import com.yellowsunn.boardservice.common.domain.user.User
 import com.yellowsunn.boardservice.common.http.client.user.UserHttpClient
-import com.yellowsunn.common.exception.UserNotFoundException
+import com.yellowsunn.common.exception.LoginUserNotFoundException
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 
@@ -68,7 +68,7 @@ class CommentCommandFacade(
 
     private fun getUserById(userId: Long): User {
         return userHttpClient.findUserByUserId(userId)
-            ?: throw UserNotFoundException()
+            ?: throw LoginUserNotFoundException()
     }
 
     private fun checkValidUser(userId: Long) {

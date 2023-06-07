@@ -7,7 +7,7 @@ operation::post-upload-image[snippets='curl-request,http-request,http-response,p
 
 '''
 === 이미지 업로드 API (내부용)
-operation::post-internal-upload-image[snippets='curl-request,http-request,http-response,path-parameters,request-parts,response-fields']
+operation::post-internal-upload-image[snippets='curl-request,http-request,http-response,path-parameters,request-parts']
 
 '''
 === 이미지 조회 API
