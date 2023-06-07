@@ -1,6 +1,7 @@
 package com.yellowsunn.userservice.controller;
 
 import com.yellowsunn.common.annotation.LoginUser;
+import com.yellowsunn.common.response.ResultResponse;
 import com.yellowsunn.userservice.dto.UserInfoUpdateRequestDto;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
 import com.yellowsunn.userservice.exception.CustomIOException;
@@ -32,33 +33,41 @@ public class ExternalUserController {
     private final UserFacade userFacade;
     private final UserService userService;
 
-    @GetMapping("/api/v2/users/my-info")
-    public UserMyInfoDto findMyInfo(@LoginUser Long userId) {
-        return userService.findUserInfo(userId);
+    @GetMapping("/api/v2/users/me")
+    public ResultResponse<UserMyInfoDto> findMyInfo(@LoginUser Long userId) {
+        return ResultResponse.ok(
+                userService.findUserInfo(userId)
+        );
     }
 
-    @DeleteMapping("/api/v2/users/my-info")
-    public boolean deleteMyInfo(@LoginUser Long userId) {
-        return userService.deleteUserInfo(userId);
+    @DeleteMapping("/api/v2/users/me")
+    public ResultResponse<Boolean> deleteMyInfo(@LoginUser Long userId) {
+        return ResultResponse.ok(
+                userService.deleteUserInfo(userId)
+        );
     }
 
-    @PutMapping("/api/v2/users/my-info")
-    public boolean updateMyInfo(@LoginUser Long userId,
-                                @Valid @RequestBody UserInfoUpdateRequestDto requestDto) {
+    @PutMapping("/api/v2/users/me")
+    public ResultResponse<Boolean> updateMyInfo(@LoginUser Long userId,
+                                                @Valid @RequestBody UserInfoUpdateRequestDto requestDto) {
         var command = requestDto.toCommand(userId);
-        return userService.changeUserInfo(command);
+        return ResultResponse.ok(
+                userService.changeUserInfo(command)
+        );
     }
 
-    @PatchMapping("/api/v2/users/my-info/thumbnail")
-    public String updateMyThumbnail(@LoginUser Long userId,
-                                    @RequestParam MultipartFile thumbnail) {
+    @PatchMapping("/api/v2/users/me/thumbnail")
+    public ResultResponse<String> updateMyThumbnail(@LoginUser Long userId,
+                                                    @RequestParam MultipartFile thumbnail) {
         if (isNotImageType(thumbnail.getContentType())) {
             throw new IllegalArgumentException("This file is not an image type.");
         }
 
         try (var inputStream = thumbnail.getInputStream()) {
             var fileUploadRequest = generateFileUploadRequest(thumbnail, inputStream);
-            return userFacade.updateUserThumbnail(userId, fileUploadRequest);
+            return ResultResponse.ok(
+                    userFacade.updateUserThumbnail(userId, fileUploadRequest)
+            );
         } catch (IOException e) {
             throw new CustomIOException(e);
         }

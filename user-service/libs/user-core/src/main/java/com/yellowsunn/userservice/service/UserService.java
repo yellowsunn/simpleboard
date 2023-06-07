@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.service;
 
-import com.yellowsunn.common.exception.UserNotFoundException;
+import com.yellowsunn.common.exception.LoginUserNotFoundException;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.dto.UserInfoUpdateCommand;
@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class UserService {
 
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(LoginUserNotFoundException::new);
     }
 
     private void checkValidNickName(Long userId, String nickName) {
