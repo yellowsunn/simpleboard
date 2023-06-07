@@ -31,7 +31,7 @@ jobs:
           gradle-version: wrapper
           cache-read-only: true
           arguments: |
-            :image-service:jib
+            :apigateway-service:jib
             -Djib.to.image=${{ env.container-image }}
             -Djib.to.tags=${{ env.deployment-version }}
             -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }}
