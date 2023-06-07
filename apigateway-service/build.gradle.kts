@@ -1,8 +1,10 @@
+import com.google.cloud.tools.jib.gradle.JibExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("org.springframework.boot") version ApiGatewayVersions.springBoot
     id("io.spring.dependency-management") version ApiGatewayVersions.springDependencyManagement
+    id("com.google.cloud.tools.jib") version ApiGatewayVersions.jib
     kotlin("jvm") version ApiGatewayVersions.kotlin
     kotlin("plugin.spring") version ApiGatewayVersions.kotlin
 }
@@ -36,4 +38,13 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+configure<JibExtension> {
+    from {
+        image = "eclipse-temurin:17-jre-alpine"
+    }
+    container {
+        ports = listOf("8080")
+    }
 }
