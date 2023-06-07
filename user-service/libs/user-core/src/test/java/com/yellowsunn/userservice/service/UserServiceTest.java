@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.service;
 
-import com.yellowsunn.common.exception.UserNotFoundException;
+import com.yellowsunn.common.exception.LoginUserNotFoundException;
 import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
 import com.yellowsunn.userservice.repository.UserProviderRepository;
@@ -31,11 +31,11 @@ class UserServiceTest {
     @Test
     void findUserInfo() {
         // given
-        var uuid = "uuid";
-        given(userRepository.findByUUID(uuid)).willReturn(Optional.of(getTestUser()));
+        var userId = 1L;
+        given(userRepository.findById(userId)).willReturn(Optional.of(getTestUser()));
 
         // when
-        UserMyInfoDto userInfo = sut.findUserInfo(uuid);
+        UserMyInfoDto userInfo = sut.findUserInfo(userId);
 
         // then
         assertThat(userInfo.email()).isEqualTo("test@example.com");
@@ -44,25 +44,25 @@ class UserServiceTest {
     @Test
     void findUserInfo_failed_when_user_not_found() {
         // given
-        var uuid = "uuid";
-        given(userRepository.findByUUID(uuid)).willReturn(Optional.empty());
+        var userId = 1L;
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
 
         // when
-        Throwable throwable = catchThrowable(() -> sut.findUserInfo(uuid));
+        Throwable throwable = catchThrowable(() -> sut.findUserInfo(userId));
 
         // then
-        assertThat(throwable).isInstanceOf(UserNotFoundException.class);
+        assertThat(throwable).isInstanceOf(LoginUserNotFoundException.class);
     }
 
     @Test
     void deleteUserInfo() {
         // given
-        var uuid = "uuid";
-        given(userRepository.findByUUID(uuid)).willReturn(Optional.of(getTestUser()));
+        var userId = 1L;
+        given(userRepository.findById(userId)).willReturn(Optional.of(getTestUser()));
         given(userRepository.delete(any(User.class))).willReturn(true);
 
         // when
-        boolean isDeleted = sut.deleteUserInfo(uuid);
+        boolean isDeleted = sut.deleteUserInfo(userId);
 
         assertThat(isDeleted).isTrue();
     }
@@ -70,11 +70,11 @@ class UserServiceTest {
     @Test
     void deleteUserInfo_return_true_when_already_deleted() {
         // given
-        var uuid = "uuid";
-        given(userRepository.findByUUID(uuid)).willReturn(Optional.empty());
+        var userId = 1L;
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
 
         // when
-        boolean isDeleted = sut.deleteUserInfo(uuid);
+        boolean isDeleted = sut.deleteUserInfo(userId);
 
         // then
         assertThat(isDeleted).isTrue();
@@ -83,12 +83,12 @@ class UserServiceTest {
     @Test
     void changeUserThumbnail() {
         // given
-        var uuid = "uuid";
+        var userId = 1L;
         var user = getTestUser();
         var updatedThumbnail = "https://example.com/thubnail.png";
-        given(userRepository.findByUUID(uuid)).willReturn(Optional.of(user));
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
 
-        boolean isSuccess = sut.changeUserThumbnail(uuid, updatedThumbnail);
+        boolean isSuccess = sut.changeUserThumbnail(userId, updatedThumbnail);
 
         assertThat(isSuccess).isTrue();
         assertThat(user.getThumbnail()).isEqualTo(updatedThumbnail);

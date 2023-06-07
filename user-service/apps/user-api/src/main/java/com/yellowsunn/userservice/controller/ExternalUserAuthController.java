@@ -1,6 +1,7 @@
 package com.yellowsunn.userservice.controller;
 
 import com.yellowsunn.common.annotation.LoginUser;
+import com.yellowsunn.common.response.ResultResponse;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.dto.EmailLoginRequestDto;
 import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
@@ -31,9 +32,11 @@ public class ExternalUserAuthController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v2/auth/email/signup")
-    public boolean signUpEmail(@Valid @RequestBody EmailSignUpRequestDto requestDto) {
+    public ResultResponse<Boolean> signUpEmail(@Valid @RequestBody EmailSignUpRequestDto requestDto) {
         var command = requestDto.toUserSignUpCommand();
-        return userAuthService.signUpEmail(command);
+        return ResultResponse.ok(
+                userAuthService.signUpEmail(command)
+        );
     }
 
     @PostMapping("/api/v2/auth/email/login")
@@ -42,35 +45,45 @@ public class ExternalUserAuthController {
         return userAuthService.loginEmail(command);
     }
 
-    @PostMapping("/api/v2/auth/oauth2/login-signup")
-    public UserOAuth2LoginOrSignUpDto loginOrSignUpOAuth2(@Valid @RequestBody OAuth2LoginOrSignUpRequestDto requestDto) {
+    @PostMapping("/api/v2/auth/oauth2/authorize")
+    public ResultResponse<UserOAuth2LoginOrSignUpDto> loginOrSignUpOAuth2(@Valid @RequestBody OAuth2LoginOrSignUpRequestDto requestDto) {
         var command = requestDto.toCommand();
-        return userAuthFacade.loginOrSignUpRequest(command);
+        return ResultResponse.ok(
+                userAuthFacade.loginOrSignUpRequest(command)
+        );
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v2/auth/oauth2/signup")
-    public UserLoginTokenDto singUpOAuth2(@Valid @RequestBody OAuth2SignUpRequestDto requestDto) {
+    public ResultResponse<UserLoginTokenDto> singUpCompleteOAuth2(@Valid @RequestBody OAuth2SignUpRequestDto requestDto) {
         var command = requestDto.toUserOAuth2SignUpCommand();
-        return userAuthFacade.signUpOAuth2(command);
+        return ResultResponse.ok(
+                userAuthFacade.signUpOAuth2(command)
+        );
     }
 
     @PutMapping("/api/v2/auth/oauth2/link")
-    public boolean linkOAuth2(@LoginUser Long userId,
-                              @Valid @RequestBody OAuth2LinkUserRequestDto requestDto) {
+    public ResultResponse<Boolean> linkOAuth2(@LoginUser Long userId,
+                                              @Valid @RequestBody OAuth2LinkUserRequestDto requestDto) {
         var command = requestDto.toCommand(userId);
-        return userAuthFacade.linkOAuth2User(command);
+        return ResultResponse.ok(
+                userAuthFacade.linkOAuth2User(command)
+        );
     }
 
     @DeleteMapping("/api/v2/auth/oauth2/link")
-    public boolean unlinkOAuth2(@LoginUser Long userId,
-                                @RequestParam String type) {
+    public ResultResponse<Boolean> unlinkOAuth2(@LoginUser Long userId,
+                                                @RequestParam String type) {
         var oAuth2Type = OAuth2Type.convertFrom(type);
-        return userAuthService.unlinkOAuth2User(userId, oAuth2Type);
+        return ResultResponse.ok(
+                userAuthService.unlinkOAuth2User(userId, oAuth2Type)
+        );
     }
 
     @PostMapping("/api/v2/auth/token")
-    public UserLoginTokenDto refreshUserToken(@Valid @RequestBody RefreshAccessTokenRequestDto requestDto) {
-        return userAuthService.refreshUserToken(requestDto.getAccessToken(), requestDto.getRefreshToken());
+    public ResultResponse<UserLoginTokenDto> refreshUserToken(@Valid @RequestBody RefreshAccessTokenRequestDto requestDto) {
+        return ResultResponse.ok(
+                userAuthService.refreshUserToken(requestDto.accessToken(), requestDto.refreshToken())
+        );
     }
 }

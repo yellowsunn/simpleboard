@@ -22,8 +22,8 @@ public record ResultResponse<T>(
         return failed("ACCESS_TOKEN_EXPIRED", "로그인이 만료되었습니다.");
     }
 
-    public static ResultResponse<Void> notFoundUser() {
-        return failed("NOT_FOUND_USER", "유저를 찾을 수 없습니다.");
+    public static ResultResponse<Void> notFoundLoginUser() {
+        return failed("NOT_FOUND_LOGIN_USER", "로그인한 유저를 찾을 수 없습니다.");
     }
 
     public static ResultResponse<Void> unknownError() {

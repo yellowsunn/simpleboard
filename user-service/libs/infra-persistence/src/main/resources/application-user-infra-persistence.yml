@@ -14,9 +14,8 @@ spring:
     baseline-on-migrate: true
     enabled: false
 ---
+spring.config.activate.on-profile: local
 spring:
-  profiles:
-    active: local
   datasource:
     url: jdbc:mysql://localhost:3308/users
     driver-class-name: com.mysql.cj.jdbc.Driver

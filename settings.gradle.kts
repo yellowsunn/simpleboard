@@ -11,7 +11,6 @@ include(
     "user-service:libs:user-core",
     "user-service:libs:infra-persistence",
     "user-service:libs:infra-redis",
-    "user-service:libs:infra-oauth2",
     "user-service:libs:infra-http",
 
     "board-service:apps:board-api",

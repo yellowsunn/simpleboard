@@ -13,7 +13,7 @@ import com.yellowsunn.boardservice.command.event.data.article.ArticleUpdateEvent
 import com.yellowsunn.boardservice.command.service.ArticleCommandService
 import com.yellowsunn.boardservice.common.domain.user.User
 import com.yellowsunn.boardservice.common.http.client.user.UserHttpClient
-import com.yellowsunn.common.exception.UserNotFoundException
+import com.yellowsunn.common.exception.LoginUserNotFoundException
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 
@@ -70,6 +70,6 @@ class ArticleCommandFacade(
 
     private fun getUserById(userId: Long): User {
         return userHttpClient.findUserByUserId(userId)
-            ?: throw UserNotFoundException()
+            ?: throw LoginUserNotFoundException()
     }
 }
