@@ -1,4 +1,7 @@
+import com.google.cloud.tools.jib.gradle.JibExtension
+
 plugins {
+    id("com.google.cloud.tools.jib") version UserServiceVersions.jib
     id("org.asciidoctor.jvm.convert") version "4.0.0-alpha.1"
 }
 val asciidoctorExtensions: Configuration by configurations.creating
@@ -30,5 +33,14 @@ tasks {
         inputs.dir(snippetsDir)
         configurations(asciidoctorExtensions.name)
         dependsOn(test)
+    }
+}
+
+configure<JibExtension> {
+    from {
+        image = "eclipse-temurin:17-jre-alpine"
+    }
+    container {
+        ports = listOf("8080")
     }
 }
