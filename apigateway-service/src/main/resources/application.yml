@@ -72,11 +72,9 @@ spring:
             - RemoveRequestHeader=Cookie
             - AuthorizationHeaderFilter
 ---
-server:
-  port: 8000
+server.port: 8000
+spring.config.activate.on-profile: local
 spring:
-  profiles:
-    active: local
   data:
     redis:
       host: localhost
@@ -88,6 +86,25 @@ endpoint:
   user-service: http://localhost:8080
   board-service: http://localhost:8081
   image-service: http://localhost:8082
+  notification-service: http://localhost:8083
+
+token:
+  access:
+    secret: jekmrsrhPKOwSUnR7m8WtcWv_K5SdKygftw3x99BrCs
+---
+spring.config.activate.on-profile: dev
+spring:
+  data:
+    redis:
+      host: simpleforum-redis-sts-0.simpleforum-redis-svc
+      port: 6379
+      connect-timeout: 3000
+      timeout: 1000
+
+endpoint:
+  user-service: http://dev-simpleforum-user-service-svc:8080
+  board-service: http://localhost:8081
+  image-service: http://dev-simpleforum-image-service-svc:8080
   notification-service: http://localhost:8083
 
 token:

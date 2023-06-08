@@ -2,12 +2,20 @@ spring:
   profiles:
     default: local
 ---
+spring.config.activate.on-profile: local
 spring:
-  profiles:
-    active: local
   data:
     redis:
       host: localhost
       port: 6389
+      connect-timeout: 3000
+      timeout: 1000
+---
+spring.config.activate.on-profile: dev
+spring:
+  data:
+    redis:
+      host: simpleforum-redis-sts-0.simpleforum-redis-svc
+      port: 6379
       connect-timeout: 3000
       timeout: 1000

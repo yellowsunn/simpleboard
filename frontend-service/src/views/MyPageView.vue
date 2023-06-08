@@ -31,7 +31,7 @@ export default {
   name: "MyPageView",
   components: {EditFinished, MyPageUserLink, MyPageUserInfo, MyPageHeader},
   async mounted() {
-    const {isError, data} = await this.$boardApi('GET', '/api/v2/users/my-info', null, true)
+    const {isError, data} = await this.$boardApi('GET', '/api/v2/users/me', undefined, true)
     if (isError) {
       alert(data.message)
       return
@@ -72,7 +72,7 @@ export default {
         return
       }
 
-      const {isError, data} = await this.$boardApi('DELETE', '/api/v2/users/my-info', undefined, true)
+      const {isError, data} = await this.$boardApi('DELETE', '/api/v2/users/me', undefined, true)
       if (isError) {
         alert(data.message)
         return

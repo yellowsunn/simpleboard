@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     async handleCallback(callbackData) {
-      const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/oauth2/login-signup', {
+      const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/oauth2/authorize', {
         state: this.$setSessionState(),
         token: callbackData?.credential,
         type: "google",
