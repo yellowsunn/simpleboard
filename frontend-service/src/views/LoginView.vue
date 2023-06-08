@@ -55,6 +55,7 @@ export default {
         return
       }
 
+      console.log(data)
       this.$store.commit('setUserToken', data)
       this.$router.push('/')
     }

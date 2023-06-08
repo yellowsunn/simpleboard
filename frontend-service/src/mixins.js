@@ -1,6 +1,7 @@
 import {callBoardApi, reAcquireAccessToken} from "@/utils/apiUtils";
 import AccessTokenExpiredError from "@/utils/AccessTokenExpiredError";
 import {isInvalidUser} from "@/utils/httpErrorHandler";
+import uuid4 from 'uuid4';
 
 export default {
   methods: {
@@ -19,14 +20,14 @@ export default {
       } catch (e) {
         if (e instanceof AccessTokenExpiredError) {
           const res = await reAcquireAccessToken()
-          await this.$store.commit('setUserToken', res.data)
+          await this.$store.commit('setUserToken', res?.data?.data)
           return await callBoardApi(method, url, data, isRequireAuth, headers)
         }
       }
     },
     // csrf 토큰 용도
     $setSessionState() {
-      const uuid = self.crypto.randomUUID()
+      const uuid = uuid4()
       sessionStorage.setItem("state", uuid)
       return uuid
     },

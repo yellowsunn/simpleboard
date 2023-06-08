@@ -2,11 +2,13 @@ package com.yellowsunn.userservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.userservice.constant.OAuth2Type;
+import com.yellowsunn.userservice.dto.EmailLoginRequestDto;
 import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LinkUserRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2LoginOrSignUpRequestDto;
 import com.yellowsunn.userservice.dto.OAuth2SignUpRequestDto;
 import com.yellowsunn.userservice.dto.RefreshAccessTokenRequestDto;
+import com.yellowsunn.userservice.dto.UserEmailLoginCommand;
 import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2LinkCommand;
@@ -78,6 +80,38 @@ class ExternalUserAuthControllerTest extends RestDocsApiTest {
                                 fieldWithPath("code").description("결과 코드"),
                                 fieldWithPath("message").description("메시지"),
                                 fieldWithPath("data").description("생성 여부")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("이메일 로그인")
+    void loginEmail() throws Exception {
+        var requestDto = new EmailLoginRequestDto("test@example.com", "12345678");
+        given(userAuthService.loginEmail(any(UserEmailLoginCommand.class)))
+                .willReturn(UserLoginTokenDto.builder()
+                        .accessToken("<< access token >>")
+                        .refreshToken("<< refresh token >>")
+                        .build());
+
+        mockMvc.perform(post("/api/v2/auth/email/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto))
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("post-email-login",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("password").description("패스워드")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("code").description("결과 코드"),
+                                fieldWithPath("message").description("메시지"),
+                                fieldWithPath("data.accessToken").description("액세스 토큰"),
+                                fieldWithPath("data.refreshToken").description("리프레시 토큰")
                         )
                 ));
     }

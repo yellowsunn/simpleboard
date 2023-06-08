@@ -5,6 +5,9 @@
 === 이메일 회원가입 API
 operation::post-email-signup[]
 
+=== 이메일 로그인 API
+operation::post-email-login[]
+
 '''
 === OAuth2 로그인 혹은 회원가입 요청 API (로그인)
 operation::post-oauth2-login[]
