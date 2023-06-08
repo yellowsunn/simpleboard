@@ -23,7 +23,7 @@ export default {
     loginWithKakao() {
       window.Kakao.Auth.authorize({
         redirectUri: `${process.env.VUE_APP_FRONT_BASE_URL}/login/kakao`,
-        scope: "account_email,profile_image"
+        scope: "account_email"
       })
     },
   }

@@ -12,8 +12,8 @@ export default {
   },
   mounted() {
     this.naverLogin = new window.naver.LoginWithNaverId({
-      clientId: 'zJUlDFqIoVQ0qNY3rJW9',
-      callbackUrl: 'http://localhost:3000/login/naver',
+      clientId: process.env.VUE_APP_NAVER_CLIENT_ID,
+      callbackUrl: `${process.env.VUE_APP_FRONT_BASE_URL}/login/naver`,
       isPopup: false,
       loginButton: {color: 'green', type: 1, height: 50}
     })
