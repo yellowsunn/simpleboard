@@ -57,7 +57,7 @@ export default {
       }
       const formData = new FormData()
       formData.append('thumbnail', e.target.files[0])
-      const {isError, data} = await this.$boardApi('PATCH', '/api/v2/users/my-info/thumbnail', formData, true, {
+      const {isError, data} = await this.$boardApi('PATCH', '/api/v2/users/me/thumbnail', formData, true, {
         'Content-Type': 'multipart/form-data',
       })
       if (isError) {
@@ -71,7 +71,7 @@ export default {
       if (this.userInfo?.nickName === this.nickName) {
         return
       }
-      const {isError, data} = await this.$boardApi('PUT', '/api/v2/users/my-info', {
+      const {isError, data} = await this.$boardApi('PUT', '/api/v2/users/me', {
         nickName: this.nickName,
       }, true)
       // 실패
