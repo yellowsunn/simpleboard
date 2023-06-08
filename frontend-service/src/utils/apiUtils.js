@@ -24,7 +24,7 @@ async function callBoardApi(method, url, data, isRequireAuth, headers = {"Conten
     });
     return {
       isError: false,
-      data: response?.data,
+      data: response?.data?.data,
     }
   } catch (e) {
     const message = e?.response?.status === 429 ?

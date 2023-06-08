@@ -20,7 +20,7 @@ export default {
     }
 
     const code = found[0].replace('code=', "")?.trim()
-    const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/oauth2/login-signup', {
+    const {isError, data} = await this.$boardApi('POST', '/api/v2/auth/oauth2/authorize', {
       state: this.$setSessionState(),
       token: code,
       type: "kakao",
