@@ -40,9 +40,11 @@ public class ExternalUserAuthController {
     }
 
     @PostMapping("/api/v2/auth/email/login")
-    public UserLoginTokenDto loginEmail(@Valid @RequestBody EmailLoginRequestDto requestDto) {
+    public ResultResponse<UserLoginTokenDto> loginEmail(@Valid @RequestBody EmailLoginRequestDto requestDto) {
         var command = requestDto.toUserLoginCommand();
-        return userAuthService.loginEmail(command);
+        return ResultResponse.ok(
+                userAuthService.loginEmail(command)
+        );
     }
 
     @PostMapping("/api/v2/auth/oauth2/authorize")

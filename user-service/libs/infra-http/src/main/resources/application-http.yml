@@ -20,8 +20,8 @@ oauth2:
   kakao:
     client-id: b623fc344a47932f1df4c840426bb5df
     redirect-uri:
-      login: http://simpleforum.yellowsunn.com/login/kakao
-      user-link: http://simpleforum.yellowsunn.com/mypage/kakao/link
+      login: https://simpleforum.yellowsunn.com/login/kakao
+      user-link: https://simpleforum.yellowsunn.com/mypage/kakao/link
 
 micro-services:
   image-service-url: http://dev-simpleforum-image-service-svc:8080
