@@ -1,6 +1,7 @@
 package com.yellowsunn.notificationservice.controller
 
 import com.yellowsunn.common.annotation.LoginUser
+import com.yellowsunn.common.response.ResultResponse
 import com.yellowsunn.notificationservice.dto.NotificationDocumentPageDto
 import com.yellowsunn.notificationservice.service.NotificationService
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,17 +18,23 @@ class NotificationController(
         @LoginUser userId: Long,
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
-    ): NotificationDocumentPageDto {
-        return notificationService.findUserNotifications(userId, page, size)
+    ): ResultResponse<NotificationDocumentPageDto> {
+        return ResultResponse.ok(
+            notificationService.findUserNotifications(userId, page, size),
+        )
     }
 
     @PutMapping("/api/v1/notifications/me/read")
-    fun readMyNotifications(@LoginUser userId: Long): Long {
-        return notificationService.readUserNotifications(userId)
+    fun readMyNotifications(@LoginUser userId: Long): ResultResponse<Long> {
+        return ResultResponse.ok(
+            notificationService.readUserNotifications(userId),
+        )
     }
 
     @GetMapping("/api/v1/notifications/me/unread")
-    fun existMyUnreadNotifications(@LoginUser userId: Long): Boolean {
-        return notificationService.existUserUnreadNotifications(userId)
+    fun existMyUnreadNotifications(@LoginUser userId: Long): ResultResponse<Boolean> {
+        return ResultResponse.ok(
+            notificationService.existUserUnreadNotifications(userId),
+        )
     }
 }

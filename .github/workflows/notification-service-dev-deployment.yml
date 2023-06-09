@@ -45,7 +45,7 @@ jobs:
           gradle-version: wrapper
           cache-read-only: true
           arguments: |
-            :notification-service:apps:notification-kafka-consumer:jib
+            :notification-service:apps:notification-consumer:jib
             -Djib.to.image=${{ env.container-consumer-image }}
             -Djib.to.tags=${{ env.deployment-version }}
             -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }}
