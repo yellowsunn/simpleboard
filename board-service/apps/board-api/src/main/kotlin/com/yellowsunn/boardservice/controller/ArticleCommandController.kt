@@ -6,6 +6,7 @@ import com.yellowsunn.boardservice.command.facade.ArticleCommandFacade
 import com.yellowsunn.boardservice.dto.ArticleSaveRequestDto
 import com.yellowsunn.boardservice.dto.ArticleUpdateRequestDto
 import com.yellowsunn.common.annotation.LoginUser
+import com.yellowsunn.common.response.ResultResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -26,9 +27,11 @@ class ArticleCommandController(
         @LoginUser userId: Long,
         @Valid @RequestBody
         requestDto: ArticleSaveRequestDto,
-    ): Long {
+    ): ResultResponse<Long> {
         val command = requestDto.toCommand(userId)
-        return articleCommandFacade.saveArticle(command)
+        return ResultResponse.ok(
+            articleCommandFacade.saveArticle(command),
+        )
     }
 
     @PutMapping("/api/v2/articles/{articleId}")
@@ -37,34 +40,42 @@ class ArticleCommandController(
         @PathVariable articleId: Long,
         @Valid @RequestBody
         requestDto: ArticleUpdateRequestDto,
-    ): Boolean {
+    ): ResultResponse<Boolean> {
         val command = requestDto.toCommand(userId, articleId)
-        return articleCommandFacade.updateArticle(command)
+        return ResultResponse.ok(
+            articleCommandFacade.updateArticle(command),
+        )
     }
 
     @DeleteMapping("/api/v2/articles/{articleId}")
     fun deleteArticle(
         @LoginUser userId: Long,
         @PathVariable articleId: Long,
-    ): Boolean {
-        return articleCommandFacade.deleteArticle(userId, articleId)
+    ): ResultResponse<Boolean> {
+        return ResultResponse.ok(
+            articleCommandFacade.deleteArticle(userId, articleId),
+        )
     }
 
     @PutMapping("/api/v2/articles/{articleId}/like")
     fun likeArticle(
         @LoginUser userId: Long,
         @PathVariable articleId: Long,
-    ): Boolean {
+    ): ResultResponse<Boolean> {
         val command = ArticleLikeCommand(userId, articleId)
-        return articleCommandFacade.likeArticle(command)
+        return ResultResponse.ok(
+            articleCommandFacade.likeArticle(command),
+        )
     }
 
     @DeleteMapping("/api/v2/articles/{articleId}/like")
     fun undoLikeArticle(
         @LoginUser userId: Long,
         @PathVariable articleId: Long,
-    ): Boolean {
+    ): ResultResponse<Boolean> {
         val command = ArticleUndoLikeCommand(userId, articleId)
-        return articleCommandFacade.undoLikeArticle(command)
+        return ResultResponse.ok(
+            articleCommandFacade.undoLikeArticle(command),
+        )
     }
 }
