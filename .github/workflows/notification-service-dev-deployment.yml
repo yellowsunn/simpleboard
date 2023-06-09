@@ -1,0 +1,90 @@
+name: notification-service dev 배포 파이프라인
+on:
+  workflow_dispatch:
+jobs:
+  build-deploy:
+    runs-on:
+      - ubuntu-latest
+    env:
+      container-api-image: yellowsunn/simpleforum-notification-service
+      container-consumer-image: yellowsunn/simpleforum-notification-consumer
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Get current time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: yyyyMMDDHHmmss
+          utcOffset: "+09:00"
+      - name: Get deploy version
+        run: echo "deployment-version=SNAPSHOT-${{ steps.current-time.outputs.formattedTime }}" >> $GITHUB_ENV
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build and Deploy api server image
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
+          cache-read-only: true
+          arguments: |
+            :notification-service:apps:notification-api:jib
+            -Djib.to.image=${{ env.container-api-image }}
+            -Djib.to.tags=${{ env.deployment-version }}
+            -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }}
+            -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
+            -Djib.container.jvmFlags=-Dspring.profiles.active=dev,-Dmongodb-dev-uri=${{ secrets.MONGODB_DEV_URI }}
+            --stacktrace
+      - name: Build and Deploy consumer server image
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: wrapper
+          cache-read-only: true
+          arguments: |
+            :notification-service:apps:notification-kafka-consumer:jib
+            -Djib.to.image=${{ env.container-consumer-image }}
+            -Djib.to.tags=${{ env.deployment-version }}
+            -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }}
+            -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
+            -Djib.container.jvmFlags=-Dspring.profiles.active=dev,-Dmongodb-dev-uri=${{ secrets.MONGODB_DEV_URI }}
+            --stacktrace
+      - name: Dispatch changing api image tag action
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{owner}/{repo}/dispatches
+          owner: yellowsunn
+          repo: argocd-manifest
+          event_type: change-image-tag
+          client_payload: |
+            {
+              "requested-event-path": "${{ env.GITHUB_EVENT_PATH }}",
+              "container-image": "${{ env.container-api-image }}",
+              "deployment-version": "${{ env.deployment-version }}",
+              "overlay-path": "manifest/simpleforum/notification-service/overlays/dev"
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_PERSONAL_ACCESS_TOKEN }}
+      - name: Sleep for 30 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '30s'
+      - name: Dispatch changing consumer image tag action
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{owner}/{repo}/dispatches
+          owner: yellowsunn
+          repo: argocd-manifest
+          event_type: change-image-tag
+          client_payload: |
+            {
+              "requested-event-path": "${{ env.GITHUB_EVENT_PATH }}",
+              "container-image": "${{ env.container-consumer-image }}",
+              "deployment-version": "${{ env.deployment-version }}",
+              "overlay-path": "manifest/simpleforum/notification-consumer/overlays/dev"
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_PERSONAL_ACCESS_TOKEN }}
