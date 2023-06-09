@@ -1,5 +1,6 @@
 name: board-service consumer 배포 파이프라인
 on:
+  workflow_call:
   workflow_dispatch:
 jobs:
   build-deploy:
