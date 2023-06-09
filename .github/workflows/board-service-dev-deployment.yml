@@ -68,10 +68,10 @@ jobs:
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_HUB_PERSONAL_ACCESS_TOKEN }}
-      - name: Sleep for 10 seconds
+      - name: Sleep for 30 seconds
         uses: jakejarvis/wait-action@master
         with:
-          time: '10s'
+          time: '30s'
       - name: Dispatch changing consumer image tag action
         uses: octokit/request-action@v2.x
         with:
