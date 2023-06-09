@@ -2,7 +2,7 @@ package com.yellowsunn.notificationservice.exception
 
 import com.yellowsunn.common.exception.LoginRequireException
 import com.yellowsunn.common.exception.LoginUserNotFoundException
-import com.yellowsunn.common.response.ErrorResponse
+import com.yellowsunn.common.response.ResultResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -18,45 +18,37 @@ class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException::class, IllegalStateException::class)
-    protected fun handleIllegalArgumentAndStateException(e: Exception): ErrorResponse {
+    protected fun handleIllegalArgumentAndStateException(e: Exception): ResultResponse<Void> {
         logger.warn("Illegal request. message={}", e.message, e)
-        return ErrorResponse.builder()
-            .code(HttpStatus.BAD_REQUEST.name)
-            .message(e.message)
-            .status(HttpStatus.BAD_REQUEST.value())
-            .build()
+        return ResultResponse.failed(HttpStatus.BAD_REQUEST.name, e.message)
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    protected fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ErrorResponse {
+    protected fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResultResponse<Void> {
         logger.warn("Invalid request. message={}", e.message, e)
-        return ErrorResponse.builder()
-            .code(HttpStatus.BAD_REQUEST.name)
-            .message(getFirstErrorMessage(e.allErrors))
-            .status(HttpStatus.BAD_REQUEST.value())
-            .build()
+        return ResultResponse.failed(HttpStatus.BAD_REQUEST.name, getFirstErrorMessage(e.allErrors))
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(LoginRequireException::class)
-    protected fun handleInvalidAuthorizationException(e: LoginRequireException): ErrorResponse? {
+    protected fun handleInvalidAuthorizationException(e: LoginRequireException): ResultResponse<Void> {
         logger.warn("Login required. message={}", e.message, e)
-        return ErrorResponse.requireLogin()
+        return ResultResponse.requireLogin()
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(LoginUserNotFoundException::class)
-    protected fun handleUserNotFoundException(e: LoginUserNotFoundException): ErrorResponse {
+    protected fun handleUserNotFoundException(e: LoginUserNotFoundException): ResultResponse<Void> {
         logger.warn("Not found user. message={}", e.message, e)
-        return ErrorResponse.notFoundLoginUser()
+        return ResultResponse.notFoundLoginUser()
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(RuntimeException::class)
-    protected fun handleUnknownException(e: RuntimeException): ErrorResponse {
+    protected fun handleUnknownException(e: RuntimeException): ResultResponse<Void> {
         logger.error("Unknown exception. message={}", e.message, e)
-        return ErrorResponse.unknownError()
+        return ResultResponse.unknownError()
     }
 
     private fun getFirstErrorMessage(errors: List<ObjectError>?): String {

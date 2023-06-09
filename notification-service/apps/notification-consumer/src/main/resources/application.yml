@@ -13,12 +13,13 @@ spring:
     import:
       - 'classpath:application-mongodb.yml'
 ---
-server:
-  port: 8183
-spring:
-  profiles:
-    active: local
+server.port: 8183
+spring.config.activate.on-profile: local
 
 my-kafka:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
+---
+spring.config.activate.on-profile: dev
 
+my-kafka:
+  bootstrap-servers: 192.168.29.201:9092, 192.168.29.202:9092, 192.168.29.203:9092
