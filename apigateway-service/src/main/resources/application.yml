@@ -103,7 +103,7 @@ spring:
 
 endpoint:
   user-service: http://dev-simpleforum-user-service-svc:8080
-  board-service: http://localhost:8081
+  board-service: http://dev-simpleforum-board-service-svc:8080
   image-service: http://dev-simpleforum-image-service-svc:8080
   notification-service: http://localhost:8083
 

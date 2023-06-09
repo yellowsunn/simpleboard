@@ -7,4 +7,5 @@ object BoardServiceVersions {
     const val springCloudAws = "2.2.6.RELEASE"
     const val commonsIo = "2.11.0"
     const val jaxb = "2.3.1"
+    const val jib = "3.3.1"
 }

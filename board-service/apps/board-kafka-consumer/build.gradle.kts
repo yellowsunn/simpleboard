@@ -1,3 +1,9 @@
+import com.google.cloud.tools.jib.gradle.JibExtension
+
+plugins {
+    id("com.google.cloud.tools.jib") version BoardServiceVersions.jib
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.kafka:spring-kafka")
@@ -11,4 +17,13 @@ dependencies {
     runtimeOnly(project(":board-service:libs:infra-persistence"))
     runtimeOnly(project(":board-service:libs:infra-mongodb"))
     runtimeOnly(project(":board-service:libs:infra-redis"))
+}
+
+configure<JibExtension> {
+    from {
+        image = "eclipse-temurin:17-jre-alpine"
+    }
+    container {
+        ports = listOf("8080")
+    }
 }

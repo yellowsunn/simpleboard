@@ -1,4 +1,4 @@
-name: board-service dev 배포 파이프라인
+name: board-service consumer 배포 파이프라인
 on:
   workflow_dispatch:
 jobs:
@@ -6,7 +6,7 @@ jobs:
     runs-on:
       - ubuntu-latest
     env:
-      container-image: yellowsunn/simpleforum-board-service
+      container-image: yellowsunn/simpleforum-board-consumer
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -25,13 +25,13 @@ jobs:
         run: echo "deployment-version=SNAPSHOT-${{ steps.current-time.outputs.formattedTime }}" >> $GITHUB_ENV
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build and Deploy api server image
+      - name: Build and Deploy image
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: wrapper
           cache-read-only: true
           arguments: |
-            :board-service:apps:board-api:jib
+            :board-service:apps:board-kafka-consumer:jib
             -Djib.to.image=${{ env.container-image }}
             -Djib.to.tags=${{ env.deployment-version }}
             -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }}
@@ -50,9 +50,7 @@ jobs:
               "requested-event-path": "${{ env.GITHUB_EVENT_PATH }}",
               "container-image": "${{ env.container-image }}",
               "deployment-version": "${{ env.deployment-version }}",
-              "overlay-path": "manifest/simpleforum/board-service/overlays/dev"
+              "overlay-path": "manifest/simpleforum/board-consumer/overlays/dev"
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_HUB_PERSONAL_ACCESS_TOKEN }}
-  trigger-board-consumer-deploy:
-    uses: ./.github/workflows/board-consumer-dev-deployment.yml
