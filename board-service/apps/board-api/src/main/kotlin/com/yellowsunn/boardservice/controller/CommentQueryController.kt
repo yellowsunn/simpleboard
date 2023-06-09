@@ -4,6 +4,7 @@ import com.yellowsunn.boardservice.query.dto.CommentDocumentPageDto
 import com.yellowsunn.boardservice.query.dto.UserCommentDocumentPageDto
 import com.yellowsunn.boardservice.query.service.CommentQueryService
 import com.yellowsunn.common.annotation.LoginUser
+import com.yellowsunn.common.response.ResultResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
@@ -18,8 +19,10 @@ class CommentQueryController(
         @PathVariable articleId: Long,
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
-    ): CommentDocumentPageDto {
-        return commentQueryService.findComments(articleId, page, size)
+    ): ResultResponse<CommentDocumentPageDto> {
+        return ResultResponse.ok(
+            commentQueryService.findComments(articleId, page, size),
+        )
     }
 
     @GetMapping("/api/v2/comments/me")
@@ -27,15 +30,19 @@ class CommentQueryController(
         @LoginUser userId: Long,
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
-    ): UserCommentDocumentPageDto {
-        return commentQueryService.findUserComments(userId, page, size)
+    ): ResultResponse<UserCommentDocumentPageDto> {
+        return ResultResponse.ok(
+            commentQueryService.findUserComments(userId, page, size),
+        )
     }
 
     @GetMapping("/api/v2/comments/{commentId}/page")
     fun getCommentPage(
         @PathVariable commentId: Long,
         @RequestParam(defaultValue = "10") size: Int,
-    ): Long? {
-        return commentQueryService.findCommentPage(commentId, size)
+    ): ResultResponse<Long?> {
+        return ResultResponse.ok(
+            commentQueryService.findCommentPage(commentId, size),
+        )
     }
 }

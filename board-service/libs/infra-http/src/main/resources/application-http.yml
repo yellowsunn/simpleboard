@@ -2,9 +2,13 @@ spring:
   profiles:
     default: local
 ---
-spring:
-  profiles:
-    active: local
+spring.config.activate.on-profile: local
 
 micro-services:
   user-service-url: http://localhost:8080
+---
+spring.config.activate.on-profile: dev
+
+micro-services:
+  user-service-url: http://dev-simpleforum-user-service-svc:8080
+
