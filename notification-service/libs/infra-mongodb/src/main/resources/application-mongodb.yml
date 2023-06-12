@@ -2,8 +2,16 @@ spring:
   profiles:
     default: local
 ---
+spring.config.activate.on-profile: local
 spring:
   data:
     mongodb:
       uri: mongodb://root:password@localhost:27017/notification?authSource=admin
+      auto-index-creation: true
+---
+spring.config.activate.on-profile: dev
+spring:
+  data:
+    mongodb:
+      uri: ${mongodb-dev-uri}/notification?authSource=admin
       auto-index-creation: true

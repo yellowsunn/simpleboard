@@ -1,9 +1,10 @@
 package com.yellowsunn.boardservice.controller
 
 import com.yellowsunn.boardservice.command.dto.CommentSavedDto
-import com.yellowsunn.boardservice.command.facade.CommentCommandFacade
+import com.yellowsunn.boardservice.command.facade.CommentFacade
 import com.yellowsunn.boardservice.dto.CommentSaveRequestDto
 import com.yellowsunn.common.annotation.LoginUser
+import com.yellowsunn.common.response.ResultResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CommentCommandController(
-    private val commentCommandFacade: CommentCommandFacade,
+class CommentController(
+    private val commentFacade: CommentFacade,
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -26,9 +27,11 @@ class CommentCommandController(
         @PathVariable articleId: Long,
         @Valid @RequestBody
         requestDto: CommentSaveRequestDto,
-    ): CommentSavedDto {
+    ): ResultResponse<CommentSavedDto> {
         val command = requestDto.toCommand(userId, articleId)
-        return commentCommandFacade.saveComment(command)
+        return ResultResponse.ok(
+            commentFacade.saveComment(command),
+        )
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -39,9 +42,11 @@ class CommentCommandController(
         @PathVariable commentId: Long,
         @Valid @RequestBody
         requestDto: CommentSaveRequestDto,
-    ): CommentSavedDto {
+    ): ResultResponse<CommentSavedDto> {
         val command = requestDto.toCommand(userId, articleId, commentId)
-        return commentCommandFacade.saveComment(command)
+        return ResultResponse.ok(
+            commentFacade.saveComment(command),
+        )
     }
 
     @DeleteMapping("/api/v2/articles/{articleId}/comments/{commentId}")
@@ -49,8 +54,10 @@ class CommentCommandController(
         @LoginUser userId: Long,
         @PathVariable articleId: Long,
         @PathVariable commentId: Long,
-    ): Boolean {
-        return commentCommandFacade.deleteComment(commentId, articleId, userId)
+    ): ResultResponse<Boolean> {
+        return ResultResponse.ok(
+            commentFacade.deleteComment(commentId, articleId, userId),
+        )
     }
 
     @PutMapping("/api/v2/articles/{articleId}/comments/{commentId}/like")
@@ -58,8 +65,10 @@ class CommentCommandController(
         @LoginUser userId: Long,
         @PathVariable articleId: Long,
         @PathVariable commentId: Long,
-    ): Boolean {
-        return commentCommandFacade.likeComment(commentId, articleId, userId)
+    ): ResultResponse<Boolean> {
+        return ResultResponse.ok(
+            commentFacade.likeComment(commentId, articleId, userId),
+        )
     }
 
     @DeleteMapping("/api/v2/articles/{articleId}/comments/{commentId}/like")
@@ -67,7 +76,9 @@ class CommentCommandController(
         @LoginUser userId: Long,
         @PathVariable articleId: Long,
         @PathVariable commentId: Long,
-    ): Boolean {
-        return commentCommandFacade.undoLikeComment(commentId, articleId, userId)
+    ): ResultResponse<Boolean> {
+        return ResultResponse.ok(
+            commentFacade.undoLikeComment(commentId, articleId, userId),
+        )
     }
 }

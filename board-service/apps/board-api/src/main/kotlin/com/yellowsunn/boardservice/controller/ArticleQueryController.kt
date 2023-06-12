@@ -6,6 +6,7 @@ import com.yellowsunn.boardservice.query.dto.ArticleReactionDocumentDto
 import com.yellowsunn.boardservice.query.dto.UserArticleDocumentPageDto
 import com.yellowsunn.boardservice.query.service.ArticleQueryService
 import com.yellowsunn.common.annotation.LoginUser
+import com.yellowsunn.common.response.ResultResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestParam
@@ -19,8 +20,10 @@ class ArticleQueryController(
     fun getArticles(
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
-    ): ArticleDocumentPageDto {
-        return articleQueryService.findArticles(page, size)
+    ): ResultResponse<ArticleDocumentPageDto> {
+        return ResultResponse.ok(
+            articleQueryService.findArticles(page, size),
+        )
     }
 
     @GetMapping("/api/v2/articles/me")
@@ -28,24 +31,30 @@ class ArticleQueryController(
         @LoginUser userId: Long,
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
-    ): UserArticleDocumentPageDto {
-        return articleQueryService.findUserArticles(userId, page, size)
+    ): ResultResponse<UserArticleDocumentPageDto> {
+        return ResultResponse.ok(
+            articleQueryService.findUserArticles(userId, page, size),
+        )
     }
 
     @GetMapping("/api/v2/articles/{articleId}")
-    fun getArticle(@PathVariable articleId: Long): ArticleDocumentDto {
-        return articleQueryService.findArticleById(articleId)
+    fun getArticle(@PathVariable articleId: Long): ResultResponse<ArticleDocumentDto> {
+        return ResultResponse.ok(
+            articleQueryService.findArticleById(articleId),
+        )
     }
 
     @GetMapping("/api/v2/articles/{articleId}/reaction")
     fun getArticleReaction(
         @PathVariable articleId: Long,
         @LoginUser(required = false) userId: Long?,
-    ): ArticleReactionDocumentDto? {
-        return if (userId != null) {
-            articleQueryService.findReactionByArticleId(articleId, userId)
-        } else {
-            null
-        }
+    ): ResultResponse<ArticleReactionDocumentDto?> {
+        val articleReactionDocumentDto: ArticleReactionDocumentDto? =
+            if (userId != null) {
+                articleQueryService.findReactionByArticleId(articleId, userId)
+            } else {
+                null
+            }
+        return ResultResponse.ok(articleReactionDocumentDto)
     }
 }

@@ -7,9 +7,12 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 ---
-spring:
-  profiles:
-    active: local
+spring.config.activate.on-profile: local
 
 my-kafka:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
+---
+spring.config.activate.on-profile: dev
+
+my-kafka:
+  bootstrap-servers: 192.168.29.201:9092, 192.168.29.202:9092, 192.168.29.203:9092

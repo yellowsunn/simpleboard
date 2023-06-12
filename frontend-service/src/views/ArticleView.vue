@@ -1,28 +1,30 @@
 <template>
-    <div class="mx-auto" v-if="article" style="max-width: 950px; padding: 0 15px">
-        <ArticleHeader :article="article"/>
-        <section class="py-4">
-            <div class="article-content" v-html="article?.body"></div>
-        </section>
-        <section class="like-container mb-4">
-            <div class="border rounded py-2 px-3" style="cursor: pointer"
-                 @click="isArticleLiked ? handleUndoLike() : handleLike()">
-                <font-awesome-icon icon="fa-regular fa-thumbs-up" v-if="!isArticleLiked"/>
-                <font-awesome-icon icon="fa-solid fa-thumbs-up" v-else/>
-                <div style="user-select: none">좋아요</div>
-            </div>
-        </section>
-        <section class="button-group">
-            <button class="btn btn-outline-secondary py-2" @click="$router.push('/articles')">목록</button>
-            <button class="btn btn-outline-success py-2" @click="routeArticleEdit">수정</button>
-            <button class="btn btn-outline-danger py-2" v-if="userUUID = article?.user?.uuid"
-                    @click="handleRemoveArticle">삭제
-            </button>
-        </section>
-        <section v-if="commentPage">
-            <CommentList :commentPage="commentPage"></CommentList>
-        </section>
-    </div>
+  <div class="mx-auto" v-if="article" style="max-width: 950px; padding: 0 15px">
+    <ArticleHeader :article="article"/>
+    <section class="py-4">
+      <div class="article-content" v-html="article?.body"></div>
+    </section>
+    <section class="like-container mb-4">
+      <div class="border rounded py-2 px-3" style="cursor: pointer"
+           @click="isArticleLiked ? handleUndoLike() : handleLike()">
+        <font-awesome-icon icon="fa-regular fa-thumbs-up" v-if="!isArticleLiked"/>
+        <font-awesome-icon icon="fa-solid fa-thumbs-up" v-else/>
+        <div style="user-select: none">좋아요</div>
+      </div>
+    </section>
+    <section class="button-group">
+      <button class="btn btn-outline-secondary py-2" @click="$router.push('/articles')">목록</button>
+      <button class="btn btn-outline-success py-2" v-if="userUUID === article?.user?.uuid"
+              @click="routeArticleEdit">수정
+      </button>
+      <button class="btn btn-outline-danger py-2" v-if="userUUID === article?.user?.uuid"
+              @click="handleRemoveArticle">삭제
+      </button>
+    </section>
+    <section v-if="commentPage">
+      <CommentList :commentPage="commentPage"></CommentList>
+    </section>
+  </div>
 </template>
 
 <script>
