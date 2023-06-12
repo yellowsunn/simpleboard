@@ -1,7 +1,7 @@
 package com.yellowsunn.boardservice.kafka.producer
 
 import com.yellowsunn.boardservice.command.event.producer.CommentEventProducer
-import com.yellowsunn.boardservice.command.event.producer.data.CommentDocumentSyncData
+import com.yellowsunn.boardservice.command.event.producer.data.CommentDocumentSyncMessage
 import com.yellowsunn.boardservice.command.event.producer.data.ProducerData
 import com.yellowsunn.common.constant.KafkaTopicConst.COMMENT_DOCUMENT_SYNC_TOPIC
 import org.springframework.kafka.core.KafkaTemplate
@@ -14,7 +14,7 @@ class CommentKafkaEventProducer(
     DefaultKafkaEventProducer() {
 
     override fun syncCommentDocument(commentId: Long) {
-        val data = CommentDocumentSyncData(commentId)
+        val data = CommentDocumentSyncMessage(commentId)
         kafkaTemplate.sendData(COMMENT_DOCUMENT_SYNC_TOPIC, data)
     }
 }

@@ -1,6 +1,6 @@
 package com.yellowsunn.boardservice.consumer
 
-import com.yellowsunn.boardservice.command.event.producer.data.CommentDocumentSyncData
+import com.yellowsunn.boardservice.command.event.producer.data.CommentDocumentSyncMessage
 import com.yellowsunn.boardservice.constant.SYNC_GROUP
 import com.yellowsunn.boardservice.service.CommentSyncService
 import com.yellowsunn.common.constant.KafkaTopicConst.COMMENT_DOCUMENT_SYNC_TOPIC
@@ -16,7 +16,7 @@ class CommentEventConsumer(
         topics = [COMMENT_DOCUMENT_SYNC_TOPIC],
         groupId = SYNC_GROUP,
     )
-    fun syncCommentDocument(@Payload payload: CommentDocumentSyncData) {
+    fun syncCommentDocument(@Payload payload: CommentDocumentSyncMessage) {
         commentSyncService.syncCommentDocument(payload.commentId)
     }
 
