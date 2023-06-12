@@ -2,7 +2,7 @@ package com.yellowsunn.boardservice.controller
 
 import com.yellowsunn.boardservice.command.dto.ArticleLikeCommand
 import com.yellowsunn.boardservice.command.dto.ArticleUndoLikeCommand
-import com.yellowsunn.boardservice.command.facade.ArticleCommandFacade
+import com.yellowsunn.boardservice.command.facade.ArticleFacade
 import com.yellowsunn.boardservice.dto.ArticleSaveRequestDto
 import com.yellowsunn.boardservice.dto.ArticleUpdateRequestDto
 import com.yellowsunn.common.annotation.LoginUser
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ArticleCommandController(
-    private val articleCommandFacade: ArticleCommandFacade,
+class ArticleController(
+    private val articleFacade: ArticleFacade,
 ) {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v2/articles")
@@ -30,7 +30,7 @@ class ArticleCommandController(
     ): ResultResponse<Long> {
         val command = requestDto.toCommand(userId)
         return ResultResponse.ok(
-            articleCommandFacade.saveArticle(command),
+            articleFacade.saveArticle(command),
         )
     }
 
@@ -43,7 +43,7 @@ class ArticleCommandController(
     ): ResultResponse<Boolean> {
         val command = requestDto.toCommand(userId, articleId)
         return ResultResponse.ok(
-            articleCommandFacade.updateArticle(command),
+            articleFacade.updateArticle(command),
         )
     }
 
@@ -53,7 +53,7 @@ class ArticleCommandController(
         @PathVariable articleId: Long,
     ): ResultResponse<Boolean> {
         return ResultResponse.ok(
-            articleCommandFacade.deleteArticle(userId, articleId),
+            articleFacade.deleteArticle(userId, articleId),
         )
     }
 
@@ -64,7 +64,7 @@ class ArticleCommandController(
     ): ResultResponse<Boolean> {
         val command = ArticleLikeCommand(userId, articleId)
         return ResultResponse.ok(
-            articleCommandFacade.likeArticle(command),
+            articleFacade.likeArticle(command),
         )
     }
 
@@ -75,7 +75,7 @@ class ArticleCommandController(
     ): ResultResponse<Boolean> {
         val command = ArticleUndoLikeCommand(userId, articleId)
         return ResultResponse.ok(
-            articleCommandFacade.undoLikeArticle(command),
+            articleFacade.undoLikeArticle(command),
         )
     }
 }

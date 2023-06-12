@@ -6,7 +6,6 @@ import org.apache.commons.text.StringEscapeUtils
 import java.time.ZonedDateTime
 
 data class ArticleDocumentDto(
-    val id: String,
     val articleId: Long,
     val title: String,
     val body: String,
@@ -19,7 +18,6 @@ data class ArticleDocumentDto(
     companion object {
         fun from(articleDocument: ArticleDocument, users: Map<Long, SimpleUser>, increasedViewCount: Long) =
             ArticleDocumentDto(
-                id = articleDocument.id,
                 articleId = articleDocument.articleId,
                 title = articleDocument.title,
                 body = StringEscapeUtils.unescapeHtml4(articleDocument.body),

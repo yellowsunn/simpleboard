@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 
 @Component
-class CommentCommandFacade(
+class CommentFacade(
     private val userHttpClient: UserHttpClient,
     private val commentCommandService: CommentCommandService,
     private val applicationEventPublisher: ApplicationEventPublisher,

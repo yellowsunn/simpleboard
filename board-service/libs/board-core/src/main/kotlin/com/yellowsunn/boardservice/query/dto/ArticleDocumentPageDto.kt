@@ -14,7 +14,6 @@ data class ArticleDocumentPageDto(
     val totalElements: Long,
 ) {
     data class ArticleDocumentDto(
-        val id: String,
         val articleId: Long,
         val thumbnail: String,
         val title: String,
@@ -54,7 +53,6 @@ data class ArticleDocumentPageDto(
             nickName: String,
             increasedViewCount: Long,
         ): ArticleDocumentDto = ArticleDocumentDto(
-            id = document.id,
             articleId = document.articleId,
             thumbnail = document.thumbnail ?: "",
             title = document.title,
