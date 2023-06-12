@@ -14,7 +14,8 @@
         <div class="d-block notification-content">{{ notification.content }}</div>
       </div>
     </section>
-    <CustomPagination class="m-3" v-if="pageInfo" :page-info="pageInfo" :page-size="5" @click-page="clickPage"></CustomPagination>
+    <CustomPagination class="m-3" v-if="pageInfo" :page-info="pageInfo" :page-size="5"
+                      @click-page="clickPage"></CustomPagination>
   </div>
 </template>
 
@@ -49,7 +50,7 @@ export default {
     timeAgoFormat,
     async clickNotification(notification) {
       const type = notification?.data?.type
-      if (type === 'comment') {
+      if (type === 'comment' || type === 'commentLike') {
         const {articleId, commentId} = notification?.data
         const {isError, data} = await this.$boardApi('GET', `/api/v2/comments/${commentId}/page`, undefined, true)
         if (isError) {
@@ -57,6 +58,9 @@ export default {
           return
         }
         this.$router.push(`/articles/${articleId}?comment-page=${data}#comment-${commentId}`)
+      } else if (type === 'articleLike') {
+        const {articleId} = notification?.data
+        this.$router.push(`/articles/${articleId}`)
       }
     },
     async readNotifications() {
