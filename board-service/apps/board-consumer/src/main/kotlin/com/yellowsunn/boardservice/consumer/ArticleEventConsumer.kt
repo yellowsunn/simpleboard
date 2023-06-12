@@ -1,7 +1,7 @@
 package com.yellowsunn.boardservice.consumer
 
-import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncData
-import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncData
+import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncMessage
+import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncMessage
 import com.yellowsunn.boardservice.constant.SYNC_GROUP
 import com.yellowsunn.boardservice.service.ArticleSyncService
 import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_DOCUMENT_SYNC_TOPIC
@@ -18,7 +18,7 @@ class ArticleEventConsumer(
         topics = [ARTICLE_DOCUMENT_SYNC_TOPIC],
         groupId = SYNC_GROUP,
     )
-    fun syncArticleDocument(@Payload payload: ArticleDocumentSyncData) {
+    fun syncArticleDocument(@Payload payload: ArticleDocumentSyncMessage) {
         articleSyncService.syncArticleDocument(payload.articleId)
     }
 
@@ -26,7 +26,7 @@ class ArticleEventConsumer(
         topics = [ARTICLE_REACTION_DOCUMENT_SYNC_TOPIC],
         groupId = SYNC_GROUP,
     )
-    fun syncArticleReactionDocument(@Payload payload: ArticleReactionDocumentSyncData) {
+    fun syncArticleReactionDocument(@Payload payload: ArticleReactionDocumentSyncMessage) {
         articleSyncService.syncArticleReactionDocument(payload.articleId, payload.userId)
     }
 }

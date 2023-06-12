@@ -1,8 +1,8 @@
 package com.yellowsunn.boardservice.kafka.producer
 
 import com.yellowsunn.boardservice.command.event.producer.ArticleEventProducer
-import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncData
-import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncData
+import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncMessage
+import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncMessage
 import com.yellowsunn.boardservice.command.event.producer.data.ProducerData
 import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_DOCUMENT_SYNC_TOPIC
 import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_REACTION_DOCUMENT_SYNC_TOPIC
@@ -16,12 +16,12 @@ class ArticleKafkaEventProducer(
     DefaultKafkaEventProducer() {
 
     override fun syncArticleDocument(articleId: Long) {
-        val data = ArticleDocumentSyncData(articleId)
+        val data = ArticleDocumentSyncMessage(articleId)
         kafkaTemplate.sendData(ARTICLE_DOCUMENT_SYNC_TOPIC, data)
     }
 
     override fun syncArticleReactionDocument(articleId: Long, userId: Long) {
-        val data = ArticleReactionDocumentSyncData(articleId = articleId, userId = userId)
+        val data = ArticleReactionDocumentSyncMessage(articleId = articleId, userId = userId)
         kafkaTemplate.sendData(ARTICLE_REACTION_DOCUMENT_SYNC_TOPIC, data)
     }
 }
