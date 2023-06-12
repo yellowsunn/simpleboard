@@ -55,4 +55,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_HUB_PERSONAL_ACCESS_TOKEN }}
   trigger-update-api-document:
-    uses: ./.github/workflows/image-service-restdocs.yml
+    uses: ./.github/workflows/restdocs/image-service-restdocs.yml
