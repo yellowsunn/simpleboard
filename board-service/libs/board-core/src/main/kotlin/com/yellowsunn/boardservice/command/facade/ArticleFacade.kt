@@ -18,7 +18,7 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 
 @Component
-class ArticleCommandFacade(
+class ArticleFacade(
     private val userHttpClient: UserHttpClient,
     private val articleCommandService: ArticleCommandService,
     private val applicationEventPublisher: ApplicationEventPublisher,

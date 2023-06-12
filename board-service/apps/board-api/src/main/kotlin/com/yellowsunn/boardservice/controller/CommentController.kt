@@ -1,7 +1,7 @@
 package com.yellowsunn.boardservice.controller
 
 import com.yellowsunn.boardservice.command.dto.CommentSavedDto
-import com.yellowsunn.boardservice.command.facade.CommentCommandFacade
+import com.yellowsunn.boardservice.command.facade.CommentFacade
 import com.yellowsunn.boardservice.dto.CommentSaveRequestDto
 import com.yellowsunn.common.annotation.LoginUser
 import com.yellowsunn.common.response.ResultResponse
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CommentCommandController(
-    private val commentCommandFacade: CommentCommandFacade,
+class CommentController(
+    private val commentFacade: CommentFacade,
 ) {
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -30,7 +30,7 @@ class CommentCommandController(
     ): ResultResponse<CommentSavedDto> {
         val command = requestDto.toCommand(userId, articleId)
         return ResultResponse.ok(
-            commentCommandFacade.saveComment(command),
+            commentFacade.saveComment(command),
         )
     }
 
@@ -45,7 +45,7 @@ class CommentCommandController(
     ): ResultResponse<CommentSavedDto> {
         val command = requestDto.toCommand(userId, articleId, commentId)
         return ResultResponse.ok(
-            commentCommandFacade.saveComment(command),
+            commentFacade.saveComment(command),
         )
     }
 
@@ -56,7 +56,7 @@ class CommentCommandController(
         @PathVariable commentId: Long,
     ): ResultResponse<Boolean> {
         return ResultResponse.ok(
-            commentCommandFacade.deleteComment(commentId, articleId, userId),
+            commentFacade.deleteComment(commentId, articleId, userId),
         )
     }
 
@@ -67,7 +67,7 @@ class CommentCommandController(
         @PathVariable commentId: Long,
     ): ResultResponse<Boolean> {
         return ResultResponse.ok(
-            commentCommandFacade.likeComment(commentId, articleId, userId),
+            commentFacade.likeComment(commentId, articleId, userId),
         )
     }
 
@@ -78,7 +78,7 @@ class CommentCommandController(
         @PathVariable commentId: Long,
     ): ResultResponse<Boolean> {
         return ResultResponse.ok(
-            commentCommandFacade.undoLikeComment(commentId, articleId, userId),
+            commentFacade.undoLikeComment(commentId, articleId, userId),
         )
     }
 }
