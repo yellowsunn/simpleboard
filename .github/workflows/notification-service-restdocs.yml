@@ -1,4 +1,4 @@
-name: user-service rest docs api 업데이트 파이프라인
+name: board-service rest docs api 업데이트 파이프라인
 on:
   workflow_call:
 jobs:
@@ -28,8 +28,8 @@ jobs:
           git checkout -t origin/gh-pages
       - name: Update rest docs api document
         run: |
-          ./gradlew :user-service:apps:user-api:asciidoctor
-          mv ./user-service/apps/user-api/build/docs/asciidoc/index.html ./docs/user-service.html
+          ./gradlew :notification-service:apps:notification-api:asciidoctor
+          mv ./notification-service/apps/notification-api/build/docs/asciidoc/index.html ./docs/notification-service.html
       - name: commit api document
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
