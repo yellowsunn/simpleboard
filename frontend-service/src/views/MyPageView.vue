@@ -1,35 +1,31 @@
 <template>
-    <div v-if="userInfo" class="mx-auto" style="max-width: 950px">
-        <div class="mb-2">
-            <MyPageHeader></MyPageHeader>
-        </div>
-        <div class="d-flex justify-content-between user-info-content">
-            <div class="mx-3" style="width: 360px">
-                <MyPageUserInfo :userInfo="userInfo"
-                                @update-thumbnail="updateThumbnail"
-                                @update-user-info="updateUserInfo"></MyPageUserInfo>
-            </div>
-            <div class="vr my-3"></div>
-            <div class="mx-3" style="width: 360px">
-                <MyPageUserLink v-if="userProviders" :userProviders="userProviders"></MyPageUserLink>
-            </div>
-        </div>
-        <div class="d-flex justify-content-end my-5 me-3">
-            <button type="button" class="btn btn-danger btn-lg" @click="deleteUserInfo">회원탈퇴</button>
-        </div>
+  <div v-if="userInfo" class="mx-auto" style="max-width: 950px">
+    <div class="d-flex justify-content-between user-info-content">
+      <div class="mx-3" style="width: 360px">
+        <MyPageUserInfo :userInfo="userInfo"
+                        @update-thumbnail="updateThumbnail"
+                        @update-user-info="updateUserInfo"></MyPageUserInfo>
+      </div>
+      <div class="vr my-3"></div>
+      <div class="mx-3" style="width: 360px">
+        <MyPageUserLink v-if="userProviders" :userProviders="userProviders"></MyPageUserLink>
+      </div>
     </div>
-    <EditFinished></EditFinished>
+    <div class="d-flex justify-content-end my-5 me-3">
+      <button type="button" class="btn btn-danger btn-lg" @click="deleteUserInfo">회원탈퇴</button>
+    </div>
+  </div>
+  <EditFinished></EditFinished>
 </template>
 
 <script>
-import MyPageHeader from "@/components/mypage/MyPageHeader.vue";
 import MyPageUserInfo from "@/components/mypage/MyPageUserInfo.vue";
 import MyPageUserLink from "@/components/mypage/MyPageUserLink.vue";
 import EditFinished from "@/components/EditFinshed.vue";
 
 export default {
   name: "MyPageView",
-  components: {EditFinished, MyPageUserLink, MyPageUserInfo, MyPageHeader},
+  components: {EditFinished, MyPageUserLink, MyPageUserInfo},
   async mounted() {
     const {isError, data} = await this.$boardApi('GET', '/api/v2/users/me', undefined, true)
     if (isError) {
@@ -89,9 +85,9 @@ export default {
 
 <style scoped>
 @media (max-width: 720px) {
-    .user-info-content {
-        align-items: center;
-        flex-direction: column;
-    }
+  .user-info-content {
+    align-items: center;
+    flex-direction: column;
+  }
 }
 </style>
