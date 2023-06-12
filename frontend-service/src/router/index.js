@@ -14,47 +14,47 @@ const routes = [
   {
     path: "/login/naver",
     name: "NaverLoginCallback",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/callback/NaverLoginCallbackView.vue'),
+    component: () => import(/* webpackChunkName: "login-naver" */ '@/views/callback/NaverLoginCallbackView.vue'),
   },
   {
     path: "/login/kakao",
     name: "KakaoLoginCallback",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/callback/KakaoLoginCallbackView.vue'),
+    component: () => import(/* webpackChunkName: "login-kakao" */ '@/views/callback/KakaoLoginCallbackView.vue'),
   },
   {
     path: "/email/signup",
     name: "EmailSignUp",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/EmailSignUpView.vue'),
+    component: () => import(/* webpackChunkName: "email-signup" */ '@/views/EmailSignUpView.vue'),
   },
   {
     path: "/oauth2/signup",
     name: "OAuth2SignUp",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/OAuth2SignUpView.vue'),
+    component: () => import(/* webpackChunkName: "oauth-signup" */ '@/views/OAuth2SignUpView.vue'),
   },
   {
     path: "/mypage",
     name: "MyPage",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/MyPageView.vue'),
+    component: () => import(/* webpackChunkName: "mypage" */ '@/views/MyPageView.vue'),
   },
   {
     path: "/mypage/naver/link",
     name: "NaverUserLinkCallbackLink",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/callback/NaverUserLinkCallbackView.vue'),
+    component: () => import(/* webpackChunkName: "mypage-naver-link" */ '@/views/callback/NaverUserLinkCallbackView.vue'),
   },
   {
     path: "/mypage/kakao/link",
     name: "KakaoUserLinkCallback",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/callback/KakaoUserLinkCallbackView.vue'),
+    component: () => import(/* webpackChunkName: "mypage-kakao-link" */ '@/views/callback/KakaoUserLinkCallbackView.vue'),
   },
   {
     path: "/articles",
     name: "Articles",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/ArticleListView.vue'),
+    component: () => import(/* webpackChunkName: "articles" */ '@/views/ArticleListView.vue'),
   },
   {
     path: "/articles/new",
     name: "ArticleNew",
-    component: () => import(/* webpackChunkName: "login" */ '@/views/ArticleWriteView.vue'),
+    component: () => import(/* webpackChunkName: "article-new" */ '@/views/ArticleWriteView.vue'),
   },
   {
     path: "/articles/:id",
@@ -64,7 +64,7 @@ const routes = [
   {
     path: "/articles/:id/edit",
     name: "ArticleEdit",
-    component: () => import(/* webpackChunkName: "articleEdit" */ '@/views/ArticleWriteView.vue'),
+    component: () => import(/* webpackChunkName: "article-edit" */ '@/views/ArticleWriteView.vue'),
   },
   {
     path: "/notifications",
