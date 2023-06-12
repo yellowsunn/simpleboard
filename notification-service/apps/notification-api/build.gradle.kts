@@ -2,7 +2,9 @@ import com.google.cloud.tools.jib.gradle.JibExtension
 
 plugins {
     id("com.google.cloud.tools.jib") version NotificationVersions.jib
+    id("org.asciidoctor.jvm.convert") version NotificationVersions.asciidoctorConvert
 }
+val asciidoctorExtensions: Configuration by configurations.creating
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -12,6 +14,25 @@ dependencies {
     implementation(project(":notification-service:libs:notification-core"))
 
     runtimeOnly(project(":notification-service:libs:infra-mongodb"))
+
+    testImplementation("io.mockk:mockk:${NotificationVersions.mockk}")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+
+    asciidoctorExtensions("org.springframework.restdocs:spring-restdocs-asciidoctor")
+}
+
+tasks {
+    val snippetsDir by extra { file("build/generated-snippets") }
+
+    test {
+        outputs.dir(snippetsDir)
+    }
+
+    asciidoctor {
+        inputs.dir(snippetsDir)
+        configurations(asciidoctorExtensions.name)
+        dependsOn(test)
+    }
 }
 
 configure<JibExtension> {
