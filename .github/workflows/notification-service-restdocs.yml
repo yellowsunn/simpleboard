@@ -37,3 +37,5 @@ jobs:
           git add .
           git commit -m "[github-action] update api document"
           git push
+  trigger-update-api-document:
+    uses: ./.github/workflows/notification-service-restdocs.yml
