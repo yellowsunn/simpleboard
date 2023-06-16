@@ -11,10 +11,8 @@ spring:
         spring.json.trusted.packages: "*"
   config:
     import:
-      - 'classpath:application-http.yml'
       - 'classpath:application-persistence.yml'
       - 'classpath:application-mongodb.yml'
-      - 'classpath:application-redis.yml'
 ---
 server.port: 8181
 spring.config.activate.on-profile: local

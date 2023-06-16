@@ -21,8 +21,8 @@ class ArticleViewRedisRepositoryTest : RedisIntegrationTest() {
     @Test
     fun increaseViewCount() {
         // when
-        articleViewRedisRepository.increaseViewCount(1L)
-        val viewCount = articleViewRedisRepository.increaseViewCount(1L)
+        articleViewRedisRepository.increaseViewCount(100L)
+        val viewCount = articleViewRedisRepository.increaseViewCount(100L)
 
         // then
         assertThat(viewCount).isEqualTo(2L)

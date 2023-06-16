@@ -1,8 +1,8 @@
 package com.yellowsunn.boardservice.consumer
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncMessage
-import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncMessage
+import com.yellowsunn.boardservice.command.message.producer.data.ArticleDocumentSyncMessage
+import com.yellowsunn.boardservice.command.message.producer.data.ArticleReactionDocumentSyncMessage
 import com.yellowsunn.boardservice.constant.SYNC_GROUP
 import com.yellowsunn.boardservice.service.ArticleSyncService
 import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_DOCUMENT_SYNC_TOPIC

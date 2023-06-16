@@ -1,6 +1,5 @@
 package com.yellowsunn.boardservice.dto
 
-import com.yellowsunn.boardservice.command.dto.ArticleUpdateCommand
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 
