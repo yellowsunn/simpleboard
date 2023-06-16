@@ -3,7 +3,7 @@ package com.yellowsunn.boardservice.kafka.producer
 import com.yellowsunn.boardservice.command.event.producer.ArticleEventProducer
 import com.yellowsunn.boardservice.command.event.producer.data.ArticleDocumentSyncMessage
 import com.yellowsunn.boardservice.command.event.producer.data.ArticleReactionDocumentSyncMessage
-import com.yellowsunn.boardservice.command.event.producer.data.ProducerData
+import com.yellowsunn.boardservice.command.repository.EventSendFailureRepository
 import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_DOCUMENT_SYNC_TOPIC
 import com.yellowsunn.common.constant.KafkaTopicConst.ARTICLE_REACTION_DOCUMENT_SYNC_TOPIC
 import org.springframework.kafka.core.KafkaTemplate
@@ -11,9 +11,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class ArticleKafkaEventProducer(
-    private val kafkaTemplate: KafkaTemplate<String, ProducerData>,
+    private val kafkaTemplate: KafkaTemplate<String, String>,
+    eventSendFailureRepository: EventSendFailureRepository,
 ) : ArticleEventProducer,
-    DefaultKafkaEventProducer() {
+    DefaultKafkaEventProducer(eventSendFailureRepository) {
 
     override fun syncArticleDocument(articleId: Long) {
         val data = ArticleDocumentSyncMessage(articleId)
