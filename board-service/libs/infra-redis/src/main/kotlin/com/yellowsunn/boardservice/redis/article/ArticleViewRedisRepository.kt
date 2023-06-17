@@ -1,12 +1,15 @@
 package com.yellowsunn.boardservice.redis.article
 
 import com.yellowsunn.boardservice.query.repository.ArticleViewCacheRepository
+import org.springframework.data.redis.core.ScanOptions
 import org.springframework.data.redis.core.StringRedisTemplate
+import org.springframework.data.redis.core.script.RedisScript
 import org.springframework.stereotype.Component
 
 @Component
 class ArticleViewRedisRepository(
     private val stringRedisTemplate: StringRedisTemplate,
+    private val viewCountPopScript: RedisScript<Long>,
 ) : ArticleViewCacheRepository {
     private companion object {
         private const val KEY = "article-views"
@@ -25,5 +28,19 @@ class ArticleViewRedisRepository(
         return articleIds.mapIndexed { index, articleId ->
             articleId to (viewCounts[index]?.toLong() ?: 0L)
         }.toMap()
+    }
+
+    override fun popViewCount(articleId: Long): Long {
+        return stringRedisTemplate.execute(viewCountPopScript, listOf(KEY, articleId.toString()))
+    }
+
+    override fun findArticleIds(): List<Long> {
+        val hashOperations = stringRedisTemplate.opsForHash<String, String>()
+
+        val articleIds: MutableList<Long> = mutableListOf()
+        hashOperations.scan(KEY, ScanOptions.NONE).forEach {
+            articleIds.add(it.key.toLong())
+        }
+        return articleIds
     }
 }
