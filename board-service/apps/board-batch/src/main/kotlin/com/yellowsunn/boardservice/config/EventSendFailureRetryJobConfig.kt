@@ -40,20 +40,19 @@ class EventSendFailureRetryJobConfig(
     }
 
     @Bean
-    fun job(): Job {
+    fun eventSendFailureRetryJob(): Job {
         return JobBuilder("eventSendFailureRetryJob", jobRepository)
-            .start(step())
+            .start(retryStep())
             .build()
     }
 
     @Bean
-    fun step(): Step {
+    fun retryStep(): Step {
         return StepBuilder("retryStep", jobRepository)
             .chunk<EventSendFailureDto, EventSendFailureDto>(CHUNK_SIZE, transactionManager)
             .reader(reader())
             .processor(processor())
             .writer(writer())
-            .allowStartIfComplete(true)
             .build()
     }
 

@@ -8,6 +8,7 @@ import com.yellowsunn.boardservice.persistence.BaseJpaRepository
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.ZonedDateTime
 
 @Repository
 class ArticleJpaRepository(
@@ -23,5 +24,14 @@ class ArticleJpaRepository(
             .selectFrom(article)
             .where(article.id.eq(id))
             .fetchFirst()
+    }
+
+    @Transactional
+    override fun updateViewCount(articleId: Long, viewCount: Long): Long {
+        return jpaQueryFactory.update(article)
+            .set(article.viewCount, article.viewCount.add(viewCount))
+            .set(article.modifiedAt, ZonedDateTime.now())
+            .where(article.id.eq(articleId))
+            .execute()
     }
 }

@@ -38,9 +38,12 @@ class ArticleViewRedisRepository(
         val hashOperations = stringRedisTemplate.opsForHash<String, String>()
 
         val articleIds: MutableList<Long> = mutableListOf()
-        hashOperations.scan(KEY, ScanOptions.NONE).forEach {
+        val entry = hashOperations.scan(KEY, ScanOptions.NONE)
+
+        entry.forEach {
             articleIds.add(it.key.toLong())
         }
+        entry.close()
         return articleIds
     }
 }
