@@ -5,16 +5,14 @@ spring:
     consumer:
       bootstrap-servers: ${my-kafka.bootstrap-servers}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       auto-offset-reset: earliest
       properties:
         spring.json.trusted.packages: "*"
   config:
     import:
-      - 'classpath:application-http.yml'
       - 'classpath:application-persistence.yml'
       - 'classpath:application-mongodb.yml'
-      - 'classpath:application-redis.yml'
 ---
 server.port: 8181
 spring.config.activate.on-profile: local

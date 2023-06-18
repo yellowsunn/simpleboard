@@ -5,7 +5,7 @@ spring:
     producer:
       bootstrap-servers: ${my-kafka.bootstrap-servers}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 ---
 spring.config.activate.on-profile: local
 

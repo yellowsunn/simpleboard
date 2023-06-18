@@ -1,6 +1,5 @@
 package com.yellowsunn.boardservice.dto
 
-import com.yellowsunn.boardservice.command.dto.CommentSaveCommand
 import jakarta.validation.constraints.Size
 
 data class CommentSaveRequestDto(

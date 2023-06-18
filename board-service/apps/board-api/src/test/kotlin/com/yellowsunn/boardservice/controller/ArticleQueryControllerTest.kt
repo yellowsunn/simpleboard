@@ -1,10 +1,10 @@
 package com.yellowsunn.boardservice.controller
 
-import com.yellowsunn.boardservice.query.dto.ArticleDocumentDto
-import com.yellowsunn.boardservice.query.dto.ArticleDocumentPageDto
-import com.yellowsunn.boardservice.query.dto.ArticleReactionDocumentDto
-import com.yellowsunn.boardservice.query.dto.UserArticleDocumentPageDto
-import com.yellowsunn.boardservice.query.service.ArticleQueryService
+import com.yellowsunn.boardservice.dto.ArticleDocumentDto
+import com.yellowsunn.boardservice.dto.ArticleDocumentPageDto
+import com.yellowsunn.boardservice.dto.ArticleReactionDocumentDto
+import com.yellowsunn.boardservice.dto.UserArticleDocumentPageDto
+import com.yellowsunn.boardservice.service.ArticleQueryService
 import com.yellowsunn.common.constant.CommonHeaderConst.USER_ID
 import io.mockk.every
 import org.junit.jupiter.api.Test

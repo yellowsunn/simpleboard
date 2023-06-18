@@ -2,8 +2,8 @@ package com.yellowsunn.boardservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.yellowsunn.boardservice.command.dto.CommentSavedDto
-import com.yellowsunn.boardservice.command.facade.CommentFacade
+import com.yellowsunn.boardservice.dto.CommentSavedDto
+import com.yellowsunn.boardservice.facade.CommentFacade
 import com.yellowsunn.boardservice.dto.CommentSaveRequestDto
 import com.yellowsunn.common.constant.CommonHeaderConst.USER_ID
 import io.mockk.every

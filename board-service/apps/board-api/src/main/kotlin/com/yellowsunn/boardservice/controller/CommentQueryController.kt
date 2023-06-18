@@ -1,8 +1,8 @@
 package com.yellowsunn.boardservice.controller
 
-import com.yellowsunn.boardservice.query.dto.CommentDocumentPageDto
-import com.yellowsunn.boardservice.query.dto.UserCommentDocumentPageDto
-import com.yellowsunn.boardservice.query.service.CommentQueryService
+import com.yellowsunn.boardservice.dto.CommentDocumentPageDto
+import com.yellowsunn.boardservice.dto.UserCommentDocumentPageDto
+import com.yellowsunn.boardservice.service.CommentQueryService
 import com.yellowsunn.common.annotation.LoginUser
 import com.yellowsunn.common.response.ResultResponse
 import org.springframework.web.bind.annotation.GetMapping

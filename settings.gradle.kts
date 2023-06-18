@@ -15,6 +15,7 @@ include(
 
     "board-service:apps:board-api",
     "board-service:apps:board-consumer",
+    "board-service:apps:board-batch",
     "board-service:libs:board-core",
     "board-service:libs:infra-persistence",
     "board-service:libs:infra-http",
