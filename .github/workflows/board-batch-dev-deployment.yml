@@ -36,21 +36,21 @@ jobs:
             -Djib.to.tags=${{ env.deployment-version }}
             -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }}
             -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
-            -Djib.container.jvmFlags=-Dspring.profiles.active=dev,-Dspring-boot.run.arguments=--job.name=${JOB_NAME}
+            -Djib.container.jvmFlags=-Dspring.profiles.active=dev
             --stacktrace
-#      - name: Dispatch changing image tag action
-#        uses: octokit/request-action@v2.x
-#        with:
-#          route: POST /repos/{owner}/{repo}/dispatches
-#          owner: yellowsunn
-#          repo: argocd-manifest
-#          event_type: change-image-tag
-#          client_payload: |
-#            {
-#              "requested-event-path": "${{ env.GITHUB_EVENT_PATH }}",
-#              "container-image": "${{ env.container-image }}",
-#              "deployment-version": "${{ env.deployment-version }}",
-#              "overlay-path": "manifest/simpleforum/board-service/overlays/dev"
-#            }
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GIT_HUB_PERSONAL_ACCESS_TOKEN }}
+      - name: Dispatch changing image tag action
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{owner}/{repo}/dispatches
+          owner: yellowsunn
+          repo: argocd-manifest
+          event_type: change-image-tag
+          client_payload: |
+            {
+              "requested-event-path": "${{ env.GITHUB_EVENT_PATH }}",
+              "container-image": "${{ env.container-image }}",
+              "deployment-version": "${{ env.deployment-version }}",
+              "overlay-path": "manifest/simpleforum/board-batch/overlays/dev"
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_PERSONAL_ACCESS_TOKEN }}
