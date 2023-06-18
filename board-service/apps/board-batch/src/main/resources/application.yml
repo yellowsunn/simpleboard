@@ -1,20 +1,15 @@
 spring:
   profiles:
     default: local
+  batch:
+    job:
+      name: ${job.name:NONE}
+      enabled: false
+  config:
+    import:
+      - 'classpath:application-persistence.yml'
+      - 'classpath:application-kafka-producer.yml'
+      - 'classpath:application-redis.yml'
 ---
 server.port: 8281
 spring.config.activate.on-profile: local
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3307/boards
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: password
----
-spring.config.activate.on-profile: dev
-spring:
-  datasource:
-    url: jdbc:mysql://192.168.29.15:3306/boards
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: password

@@ -2,7 +2,7 @@ package com.yellowsunn.boardservice.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.yellowsunn.boardservice.command.facade.ArticleFacade
+import com.yellowsunn.boardservice.facade.ArticleFacade
 import com.yellowsunn.boardservice.dto.ArticleSaveRequestDto
 import com.yellowsunn.common.constant.CommonHeaderConst.USER_ID
 import io.mockk.every

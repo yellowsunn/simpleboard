@@ -38,6 +38,16 @@ class ArticleJpaRepositoryTest : PersistenceIntegrationTest() {
         assertThat(foundArticle!!.id).isNotNull
     }
 
+    @Test
+    fun updateViewCount() {
+        val article = getTestArticle()
+        articleJpaRepository.save(article)
+
+        val updateCount = articleJpaRepository.updateViewCount(article.id, 10L)
+
+        assertThat(updateCount).isGreaterThan(0L)
+    }
+
     private fun getTestArticle(): Article {
         return Article(
             title = "게시글 제목",

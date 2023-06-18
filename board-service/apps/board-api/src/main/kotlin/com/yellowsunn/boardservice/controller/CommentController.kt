@@ -1,7 +1,7 @@
 package com.yellowsunn.boardservice.controller
 
-import com.yellowsunn.boardservice.command.dto.CommentSavedDto
-import com.yellowsunn.boardservice.command.facade.CommentFacade
+import com.yellowsunn.boardservice.dto.CommentSavedDto
+import com.yellowsunn.boardservice.facade.CommentFacade
 import com.yellowsunn.boardservice.dto.CommentSaveRequestDto
 import com.yellowsunn.common.annotation.LoginUser
 import com.yellowsunn.common.response.ResultResponse

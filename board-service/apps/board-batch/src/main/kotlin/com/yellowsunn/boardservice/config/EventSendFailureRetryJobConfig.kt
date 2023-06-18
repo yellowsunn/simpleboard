@@ -1,6 +1,8 @@
 package com.yellowsunn.boardservice.config
 
-import com.yellowsunn.boardservice.domain.EventSendFailure
+import com.yellowsunn.boardservice.command.message.producer.GlobalMessageProducer
+import com.yellowsunn.boardservice.command.repository.EventSendFailureRepository
+import com.yellowsunn.boardservice.dto.EventSendFailureDto
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
@@ -27,7 +29,8 @@ import javax.sql.DataSource
 class EventSendFailureRetryJobConfig(
     private val jobRepository: JobRepository,
     private val transactionManager: PlatformTransactionManager,
-//    private val globalKafkaEventPublisher: GlobalKafkaEventPublisher,
+    private val globalMessageProducer: GlobalMessageProducer,
+    private val eventSendFailureRepository: EventSendFailureRepository,
     private val dataSource: DataSource,
 ) {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
@@ -37,33 +40,32 @@ class EventSendFailureRetryJobConfig(
     }
 
     @Bean
-    fun job(): Job {
+    fun eventSendFailureRetryJob(): Job {
         return JobBuilder("eventSendFailureRetryJob", jobRepository)
-            .start(step())
+            .start(retryStep())
             .build()
     }
 
     @Bean
-    fun step(): Step {
+    fun retryStep(): Step {
         return StepBuilder("retryStep", jobRepository)
-            .chunk<EventSendFailure, EventSendFailure>(CHUNK_SIZE, transactionManager)
+            .chunk<EventSendFailureDto, EventSendFailureDto>(CHUNK_SIZE, transactionManager)
             .reader(reader())
             .processor(processor())
             .writer(writer())
-            .allowStartIfComplete(true)
             .build()
     }
 
     @Bean
     @StepScope
-    fun reader(): JdbcPagingItemReader<EventSendFailure> {
-        return JdbcPagingItemReaderBuilder<EventSendFailure>()
+    fun reader(): JdbcPagingItemReader<EventSendFailureDto> {
+        return JdbcPagingItemReaderBuilder<EventSendFailureDto>()
             .name("jdbcReader")
             .pageSize(CHUNK_SIZE)
             .fetchSize(CHUNK_SIZE)
             .dataSource(dataSource)
             .rowMapper { rs, _ ->
-                EventSendFailure(
+                EventSendFailureDto(
                     id = rs.getLong("id"),
                     topic = rs.getString("topic"),
                     data = rs.getString("data"),
@@ -77,18 +79,24 @@ class EventSendFailureRetryJobConfig(
 
     @Bean
     @StepScope
-    fun processor(): ItemProcessor<EventSendFailure, EventSendFailure> {
-        return ItemProcessor<EventSendFailure, EventSendFailure> {
-//            globalKafkaEventPublisher.send(it.topic, it.data)
-            logger.info("발행 실패한 이벤트 재발행. topic={}, data={}", it.topic, it.data)
-            it
+    fun processor(): ItemProcessor<EventSendFailureDto, EventSendFailureDto> {
+        return ItemProcessor<EventSendFailureDto, EventSendFailureDto> { dto ->
+            globalMessageProducer.send(dto.topic, dto.data).thenAccept {
+                if (it == null) {
+                    logger.info("발행 실패한 이벤트 재발행. topic={}, data={}", dto.topic, dto.data)
+                } else {
+                    // 재발행 실패한 경우
+                    eventSendFailureRepository.save(it)
+                }
+            }
+            dto
         }
     }
 
     @Bean
     @StepScope
-    fun writer(): JdbcBatchItemWriter<EventSendFailure> {
-        return JdbcBatchItemWriterBuilder<EventSendFailure>()
+    fun writer(): JdbcBatchItemWriter<EventSendFailureDto> {
+        return JdbcBatchItemWriterBuilder<EventSendFailureDto>()
             .dataSource(dataSource)
             .sql("update event_send_failure set is_used = true, modified_at = :modifiedAt where id = :id")
             .beanMapped()
