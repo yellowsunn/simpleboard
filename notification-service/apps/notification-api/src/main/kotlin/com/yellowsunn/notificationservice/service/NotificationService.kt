@@ -3,7 +3,6 @@ package com.yellowsunn.notificationservice.service
 import com.yellowsunn.common.utils.PageUtils
 import com.yellowsunn.notificationservice.domain.NotificationDocument
 import com.yellowsunn.notificationservice.dto.NotificationDocumentPageDto
-import com.yellowsunn.notificationservice.event.NotificationMessage
 import com.yellowsunn.notificationservice.repository.NotificationDocumentRepository
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
@@ -15,17 +14,6 @@ class NotificationService(
 ) {
     private companion object {
         private const val MAX_PAGE_SIZE = 100
-    }
-
-    fun notify(message: NotificationMessage) {
-        val notificationDocument = NotificationDocument(
-            userId = message.userId,
-            title = message.title,
-            content = message.content,
-            data = message.data,
-        )
-
-        notificationDocumentRepository.save(notificationDocument)
     }
 
     fun findUserNotifications(userId: Long, page: Int, size: Int): NotificationDocumentPageDto {
