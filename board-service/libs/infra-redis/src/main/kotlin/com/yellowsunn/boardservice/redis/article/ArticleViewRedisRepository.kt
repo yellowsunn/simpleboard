@@ -15,9 +15,9 @@ class ArticleViewRedisRepository(
         private const val KEY = "article-views"
     }
 
-    override fun increaseViewCount(articleId: Long): Long {
+    override fun increaseViewCount(articleId: Long, count: Long): Long {
         val hashOperations = stringRedisTemplate.opsForHash<String, Long>()
-        return hashOperations.increment(KEY, articleId.toString(), 1)
+        return hashOperations.increment(KEY, articleId.toString(), count)
     }
 
     override fun findViewCounts(articleIds: List<Long>): Map<Long, Long> {

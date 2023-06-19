@@ -2,11 +2,11 @@ package com.yellowsunn.boardservice.service
 
 import com.yellowsunn.boardservice.common.exception.ArticleNotFoundException
 import com.yellowsunn.boardservice.common.http.client.user.UserHttpClient
-import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import com.yellowsunn.boardservice.dto.ArticleDocumentDto
 import com.yellowsunn.boardservice.dto.ArticleDocumentPageDto
 import com.yellowsunn.boardservice.dto.ArticleReactionDocumentDto
 import com.yellowsunn.boardservice.dto.UserArticleDocumentPageDto
+import com.yellowsunn.boardservice.query.domain.article.ArticleDocument
 import com.yellowsunn.boardservice.query.repository.ArticleDocumentRepository
 import com.yellowsunn.boardservice.query.repository.ArticleReactionDocumentRepository
 import com.yellowsunn.boardservice.query.repository.ArticleViewCacheRepository
@@ -31,7 +31,7 @@ class ArticleQueryService(
 
         val users = userHttpClient.findUsersByIds(listOf(articleDocument.userId))
         // 조회수 증가
-        val increasedViewCount = articleViewCacheRepository.increaseViewCount(articleDocument.articleId)
+        val increasedViewCount = articleViewCacheRepository.increaseViewCount(articleDocument.articleId, 1L)
 
         return ArticleDocumentDto.from(articleDocument, users, increasedViewCount)
     }

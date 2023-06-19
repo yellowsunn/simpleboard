@@ -28,8 +28,8 @@ class ArticleViewRedisRepositoryTest : RedisIntegrationTest() {
     @Test
     fun increaseViewCount() {
         // when
-        articleViewRedisRepository.increaseViewCount(100L)
-        val viewCount = articleViewRedisRepository.increaseViewCount(100L)
+        articleViewRedisRepository.increaseViewCount(100L, 1L)
+        val viewCount = articleViewRedisRepository.increaseViewCount(100L, 1L)
 
         // then
         assertThat(viewCount).isEqualTo(2L)
@@ -40,7 +40,7 @@ class ArticleViewRedisRepositoryTest : RedisIntegrationTest() {
         // given
         val articleIds = (1L..5L).toList()
         listOf(2L, 4L).forEach {
-            articleViewRedisRepository.increaseViewCount(it)
+            articleViewRedisRepository.increaseViewCount(it, 1L)
         }
 
         // when
@@ -59,18 +59,18 @@ class ArticleViewRedisRepositoryTest : RedisIntegrationTest() {
     fun popViewCount() {
         val articleId = 1000L
         repeat(5) {
-            articleViewRedisRepository.increaseViewCount(articleId)
+            articleViewRedisRepository.increaseViewCount(articleId, 1L)
         }
 
         val viewCount = articleViewRedisRepository.popViewCount(articleId)
         assertThat(viewCount).isEqualTo(5L)
-        assertThat(articleViewRedisRepository.increaseViewCount(articleId)).isEqualTo(1L)
+        assertThat(articleViewRedisRepository.increaseViewCount(articleId, 1L)).isEqualTo(1L)
     }
 
     @Test
     fun findArticleIds() {
         listOf(2000L, 3000L, 5000L).forEach {
-            articleViewRedisRepository.increaseViewCount(it)
+            articleViewRedisRepository.increaseViewCount(it, 1L)
         }
 
         val articleIds: List<Long> = articleViewRedisRepository.findArticleIds()
