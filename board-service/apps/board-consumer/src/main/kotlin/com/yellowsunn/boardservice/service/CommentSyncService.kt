@@ -14,7 +14,7 @@ class CommentSyncService(
     private val commentDocumentRepository: CommentDocumentRepository,
 ) {
     fun syncCommentDocument(commentId: Long) {
-        val comment: Comment = commentRepository.findById(commentId) ?: return
+        val comment: Comment = commentRepository.findById(commentId, true) ?: return
         val likeCount: Long = commentLikeRepository.countByCommentId(commentId)
 
         val commentDocument = CommentDocument(
