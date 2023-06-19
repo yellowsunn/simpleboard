@@ -109,4 +109,4 @@ endpoint:
 
 token:
   access:
-    secret: jekmrsrhPKOwSUnR7m8WtcWv_K5SdKygftw3x99BrCs
+    secret: ${access-token-secret}

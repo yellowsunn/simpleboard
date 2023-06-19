@@ -36,7 +36,7 @@ jobs:
             -Djib.to.tags=${{ env.deployment-version }}
             -Djib.to.auth.username=${{ secrets.DOCKER_HUB_USERNAME }}
             -Djib.to.auth.password=${{ secrets.DOCKER_HUB_PASSWORD }}
-            -Djib.container.jvmFlags=-Dspring.profiles.active=dev,-Daws-access-key=${{ secrets.AWS_ACCESS_KEY }},-Daws-secret-key=${{ secrets.AWS_SECRET_KEY }}
+            -Djib.container.jvmFlags=-Dspring.profiles.active=dev,-Daws-access-key=${{ secrets.AWS_ACCESS_KEY }},-Daws-secret-key=${{ secrets.AWS_SECRET_KEY }},-Daccess-token-secret=${{ vars.ACCESS_TOKEN_SECRET }}
             --stacktrace
       - name: Dispatch changing image tag action
         uses: octokit/request-action@v2.x
