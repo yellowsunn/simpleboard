@@ -4,14 +4,14 @@ import com.yellowsunn.boardservice.command.domain.article.Article
 import com.yellowsunn.boardservice.command.domain.comment.Comment
 import com.yellowsunn.boardservice.command.domain.comment.CommentLike
 import com.yellowsunn.boardservice.command.domain.comment.CommentLikeId
-import com.yellowsunn.boardservice.dto.CommentSaveCommand
-import com.yellowsunn.boardservice.dto.CommentSavedDto
 import com.yellowsunn.boardservice.command.repository.ArticleRepository
 import com.yellowsunn.boardservice.command.repository.CommentLikeRepository
 import com.yellowsunn.boardservice.command.repository.CommentRepository
 import com.yellowsunn.boardservice.common.domain.user.User
 import com.yellowsunn.boardservice.common.exception.ArticleNotFoundException
 import com.yellowsunn.boardservice.common.exception.CommentNotFoundException
+import com.yellowsunn.boardservice.dto.CommentSaveCommand
+import com.yellowsunn.boardservice.dto.CommentSavedDto
 import jakarta.persistence.EntityExistsException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
@@ -44,7 +44,7 @@ class CommentService(
 
     @Transactional
     fun deleteComment(commentId: Long, articleId: Long): Boolean {
-        val comment = commentRepository.findById(commentId)
+        val comment = commentRepository.findById(commentId, true)
             ?: return false
 
         if (comment.articleId != articleId) {
