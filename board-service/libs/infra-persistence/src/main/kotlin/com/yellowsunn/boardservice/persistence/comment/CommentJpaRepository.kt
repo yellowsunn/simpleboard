@@ -17,11 +17,20 @@ class CommentJpaRepository(
 
     private val jpaQueryFactory = JPAQueryFactory(em)
 
-    override fun findById(id: Long): Comment? {
-        return jpaQueryFactory
+    override fun findById(id: Long, includeDeleted: Boolean): Comment? {
+        val foundComment: Comment? = jpaQueryFactory
             .selectFrom(comment)
-            .validWhere(comment.id.eq(id))
+            .where(comment.id.eq(id))
             .fetchOne()
+        if (includeDeleted) {
+            return foundComment
+        }
+
+        return if (foundComment?.isDeleted == true) {
+            null
+        } else {
+            foundComment
+        }
     }
 
     override fun countByArticleId(articleId: Long): Long {
