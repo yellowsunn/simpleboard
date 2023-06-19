@@ -9,6 +9,7 @@ val asciidoctorExtensions: Configuration by configurations.creating
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.data:spring-data-commons")
 
     implementation(project(":common-library"))
     implementation(project(":notification-service:libs:notification-core"))

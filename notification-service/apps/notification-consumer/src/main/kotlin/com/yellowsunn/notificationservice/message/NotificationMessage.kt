@@ -1,4 +1,4 @@
-package com.yellowsunn.notificationservice.event
+package com.yellowsunn.notificationservice.message
 
 import com.yellowsunn.common.notification.NotificationData
 
