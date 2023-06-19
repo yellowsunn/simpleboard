@@ -28,9 +28,11 @@ class ArticleJpaRepository(
 
     @Transactional
     override fun updateViewCount(articleId: Long, viewCount: Long): Long {
-        return jpaQueryFactory.update(article)
-            .set(article.viewCount, article.viewCount.add(viewCount))
-            .set(article.modifiedAt, ZonedDateTime.now())
+        val clause = jpaQueryFactory.update(article)
+        clause[article.viewCount] = article.viewCount.add(viewCount)
+        clause[article.modifiedAt] = ZonedDateTime.now()
+
+        return clause
             .where(article.id.eq(articleId))
             .execute()
     }
