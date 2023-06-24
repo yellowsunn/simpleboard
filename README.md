@@ -5,7 +5,7 @@
 마이크로 서비스 기반의 게시판 프로젝트
 
 ## 개요
-[overview.md](overview.md)
+[overview.md](assets/overview.md)
 
 ## API 문서
 
@@ -20,7 +20,7 @@
 
 ### 물리 모델
 
-![database.png](images%2Fdatabase.png)
+![database.png](assets/images/database.png)
 
 ## 아키 텍쳐
 
@@ -64,21 +64,21 @@ xxx-service
 
 #### 모듈 간 의존성 예시
 
-![module_dependency.png](images/module_dependency.png)
+![module_dependency.png](assets/images/module_dependency.png)
 
 인프라스트럭처 레이어의 구현체 모듈을 런타임 시 빌드하도록 설정하여, 구현체에 직접적인 참조를 방지
 
 ### 시스템 아키텍처
 
-![system_architecture.png](images/system_architecture.png)
+![system_architecture.png](assets/images/system_architecture.png)
 
 #### 유저 서비스 - 시퀀스 다이어그램 (로그인)
 
-![user_service_sequence_diagram.png](images/user_service_sequence_diagram.png)
+![user_service_sequence_diagram.png](assets/images/user_service_sequence_diagram.png)
 
 #### API 게이트웨이 - 인증
 
-![api_gateway.png](images/api_gateway.png)
+![api_gateway.png](assets/images/api_gateway.png)
 
 * API 게이트웨이에서 Authorization 헤더로 전달된 JWT 토큰을 파싱
 * 유효한 토큰인 경우 X-USER-ID 헤더로 유저 id 전달
@@ -86,38 +86,38 @@ xxx-service
 
 #### 게시판 서비스 - CQRS
 
-![board_service_cqrs.png](images/board_service_cqrs.png)
+![board_service_cqrs.png](assets/images/board_service_cqrs.png)
 
 * Command, Query 데이터베이스 분리
 * 카프카로 동기화
 
 이슈) 카프카 프로듀서에 동기화 요청 메시지를 전송하는데 실패한 경우?
-![board_serivce_failed_to_sync.png](images/board_serivce_failed_to_sync.png)
+![board_serivce_failed_to_sync.png](assets/images/board_serivce_failed_to_sync.png)
 
 * 실패한 데이터를 event_send_failure 테이블에 저장 후 배치를 통해 다시 프로듀서에 전송 요청
 
 #### 게시판 서비스 - 조회수 증가
 
-![board_service_view_count.png](images/board_service_view_count.png)
+![board_service_view_count.png](assets/images/board_service_view_count.png)
 
 * 게시글 조회 시 조회수를 증가하는데 데이터베이스에 바로 반영하는 것이 아닌 레디스에 우선 조회수 업데이트
 * 배치 작업으로 특정 시간마다 조회 수 데이터베이스에 bulk 업데이트
 
 이슈) 배치 작업 도중 조회수가 증가하면 데이터 정합성 이슈 발생
-![view_count_issue.png](images/view_count_issue.png)
+![view_count_issue.png](assets/images/view_count_issue.png)
 
 해결 방법 (Lua Script를 이용해 Redis 다중 명령을 원자적으로 실행)
-![view_count_issue_resolution.png](images%2Fview_count_issue_resolution.png)
+![view_count_issue_resolution.png](assets/images/view_count_issue_resolution.png)
 
 #### 알림 서비스
 
-![notification_service.png](images/notification_service.png)
+![notification_service.png](assets/images/notification_service.png)
 * 알림 메시지 수신시 DB에 반영
 * 폴링 방식으로 지속적으로 요청해 새로운 알림이 존재하는 지 확인
 
 ## CI/CD 배포 파이프라인
 
-![dev_ci_cd.png](images/dev_ci_cd.png)
+![dev_ci_cd.png](assets/images/dev_ci_cd.png)
 
 * [docker hub 이미지 목록](https://hub.docker.com/u/yellowsunn)
 * [manifest repository](https://github.com/yellowsunn/argocd-manifest/tree/main/manifest/simpleforum)
