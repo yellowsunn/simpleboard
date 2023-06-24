@@ -93,12 +93,18 @@ xxx-service
 
 * 실패한 데이터를 event_send_failure 테이블에 저장 후 배치를 통해 다시 프로듀서에 전송 요청
 
-#### 게시판 서비스 - 조회수 업데이트
+#### 게시판 서비스 - 조회수 증가
 
 ![board_service_view_count.png](images/board_service_view_count.png)
 
-* 게시글 조회 시 조회수를 데이터베이스에 바로 반영하는 것이 아닌 레디스에 우선 조회수 업데이트
-* 배치 작업으로 조회 수 목록 데이터베이스에 업데이트
+* 게시글 조회 시 조회수를 증가하는데 데이터베이스에 바로 반영하는 것이 아닌 레디스에 우선 조회수 업데이트
+* 배치 작업으로 특정 시간마다 조회 수 데이터베이스에 bulk 업데이트
+
+이슈) 배치 작업 도중 조회수가 증가하면 데이터 정합성 이슈 발생
+![view_count_issue.png](images/view_count_issue.png)
+
+해결 방법 (Lua Script를 이용해 Redis 다중 명령을 원자적으로 실행)
+![view_count_issue_resolution.png](images%2Fview_count_issue_resolution.png)
 
 #### 알림 서비스
 
