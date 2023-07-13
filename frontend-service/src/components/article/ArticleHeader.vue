@@ -10,16 +10,8 @@
                      :height="height"
                      alt="thumbnail"/>
             </div>
-            <div class="nick-name dropdown-toggle" data-bs-toggle="dropdown">
+            <div class="nick-name">
                 {{ article.user?.nickName }}
-                <ul class="user-popup dropdown-menu">
-                    <li>
-                        <a class="dropdown-item" href="#">게시글 보기</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">댓글 보기</a>
-                    </li>
-                </ul>
             </div>
             <div class="dot"></div>
             <div class="created-at">
@@ -96,7 +88,6 @@ export default {
 
   .nick-name {
     display: flex;
-    cursor: pointer;
   }
 
   .dot {

@@ -17,7 +17,7 @@ spring.config.activate.on-profile: dev
 token:
   access:
     expiration: 30m
-    secret: jekmrsrhPKOwSUnR7m8WtcWv_K5SdKygftw3x99BrCs
+    secret: ${access-token-secret}
   refresh:
     expiration: 1d
-    secret: 8p1WxOIxZchtCRgQ0TeqYyV-0T86IR2rZhhVTwTtxLQ
+    secret: ${refresh-token-secret}
