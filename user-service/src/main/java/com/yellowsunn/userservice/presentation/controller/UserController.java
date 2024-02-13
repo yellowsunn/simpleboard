@@ -3,10 +3,12 @@ package com.yellowsunn.userservice.presentation.controller;
 import com.yellowsunn.userservice.application.UserService;
 import com.yellowsunn.userservice.application.UuidHolder;
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
-import com.yellowsunn.userservice.presentation.request.UserCreateRequest;
+import com.yellowsunn.userservice.presentation.request.EmailSignUpRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,8 +18,9 @@ public class UserController {
     private final UserService userService;
     private final UuidHolder uuidHolder;
 
-    @PostMapping("/api/v3/users/signup/email")
-    public String signUpEmail(@RequestBody UserCreateRequest request) {
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/api/v2/users/signup/email")
+    public String signUpEmail(@RequestBody EmailSignUpRequest request) {
         String userId = uuidHolder.random();
 
         UserCreateCommand command = UserCreateCommand.builder()
@@ -27,7 +30,7 @@ public class UserController {
                 .nickname(request.nickname())
                 .build();
 
-        userService.createUser(command);
+        userService.createEmailUser(command);
 
         return userId;
     }

@@ -12,8 +12,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void createUser(UserCreateCommand command) {
-        User user = new User();
+    public void createEmailUser(UserCreateCommand command) {
+        User user = User.createEmailUser(command.userId(), command.email(), command.password(), command.nickname());
+
         userRepository.save(user);
     }
 }

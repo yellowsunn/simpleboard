@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.presentation.request;
 
-public record UserCreateRequest(
+public record EmailSignUpRequest(
         String email,
         String password,
         String nickname
