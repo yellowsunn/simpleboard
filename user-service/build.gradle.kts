@@ -14,19 +14,19 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
-//subprojects {
-//    apply(plugin = "org.springframework.boot")
-//    apply(plugin = "io.spring.dependency-management")
-//
-//    tasks.withType<Test> {
-//        useJUnitPlatform()
-//    }
-//
-//    dependencies {
-//        implementation("org.apache.commons:commons-lang3")
-//        implementation("org.apache.commons:commons-collections4:4.4")
-//
-//        annotationProcessor("org.projectlombok:lombok")
-//        compileOnly("org.projectlombok:lombok")
-//    }
-//}
+subprojects {
+    apply(plugin = "org.springframework.boot")
+    apply(plugin = "io.spring.dependency-management")
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
+
+    dependencies {
+        implementation("org.apache.commons:commons-lang3")
+        implementation("org.apache.commons:commons-collections4:4.4")
+
+        annotationProcessor("org.projectlombok:lombok")
+        compileOnly("org.projectlombok:lombok")
+    }
+}

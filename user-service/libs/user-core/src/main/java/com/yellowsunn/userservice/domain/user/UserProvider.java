@@ -30,7 +30,7 @@ public class UserProvider {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar")
     private Provider provider;
 
     @Column(nullable = false)

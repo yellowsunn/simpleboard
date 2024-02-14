@@ -8,11 +8,11 @@ include(
     "image-service",
     "user-service",
 
-//    "user-service:apps:user-api",
-//    "user-service:libs:user-core",
-//    "user-service:libs:infra-persistence",
-//    "user-service:libs:infra-redis",
-//    "user-service:libs:infra-http",
+    "user-service:apps:user-api",
+    "user-service:libs:user-core",
+    "user-service:libs:infra-persistence",
+    "user-service:libs:infra-redis",
+    "user-service:libs:infra-http",
 
     "board-service:apps:board-api",
     "board-service:apps:board-consumer",

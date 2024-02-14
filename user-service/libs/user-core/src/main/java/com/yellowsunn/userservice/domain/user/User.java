@@ -41,7 +41,7 @@ public class User extends BaseTimeEntity {
     private String thumbnail;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar")
     private UserRole role;
 
     @Builder(builderMethodName = "emailUserBuilder", builderClassName = "EmailUserBuilder")
