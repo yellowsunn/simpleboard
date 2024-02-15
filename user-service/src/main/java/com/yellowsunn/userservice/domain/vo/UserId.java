@@ -17,4 +17,9 @@ public final class UserId {
         Assert.hasText(userId, () -> "userId must not be blank.");
         return new UserId(UUID.fromString(userId));
     }
+
+    @Override
+    public String toString() {
+        return id.toString();
+    }
 }

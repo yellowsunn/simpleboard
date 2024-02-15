@@ -4,6 +4,8 @@ import com.yellowsunn.userservice.domain.dto.UserProviderCreate;
 import com.yellowsunn.userservice.domain.vo.Provider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +27,7 @@ public class UserProviderEntity {
 
     private String userId;
 
+    @Enumerated(EnumType.STRING)
     private Provider provider;
 
     private String email;
