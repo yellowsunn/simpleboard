@@ -1,6 +1,7 @@
 package com.yellowsunn.userservice.presentation.request;
 
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
+import com.yellowsunn.userservice.domain.vo.UserId;
 
 public record EmailSignUpRequest(
         String email,
@@ -8,7 +9,7 @@ public record EmailSignUpRequest(
         String nickname
 ) {
 
-    public UserCreateCommand toUserCreateCommand(String userId) {
+    public UserCreateCommand toUserCreateCommand(UserId userId) {
         return UserCreateCommand.builder()
                 .userId(userId)
                 .email(email)

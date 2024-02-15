@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.utils;
+package com.yellowsunn.userservice.application.port.out;
 
 public interface PasswordEncoder {
 

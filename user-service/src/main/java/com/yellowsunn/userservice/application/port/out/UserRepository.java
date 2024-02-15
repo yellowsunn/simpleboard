@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.domain.repository;
+package com.yellowsunn.userservice.application.port.out;
 
 import com.yellowsunn.userservice.domain.dto.EmailUserInfoDto;
 import com.yellowsunn.userservice.domain.entity.User;

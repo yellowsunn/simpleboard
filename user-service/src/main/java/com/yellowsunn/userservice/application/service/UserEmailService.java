@@ -1,11 +1,12 @@
-package com.yellowsunn.userservice.application;
+package com.yellowsunn.userservice.application.service;
 
 import com.yellowsunn.userservice.domain.dto.EmailUserInfoDto;
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
 import com.yellowsunn.userservice.domain.entity.User;
-import com.yellowsunn.userservice.domain.repository.UserRepository;
+import com.yellowsunn.userservice.application.port.out.UserRepository;
+import com.yellowsunn.userservice.domain.vo.UserId;
 import com.yellowsunn.userservice.exception.EmailLoginFailedException;
-import com.yellowsunn.userservice.utils.PasswordEncoder;
+import com.yellowsunn.userservice.application.port.out.PasswordEncoder;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,12 +27,12 @@ public class UserEmailService {
         userRepository.save(user);
     }
 
-    public String login(String email, String password) {
+    public UserId login(String email, String password) {
 
         EmailUserInfoDto emailUserInfoDto = userRepository.findEmailUserInfo(email)
                 .filter(emailUserInfo -> passwordEncoder.match(password, emailUserInfo.password()))
                 .orElseThrow(EmailLoginFailedException::new);
 
-        return emailUserInfoDto.userId();
+        return UserId.fromString(emailUserInfoDto.userId());
     }
 }

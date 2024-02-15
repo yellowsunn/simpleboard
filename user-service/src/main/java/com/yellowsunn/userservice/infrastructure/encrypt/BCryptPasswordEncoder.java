@@ -1,6 +1,7 @@
-package com.yellowsunn.userservice.utils;
+package com.yellowsunn.userservice.infrastructure.encrypt;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.yellowsunn.userservice.application.port.out.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 

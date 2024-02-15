@@ -2,11 +2,12 @@ package com.yellowsunn.userservice.application;
 
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
+import com.yellowsunn.userservice.application.service.UserEmailService;
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
-import com.yellowsunn.userservice.domain.repository.UserRepository;
+import com.yellowsunn.userservice.application.port.out.UserRepository;
 import com.yellowsunn.userservice.mock.FakeUserRepository;
 import com.yellowsunn.userservice.mock.TestPasswordEncoder;
-import com.yellowsunn.userservice.utils.PasswordEncoder;
+import com.yellowsunn.userservice.application.port.out.PasswordEncoder;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -27,9 +27,9 @@ public final class User {
         this.providers = providers;
     }
 
-    public static User createEmailUser(String userId, String email, String nickname, String password) {
+    public static User createEmailUser(UserId userId, String email, String nickname, String password) {
         return User.builder()
-                .userId(UserId.fromString(userId))
+                .userId(userId)
                 .nickname(nickname)
                 .providers(List.of(EmailProvider.from(userId, email, password)))
                 .build();

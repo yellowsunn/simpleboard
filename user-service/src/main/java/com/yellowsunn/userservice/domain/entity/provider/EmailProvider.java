@@ -22,8 +22,8 @@ public final class EmailProvider implements UserProvider {
         this.password = password;
     }
 
-    public static EmailProvider from(String userId, String email, String password) {
-        return new EmailProvider(UserId.fromString(userId), email, password);
+    public static EmailProvider from(UserId userId, String email, String password) {
+        return new EmailProvider(userId, email, password);
     }
 
     @Override

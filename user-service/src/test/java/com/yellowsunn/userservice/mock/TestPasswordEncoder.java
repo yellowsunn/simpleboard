@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.mock;
 
-import com.yellowsunn.userservice.utils.PasswordEncoder;
+import com.yellowsunn.userservice.application.port.out.PasswordEncoder;
 
 public class TestPasswordEncoder implements PasswordEncoder {
 
@@ -13,5 +13,10 @@ public class TestPasswordEncoder implements PasswordEncoder {
     @Override
     public String encode(String rawPassword) {
         return password;
+    }
+
+    @Override
+    public boolean match(String rawPassword, String encodedPassword) {
+        return true;
     }
 }
