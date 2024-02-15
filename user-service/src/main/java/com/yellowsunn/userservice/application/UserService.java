@@ -14,7 +14,7 @@ public class UserService {
 
     public void createEmailUser(UserCreateCommand command) {
 
-        User user = User.createEmailUser(command.userId(), command.email(), command.password(), command.nickname());
+        User user = User.createEmailUser(command.userId(), command.email(), command.nickname(), command.password());
 
         userRepository.save(user);
     }

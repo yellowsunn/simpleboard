@@ -12,6 +12,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3")
     implementation("org.apache.commons:commons-collections4:4.4")
     compileOnly("org.projectlombok:lombok")
+    runtimeOnly("com.h2database:h2")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

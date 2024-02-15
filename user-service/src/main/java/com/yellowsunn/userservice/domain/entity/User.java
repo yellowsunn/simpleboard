@@ -3,8 +3,8 @@ package com.yellowsunn.userservice.domain.entity;
 import com.yellowsunn.userservice.domain.dto.UserCreate;
 import com.yellowsunn.userservice.domain.dto.UserProviderCreate;
 import com.yellowsunn.userservice.domain.entity.provider.EmailProvider;
-import com.yellowsunn.userservice.domain.vo.UserId;
 import com.yellowsunn.userservice.domain.entity.provider.UserProvider;
+import com.yellowsunn.userservice.domain.vo.UserId;
 import java.util.List;
 import lombok.Builder;
 import org.springframework.util.Assert;
@@ -27,7 +27,7 @@ public final class User {
         this.providers = providers;
     }
 
-    public static User createEmailUser(String userId, String email, String password, String nickname) {
+    public static User createEmailUser(String userId, String email, String nickname, String password) {
         return User.builder()
                 .userId(UserId.fromString(userId))
                 .nickname(nickname)
