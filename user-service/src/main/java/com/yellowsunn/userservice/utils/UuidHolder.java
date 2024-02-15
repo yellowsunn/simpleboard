@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.application;
+package com.yellowsunn.userservice.utils;
 
 public interface UuidHolder {
 

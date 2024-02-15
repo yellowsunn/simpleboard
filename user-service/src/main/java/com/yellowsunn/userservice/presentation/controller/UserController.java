@@ -1,7 +1,7 @@
 package com.yellowsunn.userservice.presentation.controller;
 
 import com.yellowsunn.userservice.application.UserService;
-import com.yellowsunn.userservice.application.UuidHolder;
+import com.yellowsunn.userservice.utils.UuidHolder;
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
 import com.yellowsunn.userservice.presentation.request.EmailSignUpRequest;
 import lombok.RequiredArgsConstructor;

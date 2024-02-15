@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 
 @Component
 public class BCryptPasswordEncoder implements PasswordEncoder {
+
     private static final int COST = 6;
 
     @Override
