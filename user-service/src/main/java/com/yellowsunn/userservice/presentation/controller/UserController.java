@@ -24,12 +24,7 @@ public class UserController {
     public String emailSignUp(@RequestBody EmailSignUpRequest request) {
         String userId = uuidHolder.random();
 
-        UserCreateCommand command = UserCreateCommand.builder()
-                .userId(userId)
-                .email(request.email())
-                .password(request.password())
-                .nickname(request.nickname())
-                .build();
+        UserCreateCommand command = request.toUserCreateCommand(userId);
 
         userEmailService.createEmailUser(command);
 

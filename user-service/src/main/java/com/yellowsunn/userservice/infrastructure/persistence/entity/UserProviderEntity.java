@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Collections;
 import java.util.List;
 import lombok.AccessLevel;
@@ -20,11 +21,11 @@ import org.springframework.util.CollectionUtils;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "user_provider")
 public class UserProviderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_provider_id")
     private long id;
 
     private String userId;
