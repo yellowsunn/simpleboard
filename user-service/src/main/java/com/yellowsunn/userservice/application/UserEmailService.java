@@ -1,8 +1,10 @@
 package com.yellowsunn.userservice.application;
 
+import com.yellowsunn.userservice.domain.dto.EmailUserInfoDto;
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
 import com.yellowsunn.userservice.domain.entity.User;
 import com.yellowsunn.userservice.domain.repository.UserRepository;
+import com.yellowsunn.userservice.exception.EmailLoginFailedException;
 import com.yellowsunn.userservice.utils.PasswordEncoder;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Builder
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserEmailService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -22,5 +24,14 @@ public class UserService {
                 passwordEncoder.encode(command.password()));
 
         userRepository.save(user);
+    }
+
+    public String login(String email, String password) {
+
+        EmailUserInfoDto emailUserInfoDto = userRepository.findEmailUserInfo(email)
+                .filter(emailUserInfo -> passwordEncoder.match(password, emailUserInfo.password()))
+                .orElseThrow(EmailLoginFailedException::new);
+
+        return emailUserInfoDto.userId();
     }
 }

@@ -11,9 +11,9 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class UserServiceTest {
+class UserEmailServiceTest {
 
-    UserService userService;
+    UserEmailService userEmailService;
 
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
@@ -22,7 +22,7 @@ class UserServiceTest {
     void setUp() {
         userRepository = new FakeUserRepository();
         passwordEncoder = new TestPasswordEncoder("encrypted");
-        userService = UserService.builder()
+        userEmailService = UserEmailService.builder()
                 .userRepository(userRepository)
                 .passwordEncoder(passwordEncoder)
                 .build();
@@ -40,6 +40,6 @@ class UserServiceTest {
 
         // when
         assertThatNoException()
-                .isThrownBy(() -> userService.createEmailUser(command));
+                .isThrownBy(() -> userEmailService.createEmailUser(command));
     }
 }

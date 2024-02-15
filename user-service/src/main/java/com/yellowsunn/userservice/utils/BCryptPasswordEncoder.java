@@ -15,4 +15,14 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
 
         return BCrypt.withDefaults().hashToString(COST, rawPassword.toCharArray());
     }
+
+    @Override
+    public boolean match(String rawPassword, String encodedPassword) {
+        Assert.notNull(rawPassword, () -> "rawPassword must not be null");
+        Assert.notNull(encodedPassword, () -> "encodedPassword must not be null");
+
+        BCrypt.Result result = BCrypt.verifyer().verify(rawPassword.toCharArray(), encodedPassword);
+
+        return result.verified;
+    }
 }
