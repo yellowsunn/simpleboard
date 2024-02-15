@@ -19,20 +19,14 @@ public class UserEntity {
 
     private String userId;
 
-    private String email;
-
-    private String password;
-
     private String nickname;
 
     private String thumbnail;
 
     @Builder
-    private UserEntity(long id, String userId, String email, String password, String nickname, String thumbnail) {
+    private UserEntity(long id, String userId, String nickname, String thumbnail) {
         this.id = id;
         this.userId = userId;
-        this.email = email;
-        this.password = password;
         this.nickname = nickname;
         this.thumbnail = thumbnail;
     }
@@ -40,8 +34,6 @@ public class UserEntity {
     public static UserEntity create(UserCreate userCreate) {
         return UserEntity.builder()
                 .userId(userCreate.userId())
-                .email(userCreate.email())
-                .password(userCreate.password())
                 .nickname(userCreate.nickname())
                 .thumbnail(userCreate.thumbnail())
                 .build();

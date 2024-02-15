@@ -19,7 +19,7 @@ public class UserController {
     private final UuidHolder uuidHolder;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/api/v2/users/signup/email")
+    @PostMapping("/api/v3/auth/email/signup")
     public String signUpEmail(@RequestBody EmailSignUpRequest request) {
         String userId = uuidHolder.random();
 

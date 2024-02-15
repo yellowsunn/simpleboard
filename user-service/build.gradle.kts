@@ -9,6 +9,8 @@ version = "0.0.1-SNAPSHOT"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.apache.commons:commons-lang3")
+    implementation("org.apache.commons:commons-collections4:4.4")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

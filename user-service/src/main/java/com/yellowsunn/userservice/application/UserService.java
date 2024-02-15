@@ -13,6 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public void createEmailUser(UserCreateCommand command) {
+
         User user = User.createEmailUser(command.userId(), command.email(), command.password(), command.nickname());
 
         userRepository.save(user);

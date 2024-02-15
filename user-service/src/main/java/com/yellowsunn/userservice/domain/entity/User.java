@@ -1,45 +1,51 @@
 package com.yellowsunn.userservice.domain.entity;
 
 import com.yellowsunn.userservice.domain.dto.UserCreate;
-import com.yellowsunn.userservice.domain.vo.EmailProvider;
+import com.yellowsunn.userservice.domain.dto.UserProviderCreate;
+import com.yellowsunn.userservice.domain.entity.provider.EmailProvider;
 import com.yellowsunn.userservice.domain.vo.UserId;
-import com.yellowsunn.userservice.domain.vo.UserProvider;
+import com.yellowsunn.userservice.domain.entity.provider.UserProvider;
 import java.util.List;
 import lombok.Builder;
+import org.springframework.util.Assert;
 
 public final class User {
 
-    private UserId userId;
-    private String email;
-    private String password;
-    private String nickname;
-    private List<UserProvider> providers;
+    private final UserId userId;
+    private final String nickname;
+    private final List<UserProvider> providers;
 
     @Builder
-    private User(UserId userId, String email, String password, String nickname, List<UserProvider> providers) {
+    private User(UserId userId, String nickname, List<UserProvider> providers) {
+        Assert.notNull(userId, () -> "userId must not be null.");
         this.userId = userId;
-        this.email = email;
-        this.password = password;
+
+        Assert.hasText(nickname, () -> "nickname must not be blank.");
         this.nickname = nickname;
+
+        Assert.notEmpty(providers, () -> "providers must not be empty.");
         this.providers = providers;
     }
 
     public static User createEmailUser(String userId, String email, String password, String nickname) {
         return User.builder()
                 .userId(UserId.fromString(userId))
-                .email(email)
-                .password(password)
                 .nickname(nickname)
-                .providers(List.of(EmailProvider.fromEmail(email)))
+                .providers(List.of(EmailProvider.from(userId, email, password)))
                 .build();
     }
 
     public UserCreate toUserCreate() {
         return UserCreate.builder()
                 .userId(userId.toString())
-                .email(email)
-                .password(password)
                 .nickname(nickname)
                 .build();
     }
+
+    public List<UserProviderCreate> toUserProviderCreates() {
+        return providers.stream()
+                .map(UserProvider::toUserProviderCreate)
+                .toList();
+    }
+
 }
