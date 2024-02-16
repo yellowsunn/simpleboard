@@ -1,7 +1,7 @@
 package com.yellowsunn.userservice.presentation.controller;
 
-import com.yellowsunn.userservice.application.port.out.UuidHolder;
-import com.yellowsunn.userservice.application.service.UserEmailService;
+import com.yellowsunn.userservice.utils.UuidHolder;
+import com.yellowsunn.userservice.application.UserEmailService;
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
 import com.yellowsunn.userservice.domain.vo.UserId;
 import com.yellowsunn.userservice.presentation.request.EmailLoginRequest;

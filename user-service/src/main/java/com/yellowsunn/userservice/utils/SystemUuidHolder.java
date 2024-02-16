@@ -1,6 +1,6 @@
-package com.yellowsunn.userservice.infrastructure.system;
+package com.yellowsunn.userservice.utils;
 
-import com.yellowsunn.userservice.application.port.out.UuidHolder;
+import com.yellowsunn.userservice.utils.UuidHolder;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 

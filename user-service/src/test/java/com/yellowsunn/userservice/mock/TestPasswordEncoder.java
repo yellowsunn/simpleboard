@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.mock;
 
-import com.yellowsunn.userservice.application.port.out.PasswordEncoder;
+import com.yellowsunn.userservice.utils.PasswordEncoder;
 
 public class TestPasswordEncoder implements PasswordEncoder {
 

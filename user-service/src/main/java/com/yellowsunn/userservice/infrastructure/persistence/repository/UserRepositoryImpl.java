@@ -2,7 +2,7 @@ package com.yellowsunn.userservice.infrastructure.persistence.repository;
 
 import com.yellowsunn.userservice.domain.dto.EmailUserInfoDto;
 import com.yellowsunn.userservice.domain.entity.User;
-import com.yellowsunn.userservice.application.port.out.UserRepository;
+import com.yellowsunn.userservice.domain.UserRepository;
 import com.yellowsunn.userservice.domain.vo.Provider;
 import com.yellowsunn.userservice.infrastructure.persistence.entity.UserEntity;
 import com.yellowsunn.userservice.infrastructure.persistence.entity.UserProviderEntity;
