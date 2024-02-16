@@ -3,7 +3,7 @@ package com.yellowsunn.userservice.application;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
-import com.yellowsunn.userservice.domain.UserRepository;
+import com.yellowsunn.userservice.domain.port.UserRepository;
 import com.yellowsunn.userservice.mock.FakeUserRepository;
 import com.yellowsunn.userservice.mock.TestPasswordEncoder;
 import com.yellowsunn.userservice.utils.PasswordEncoder;

@@ -1,9 +1,10 @@
 package com.yellowsunn.userservice.infrastructure.persistence.repository;
 
+import com.yellowsunn.userservice.domain.port.UserRepository;
 import com.yellowsunn.userservice.domain.dto.EmailUserInfoDto;
 import com.yellowsunn.userservice.domain.entity.User;
-import com.yellowsunn.userservice.domain.UserRepository;
 import com.yellowsunn.userservice.domain.vo.Provider;
+import com.yellowsunn.userservice.domain.vo.UserId;
 import com.yellowsunn.userservice.infrastructure.persistence.entity.UserEntity;
 import com.yellowsunn.userservice.infrastructure.persistence.entity.UserProviderEntity;
 import java.util.List;
@@ -38,7 +39,7 @@ public class UserRepositoryImpl implements UserRepository {
         return userProviderJpaRepository.findByEmailAndProvider(email, Provider.EMAIL)
                 .filter(userProviderEntity -> userJpaRepository.existsByUserId(userProviderEntity.getUserId()))
                 .map(userProviderEntity -> EmailUserInfoDto.builder()
-                        .userId(userProviderEntity.getUserId())
+                        .userId(UserId.fromString(userProviderEntity.getUserId()))
                         .password(userProviderEntity.getPassword())
                         .build()
                 );

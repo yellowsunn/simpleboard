@@ -1,9 +1,9 @@
 package com.yellowsunn.userservice.application;
 
+import com.yellowsunn.userservice.domain.port.UserRepository;
 import com.yellowsunn.userservice.domain.dto.EmailUserInfoDto;
 import com.yellowsunn.userservice.domain.dto.UserCreateCommand;
 import com.yellowsunn.userservice.domain.entity.User;
-import com.yellowsunn.userservice.domain.UserRepository;
 import com.yellowsunn.userservice.domain.vo.UserId;
 import com.yellowsunn.userservice.exception.EmailLoginFailedException;
 import com.yellowsunn.userservice.utils.PasswordEncoder;
@@ -33,6 +33,6 @@ public class UserEmailService {
                 .filter(emailUserInfo -> passwordEncoder.match(password, emailUserInfo.password()))
                 .orElseThrow(EmailLoginFailedException::new);
 
-        return UserId.fromString(emailUserInfoDto.userId());
+        return emailUserInfoDto.userId();
     }
 }
