@@ -62,7 +62,8 @@ public class UserController {
     @PostMapping("/api/v2/auth/oauth2/kakao")
     public OAuth2UserInfoDto getKakaoUserInfo(@RequestBody KakaoUserInfoRequest request) {
 
-        OAuth2UserInfoDto kakaoToken = userOAuth2Service.getKakaoToken(request.token());
+        OAuth2UserInfoDto kakaoToken = userOAuth2Service.getKakaoUserInfo(request.token(), request.clientId(),
+                request.redirectUrl());
         return kakaoToken;
     }
 }

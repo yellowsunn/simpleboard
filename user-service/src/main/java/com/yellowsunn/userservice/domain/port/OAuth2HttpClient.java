@@ -9,5 +9,5 @@ public interface OAuth2HttpClient {
 
     Optional<OAuth2UserInfoDto> findNaverUserInfo(String token);
 
-    Optional<OAuth2UserInfoDto> findKakaoUserInfo(String code);
+    Optional<OAuth2UserInfoDto> findKakaoUserInfo(String code, String clientId, String redirectUrl);
 }

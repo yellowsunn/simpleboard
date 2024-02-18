@@ -53,7 +53,7 @@ public class OAuth2HttpClientImpl implements OAuth2HttpClient {
     }
 
     @Override
-    public Optional<OAuth2UserInfoDto> findKakaoUserInfo(String code) {
+    public Optional<OAuth2UserInfoDto> findKakaoUserInfo(String code, String clientId, String redirectUrl) {
         Map<String, String> data = Map.of(
                 "grant_type", "authorization_code",
                 "client_id", "36a710c0f0041dcbb3f68b717171c947",

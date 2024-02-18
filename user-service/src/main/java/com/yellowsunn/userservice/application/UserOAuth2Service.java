@@ -21,8 +21,8 @@ public class UserOAuth2Service {
                 .orElseThrow(() -> new IllegalStateException("네이버 계정으로 회원정보를 찾을 수 없습니다."));
     }
 
-    public OAuth2UserInfoDto getKakaoToken(String code) {
-        return oAuth2HttpClient.findKakaoUserInfo(code)
+    public OAuth2UserInfoDto getKakaoUserInfo(String code, String clientId, String redirectUrl) {
+        return oAuth2HttpClient.findKakaoUserInfo(code, clientId, redirectUrl)
                 .orElseThrow(() -> new IllegalStateException("카카오 계정으로 회원정보를 찾을 수 없습니다."));
     }
 }
