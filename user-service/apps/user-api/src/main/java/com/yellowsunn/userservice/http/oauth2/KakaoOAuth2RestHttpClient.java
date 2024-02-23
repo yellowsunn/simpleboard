@@ -2,12 +2,10 @@ package com.yellowsunn.userservice.http.oauth2;
 
 import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.constant.OAuth2Type;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
 import com.yellowsunn.userservice.dto.KakaoOAuth2TokenResponseDto;
 import com.yellowsunn.userservice.dto.KakaoOAuth2UserInfoResponseDto;
 import com.yellowsunn.userservice.dto.KakaoUserInfo;
 import com.yellowsunn.userservice.dto.KakaoUserProfile;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;

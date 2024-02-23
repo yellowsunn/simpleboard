@@ -2,9 +2,7 @@ package com.yellowsunn.userservice.http.oauth2;
 
 import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.constant.OAuth2Type;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
 import com.yellowsunn.userservice.dto.NaverOAuth2UserInfoResponseDto;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

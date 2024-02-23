@@ -2,9 +2,7 @@ package com.yellowsunn.userservice.http.oauth2;
 
 import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.constant.OAuth2Type;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
 import com.yellowsunn.userservice.dto.GoogleOAuth2UserInfoResponseDto;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClient;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;

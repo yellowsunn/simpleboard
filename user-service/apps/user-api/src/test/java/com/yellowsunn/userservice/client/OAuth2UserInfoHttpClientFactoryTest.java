@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.http.client;
+package com.yellowsunn.userservice.client;
 
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClient;
