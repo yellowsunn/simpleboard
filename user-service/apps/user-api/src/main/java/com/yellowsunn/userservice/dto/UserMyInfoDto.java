@@ -2,9 +2,8 @@ package com.yellowsunn.userservice.dto;
 
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.User;
-import lombok.Builder;
-
 import java.util.List;
+import lombok.Builder;
 
 @Builder
 public record UserMyInfoDto(String email, String nickName, String thumbnail, List<Provider> providers) {

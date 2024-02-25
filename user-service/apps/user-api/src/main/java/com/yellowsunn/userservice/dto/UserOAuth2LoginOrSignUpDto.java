@@ -1,13 +1,14 @@
 package com.yellowsunn.userservice.dto;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
-
 @Getter
 public class UserOAuth2LoginOrSignUpDto {
+
     private final Boolean isLogin;
 
     @JsonInclude(NON_NULL)

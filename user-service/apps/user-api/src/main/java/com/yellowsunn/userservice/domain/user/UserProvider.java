@@ -20,6 +20,7 @@ import lombok.NonNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class UserProvider {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_provider_id")
@@ -38,8 +39,8 @@ public class UserProvider {
 
     @Builder
     public UserProvider(@NonNull User user,
-                        @NonNull Provider provider,
-                        @NonNull String providerEmail) {
+            @NonNull Provider provider,
+            @NonNull String providerEmail) {
         this.user = user;
         this.provider = provider;
         this.providerEmail = providerEmail;

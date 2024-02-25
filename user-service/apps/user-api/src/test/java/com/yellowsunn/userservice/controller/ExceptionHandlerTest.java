@@ -1,10 +1,10 @@
 package com.yellowsunn.userservice.controller;
 
 import com.yellowsunn.common.exception.LoginUserNotFoundException;
-import com.yellowsunn.userservice.facade.UserAuthFacade;
-import com.yellowsunn.userservice.facade.UserFacade;
-import com.yellowsunn.userservice.service.UserAuthService;
-import com.yellowsunn.userservice.service.UserService;
+import com.yellowsunn.userservice.application.UserAuthFacade;
+import com.yellowsunn.userservice.application.UserFacade;
+import com.yellowsunn.userservice.application.UserAuthService;
+import com.yellowsunn.userservice.application.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

@@ -9,19 +9,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.util.UUID;
-
 @Getter
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -46,9 +46,9 @@ public class User extends BaseTimeEntity {
 
     @Builder(builderMethodName = "emailUserBuilder", builderClassName = "EmailUserBuilder")
     private User(@NonNull String email,
-                 @NonNull String password,
-                 @NonNull String nickName,
-                 String thumbnail) {
+            @NonNull String password,
+            @NonNull String nickName,
+            String thumbnail) {
         this.email = email;
         this.password = password;
         this.uuid = UUID.randomUUID().toString();
@@ -59,8 +59,8 @@ public class User extends BaseTimeEntity {
 
     @Builder(builderMethodName = "oauth2UserBuilder", builderClassName = "OAut2UserBuilder")
     private User(@NonNull String email,
-                 @NonNull String nickName,
-                 String thumbnail) {
+            @NonNull String nickName,
+            String thumbnail) {
         this.email = email;
         this.uuid = UUID.randomUUID().toString();
         this.nickName = nickName;

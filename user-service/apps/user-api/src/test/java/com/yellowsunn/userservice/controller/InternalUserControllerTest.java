@@ -3,7 +3,7 @@ package com.yellowsunn.userservice.controller;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.dto.InternalUserInfoDto;
 import com.yellowsunn.userservice.dto.InternalUserSimpleDto;
-import com.yellowsunn.userservice.service.InternalUserService;
+import com.yellowsunn.userservice.application.InternalUserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

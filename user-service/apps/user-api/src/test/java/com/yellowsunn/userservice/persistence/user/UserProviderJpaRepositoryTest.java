@@ -3,6 +3,8 @@ package com.yellowsunn.userservice.persistence.user;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.domain.user.UserProvider;
+import com.yellowsunn.userservice.infrastructure.persistence.UserJpaRepository;
+import com.yellowsunn.userservice.infrastructure.persistence.UserProviderJpaRepository;
 import com.yellowsunn.userservice.persistence.PersistenceIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

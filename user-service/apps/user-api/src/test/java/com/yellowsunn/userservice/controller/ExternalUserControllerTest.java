@@ -2,12 +2,12 @@ package com.yellowsunn.userservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.userservice.domain.user.Provider;
-import com.yellowsunn.userservice.dto.UserInfoUpdateCommand;
+import com.yellowsunn.userservice.application.command.UserInfoUpdateCommand;
 import com.yellowsunn.userservice.controller.request.UserInfoUpdateRequest;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
-import com.yellowsunn.userservice.facade.UserFacade;
-import com.yellowsunn.userservice.file.FileUploadRequest;
-import com.yellowsunn.userservice.service.UserService;
+import com.yellowsunn.userservice.application.UserFacade;
+import com.yellowsunn.userservice.application.command.FileUploadCommand;
+import com.yellowsunn.userservice.application.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -141,7 +141,7 @@ class ExternalUserControllerTest extends RestDocsApiTest {
     void updateMyThumbnail() throws Exception {
         var userId = 1L;
         var imageFile = new MockMultipartFile("thumbnail", "test.png", "image/png", "<< png data >>".getBytes());
-        given(userFacade.updateUserThumbnail(eq(userId), any(FileUploadRequest.class)))
+        given(userFacade.updateUserThumbnail(eq(userId), any(FileUploadCommand.class)))
                 .willReturn("http://localhost:8080/thumbnail/test.png");
 
         mockMvc.perform(multipart(HttpMethod.PATCH, "/api/v2/users/me/thumbnail")

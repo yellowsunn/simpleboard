@@ -4,12 +4,12 @@ import static java.util.Objects.requireNonNull;
 
 import com.yellowsunn.common.annotation.LoginUser;
 import com.yellowsunn.common.response.ResultResponse;
+import com.yellowsunn.userservice.application.UserFacade;
+import com.yellowsunn.userservice.application.UserService;
 import com.yellowsunn.userservice.controller.request.UserInfoUpdateRequest;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
 import com.yellowsunn.userservice.exception.CustomIOException;
-import com.yellowsunn.userservice.facade.UserFacade;
-import com.yellowsunn.userservice.file.FileUploadRequest;
-import com.yellowsunn.userservice.service.UserService;
+import com.yellowsunn.userservice.application.command.FileUploadCommand;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,8 +81,8 @@ public class ExternalUserController {
         return !StringUtils.startsWith(contentType, "image/");
     }
 
-    private FileUploadRequest generateFileUploadRequest(MultipartFile thumbnail, InputStream inputStream) {
-        return FileUploadRequest.builder()
+    private FileUploadCommand generateFileUploadRequest(MultipartFile thumbnail, InputStream inputStream) {
+        return FileUploadCommand.builder()
                 .inputStream(inputStream)
                 .originalFileName(requireNonNull(thumbnail.getOriginalFilename()))
                 .build();

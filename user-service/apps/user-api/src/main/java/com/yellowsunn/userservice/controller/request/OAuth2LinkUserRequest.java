@@ -1,7 +1,7 @@
 package com.yellowsunn.userservice.controller.request;
 
+import com.yellowsunn.userservice.application.command.UserOAuth2LinkCommand;
 import com.yellowsunn.userservice.constant.OAuth2Type;
-import com.yellowsunn.userservice.dto.UserOAuth2LinkCommand;
 import jakarta.validation.constraints.NotBlank;
 
 /**
@@ -12,6 +12,7 @@ public record OAuth2LinkUserRequest(
         @NotBlank String token,
         @NotBlank String type
 ) {
+
     public UserOAuth2LinkCommand toCommand(Long userId) {
         return UserOAuth2LinkCommand.builder()
                 .userId(userId)

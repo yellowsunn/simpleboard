@@ -3,13 +3,13 @@ package com.yellowsunn.userservice.domain;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import lombok.Getter;
-
 import java.time.ZonedDateTime;
+import lombok.Getter;
 
 @Getter
 @MappedSuperclass
 public abstract class BaseTimeEntity {
+
     private ZonedDateTime createdAt;
     private ZonedDateTime modifiedAt;
 

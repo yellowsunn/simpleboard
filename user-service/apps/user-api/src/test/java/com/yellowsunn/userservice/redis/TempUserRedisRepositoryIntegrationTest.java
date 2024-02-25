@@ -3,6 +3,7 @@ package com.yellowsunn.userservice.redis;
 import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.config.RedisConfiguration;
+import com.yellowsunn.userservice.infrastructure.redis.TempUserRedisRepository;
 import com.yellowsunn.userservice.redis.config.TestRedisConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

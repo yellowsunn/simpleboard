@@ -1,15 +1,16 @@
 package com.yellowsunn.userservice.facade;
 
+import com.yellowsunn.userservice.application.UserAuthFacade;
 import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
-import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpCommand;
+import com.yellowsunn.userservice.application.command.UserOAuth2LoginOrSignUpCommand;
 import com.yellowsunn.userservice.exception.CustomUserException;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClient;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfoHttpClientFactory;
-import com.yellowsunn.userservice.repository.TempUserCacheRepository;
-import com.yellowsunn.userservice.service.UserAuthService;
+import com.yellowsunn.userservice.infrastructure.http.oauth2.OAuth2UserInfo;
+import com.yellowsunn.userservice.infrastructure.http.oauth2.OAuth2UserInfoHttpClient;
+import com.yellowsunn.userservice.infrastructure.http.oauth2.OAuth2UserInfoHttpClientFactory;
+import com.yellowsunn.userservice.application.port.TempUserCacheRepository;
+import com.yellowsunn.userservice.application.UserAuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

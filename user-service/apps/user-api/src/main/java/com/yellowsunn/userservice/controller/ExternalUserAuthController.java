@@ -2,6 +2,8 @@ package com.yellowsunn.userservice.controller;
 
 import com.yellowsunn.common.annotation.LoginUser;
 import com.yellowsunn.common.response.ResultResponse;
+import com.yellowsunn.userservice.application.UserAuthFacade;
+import com.yellowsunn.userservice.application.UserAuthService;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.controller.request.EmailLoginRequest;
 import com.yellowsunn.userservice.controller.request.EmailSignUpRequest;
@@ -11,8 +13,6 @@ import com.yellowsunn.userservice.controller.request.OAuth2SignUpRequest;
 import com.yellowsunn.userservice.controller.request.RefreshAccessTokenRequest;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpDto;
-import com.yellowsunn.userservice.facade.UserAuthFacade;
-import com.yellowsunn.userservice.service.UserAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

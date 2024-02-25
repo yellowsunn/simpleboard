@@ -1,10 +1,11 @@
 package com.yellowsunn.userservice.service;
 
 import com.yellowsunn.common.exception.LoginUserNotFoundException;
+import com.yellowsunn.userservice.application.UserService;
 import com.yellowsunn.userservice.domain.user.User;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
-import com.yellowsunn.userservice.repository.UserProviderRepository;
-import com.yellowsunn.userservice.repository.UserRepository;
+import com.yellowsunn.userservice.application.port.UserProviderRepository;
+import com.yellowsunn.userservice.application.port.UserRepository;
 import com.yellowsunn.userservice.utils.BCryptPasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

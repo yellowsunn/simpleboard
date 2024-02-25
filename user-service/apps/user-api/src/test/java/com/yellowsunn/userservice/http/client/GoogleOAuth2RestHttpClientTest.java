@@ -1,8 +1,8 @@
 package com.yellowsunn.userservice.http.client;
 
 import com.yellowsunn.userservice.constant.OAuth2Request;
-import com.yellowsunn.userservice.http.oauth2.GoogleOAuth2RestHttpClient;
-import com.yellowsunn.userservice.http.oauth2.OAuth2UserInfo;
+import com.yellowsunn.userservice.infrastructure.http.oauth2.GoogleOAuth2RestHttpClient;
+import com.yellowsunn.userservice.infrastructure.http.oauth2.OAuth2UserInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

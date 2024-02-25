@@ -1,16 +1,16 @@
 package com.yellowsunn.userservice.domain.user;
 
 import com.yellowsunn.common.utils.Base64Handler;
+import java.beans.ConstructorProperties;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import java.beans.ConstructorProperties;
-import java.util.UUID;
-
 @Getter
 @EqualsAndHashCode
 public class TempUser {
+
     private final String email;
     private final Provider provider;
     private final String thumbnail;
@@ -20,9 +20,9 @@ public class TempUser {
     @Builder
     @ConstructorProperties({"email", "provider", "thumbnail", "csrfToken"})
     private TempUser(String email,
-                     Provider provider,
-                     String thumbnail,
-                     String csrfToken) {
+            Provider provider,
+            String thumbnail,
+            String csrfToken) {
         this.email = email;
         this.provider = provider;
         this.thumbnail = thumbnail;

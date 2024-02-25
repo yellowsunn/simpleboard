@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class CustomUserException extends RuntimeException {
+
     private final UserErrorCode errorCode;
 
     public CustomUserException(UserErrorCode errorCode) {

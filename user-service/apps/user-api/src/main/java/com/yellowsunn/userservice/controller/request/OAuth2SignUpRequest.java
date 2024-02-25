@@ -1,12 +1,12 @@
 package com.yellowsunn.userservice.controller.request;
 
-import com.yellowsunn.userservice.dto.UserOAuth2SignUpCommand;
+import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_NICKNAME_MESSAGE;
+import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_NICKNAME_REGEX;
+
+import com.yellowsunn.userservice.application.command.UserOAuth2SignUpCommand;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.apache.commons.lang3.StringUtils;
-
-import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_NICKNAME_MESSAGE;
-import static com.yellowsunn.userservice.constant.HttpRequestConst.VALID_NICKNAME_REGEX;
 
 public record OAuth2SignUpRequest(
         String state,

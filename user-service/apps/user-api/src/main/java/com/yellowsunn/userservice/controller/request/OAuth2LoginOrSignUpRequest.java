@@ -1,7 +1,7 @@
 package com.yellowsunn.userservice.controller.request;
 
+import com.yellowsunn.userservice.application.command.UserOAuth2LoginOrSignUpCommand;
 import com.yellowsunn.userservice.constant.OAuth2Type;
-import com.yellowsunn.userservice.dto.UserOAuth2LoginOrSignUpCommand;
 import jakarta.validation.constraints.NotBlank;
 
 /**
@@ -14,6 +14,7 @@ public record OAuth2LoginOrSignUpRequest(
         @NotBlank String type,
         @NotBlank String state
 ) {
+
     public UserOAuth2LoginOrSignUpCommand toCommand() {
         return UserOAuth2LoginOrSignUpCommand.builder()
                 .oAuth2Token(token)

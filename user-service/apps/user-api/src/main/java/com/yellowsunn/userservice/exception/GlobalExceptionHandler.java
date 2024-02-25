@@ -3,6 +3,7 @@ package com.yellowsunn.userservice.exception;
 import com.yellowsunn.common.exception.LoginRequireException;
 import com.yellowsunn.common.exception.LoginUserNotFoundException;
 import com.yellowsunn.common.response.ResultResponse;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.HttpStatus;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.List;
 
 @Slf4j
 @RestControllerAdvice

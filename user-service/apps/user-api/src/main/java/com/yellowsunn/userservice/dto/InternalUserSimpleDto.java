@@ -10,6 +10,7 @@ public record InternalUserSimpleDto(
         String nickName,
         String thumbnail
 ) {
+
     public static InternalUserSimpleDto from(User user) {
         return InternalUserSimpleDto.builder()
                 .userId(user.getId())
