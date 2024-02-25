@@ -1,8 +1,8 @@
-package com.yellowsunn.userservice.dto;
+package com.yellowsunn.userservice.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record RefreshAccessTokenRequestDto(
+public record RefreshAccessTokenRequest(
         @NotBlank String accessToken,
         @NotBlank String refreshToken
 ) {

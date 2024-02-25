@@ -1,4 +1,4 @@
-package com.yellowsunn.userservice.redis.config;
+package com.yellowsunn.userservice.config;
 
 import com.yellowsunn.userservice.domain.user.TempUser;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +10,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfiguration {
+
     @Bean
     public RedisTemplate<String, TempUser> tempUserRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         var keySerializer = new StringRedisSerializer();

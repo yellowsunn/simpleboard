@@ -2,12 +2,12 @@ package com.yellowsunn.userservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.userservice.constant.OAuth2Type;
-import com.yellowsunn.userservice.dto.EmailLoginRequestDto;
-import com.yellowsunn.userservice.dto.EmailSignUpRequestDto;
-import com.yellowsunn.userservice.dto.OAuth2LinkUserRequestDto;
-import com.yellowsunn.userservice.dto.OAuth2LoginOrSignUpRequestDto;
-import com.yellowsunn.userservice.dto.OAuth2SignUpRequestDto;
-import com.yellowsunn.userservice.dto.RefreshAccessTokenRequestDto;
+import com.yellowsunn.userservice.controller.request.EmailLoginRequest;
+import com.yellowsunn.userservice.controller.request.EmailSignUpRequest;
+import com.yellowsunn.userservice.controller.request.OAuth2LinkUserRequest;
+import com.yellowsunn.userservice.controller.request.OAuth2LoginOrSignUpRequest;
+import com.yellowsunn.userservice.controller.request.OAuth2SignUpRequest;
+import com.yellowsunn.userservice.controller.request.RefreshAccessTokenRequest;
 import com.yellowsunn.userservice.dto.UserEmailLoginCommand;
 import com.yellowsunn.userservice.dto.UserEmailSignUpCommand;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
@@ -59,7 +59,7 @@ class ExternalUserAuthControllerTest extends RestDocsApiTest {
     @Test
     @DisplayName("이메일 회원가입")
     void signUpEmail() throws Exception {
-        var requestDto = new EmailSignUpRequestDto("test@example.com", "12345678", "닉네임");
+        var requestDto = new EmailSignUpRequest("test@example.com", "12345678", "닉네임");
         given(userAuthService.signUpEmail(any(UserEmailSignUpCommand.class))).willReturn(true);
 
         mockMvc.perform(post("/api/v2/auth/email/signup")
@@ -87,7 +87,7 @@ class ExternalUserAuthControllerTest extends RestDocsApiTest {
     @Test
     @DisplayName("이메일 로그인")
     void loginEmail() throws Exception {
-        var requestDto = new EmailLoginRequestDto("test@example.com", "12345678");
+        var requestDto = new EmailLoginRequest("test@example.com", "12345678");
         given(userAuthService.loginEmail(any(UserEmailLoginCommand.class)))
                 .willReturn(UserLoginTokenDto.builder()
                         .accessToken("<< access token >>")
@@ -120,7 +120,7 @@ class ExternalUserAuthControllerTest extends RestDocsApiTest {
     @DisplayName("OAuth2 로그인")
     void loginOAuth2() throws Exception {
         var state = "ZTdjMGU5NjgtMDRkZS0xMWVlLWJlNTYtMDI0MmFjMTIwMDAy";
-        var requestDto = new OAuth2LoginOrSignUpRequestDto("<< OAuth2 token >>", "google", state);
+        var requestDto = new OAuth2LoginOrSignUpRequest("<< OAuth2 token >>", "google", state);
         given(userAuthFacade.loginOrSignUpRequest(any(UserOAuth2LoginOrSignUpCommand.class)))
                 .willReturn(UserOAuth2LoginOrSignUpDto.loginBuilder()
                         .accessToken("<< access token >>")
@@ -156,7 +156,7 @@ class ExternalUserAuthControllerTest extends RestDocsApiTest {
     @Test
     void singUpRequestOAuth2() throws Exception {
         var state = "ZTdjMGU5NjgtMDRkZS0xMWVlLWJlNTYtMDI0MmFjMTIwMDAy";
-        var requestDto = new OAuth2LoginOrSignUpRequestDto("<< OAuth2 token >>", "google", state);
+        var requestDto = new OAuth2LoginOrSignUpRequest("<< OAuth2 token >>", "google", state);
         given(userAuthFacade.loginOrSignUpRequest(any(UserOAuth2LoginOrSignUpCommand.class)))
                 .willReturn(UserOAuth2LoginOrSignUpDto.signUpRequestBuilder()
                         .tempUserToken("<< temp user token >>")
@@ -191,7 +191,7 @@ class ExternalUserAuthControllerTest extends RestDocsApiTest {
     void singUpCompleteOAuth2() throws Exception {
         var state = "ZTdjMGU5NjgtMDRkZS0xMWVlLWJlNTYtMDI0MmFjMTIwMDAy";
         var tempUserToken = "<< temp user token >>";
-        var requestDto = new OAuth2SignUpRequestDto(state, tempUserToken, "닉네임");
+        var requestDto = new OAuth2SignUpRequest(state, tempUserToken, "닉네임");
         given(userAuthFacade.signUpOAuth2(any(UserOAuth2SignUpCommand.class)))
                 .willReturn(UserLoginTokenDto.builder()
                         .accessToken("<< access token >>")
@@ -224,7 +224,7 @@ class ExternalUserAuthControllerTest extends RestDocsApiTest {
     @DisplayName("OAuth2 계정 연동")
     @Test
     void linkOAuth2() throws Exception {
-        var requestDto = new OAuth2LinkUserRequestDto("<< OAuth2 token >>", "google");
+        var requestDto = new OAuth2LinkUserRequest("<< OAuth2 token >>", "google");
         given(userAuthFacade.linkOAuth2User(any(UserOAuth2LinkCommand.class)))
                 .willReturn(true);
 
@@ -288,7 +288,7 @@ class ExternalUserAuthControllerTest extends RestDocsApiTest {
     void refreshUserToken() throws Exception {
         var accessToken = "<< access token >>";
         var refreshToken = "<< refresh token >>";
-        var requestDto = new RefreshAccessTokenRequestDto(accessToken, refreshToken);
+        var requestDto = new RefreshAccessTokenRequest(accessToken, refreshToken);
         given(userAuthService.refreshUserToken(accessToken, refreshToken))
                 .willReturn(UserLoginTokenDto.builder()
                         .accessToken("<< new access token >>")

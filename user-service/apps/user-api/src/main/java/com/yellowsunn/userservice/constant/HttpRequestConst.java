@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class HttpRequestConst {
+
     public static final String VALID_PASSWORD_REGEX = "^[a-zA-Z0-9~`!@#$%^&*()-+=]{8,24}$";
     public static final String VALID_PASSWORD_MESSAGE = "8~24자의 영문대소문자, 숫자, 특수문자만 가능합니다.";
 

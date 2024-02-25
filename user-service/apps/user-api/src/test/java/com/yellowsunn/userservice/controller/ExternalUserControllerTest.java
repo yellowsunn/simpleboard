@@ -3,7 +3,7 @@ package com.yellowsunn.userservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.dto.UserInfoUpdateCommand;
-import com.yellowsunn.userservice.dto.UserInfoUpdateRequestDto;
+import com.yellowsunn.userservice.controller.request.UserInfoUpdateRequest;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
 import com.yellowsunn.userservice.facade.UserFacade;
 import com.yellowsunn.userservice.file.FileUploadRequest;
@@ -87,7 +87,7 @@ class ExternalUserControllerTest extends RestDocsApiTest {
     @Test
     void updateMyInfo() throws Exception {
         var userId = 1L;
-        var requestDto = new UserInfoUpdateRequestDto("수정된닉네임");
+        var requestDto = new UserInfoUpdateRequest("수정된닉네임");
         given(userService.changeUserInfo(any(UserInfoUpdateCommand.class))).willReturn(true);
 
         mockMvc.perform(put("/api/v2/users/me")
