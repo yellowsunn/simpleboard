@@ -25,14 +25,14 @@ class AuthorizationHeaderFilter(
     override fun apply(config: Any?) = GatewayFilter { exchange, chain ->
         val request: ServerHttpRequest = exchange.request
         val authorization = getAuthorizationValue(request)
-        val userId: Long? = if (authorization.isNotBlank()) {
+        val userId: String? = if (authorization.isNotBlank()) {
             getUserIdByAccessToken(authorization)
         } else {
             null
         }
 
         val changedRequest = exchange.request.mutate()
-            .header(USER_ID, userId?.toString())
+            .header(USER_ID, userId)
             .build()
 
         chain.filter(exchange.mutate().request(changedRequest).build())
@@ -48,10 +48,10 @@ class AuthorizationHeaderFilter(
         return authorization.replace(BEARER, "", ignoreCase = true).trim()
     }
 
-    private fun getUserIdByAccessToken(encodedAccessToken: String): Long? {
+    private fun getUserIdByAccessToken(encodedAccessToken: String): String? {
         return try {
             val accessTokenPayload: AccessTokenPayload = accessTokenParser.parseEncodedToken(encodedAccessToken)
-            accessTokenPayload.id
+            accessTokenPayload.userId
         } catch (e: JwtTokenParseException) {
             logger.warn("토큰 값을 조회하는데 실패하였습니다.")
             null

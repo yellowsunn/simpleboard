@@ -1,15 +1,11 @@
 package com.yellowsunn.userservice.application;
 
-import com.yellowsunn.common.exception.LoginUserNotFoundException;
 import com.yellowsunn.userservice.application.command.UserInfoUpdateCommand;
-import com.yellowsunn.userservice.domain.user.Provider;
-import com.yellowsunn.userservice.domain.user.User;
+import com.yellowsunn.userservice.application.port.UserRepository;
+import com.yellowsunn.userservice.domain.User;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
-import com.yellowsunn.userservice.application.port.UserProviderRepository;
-import com.yellowsunn.userservice.application.port.UserRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
@@ -20,47 +16,41 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserProviderRepository userProviderRepository;
 
-    @Transactional(readOnly = true)
-    public UserMyInfoDto findUserInfo(Long userId) {
-        User user = getUserById(userId);
+    public UserMyInfoDto findUserInfo(String userId) {
+        User user = userRepository.getByUserId(userId);
 
-        List<Provider> providers = userProviderRepository.findProvidersByUserId(user.getId());
-
-        return UserMyInfoDto.fromUser(user, providers);
+        return UserMyInfoDto.from(user);
     }
 
     @Transactional
-    public boolean deleteUserInfo(Long userId) {
-        return userRepository.findById(userId)
-                .filter(user -> userProviderRepository.deleteByUserId(user.getId()))
-                .map(userRepository::delete)
-                .orElse(true);
+    public void deleteUserInfo(String userId) {
+        User user = userRepository.getByUserId(userId);
+
+        userRepository.delete(user);
     }
 
     @Transactional
-    public boolean changeUserThumbnail(Long userId, String thumbnail) {
-        User user = getUserById(userId);
-        return user.changeThumbnail(thumbnail);
+    public void changeUserThumbnail(String userId, String thumbnail) {
+        User user = userRepository.getByUserId(userId);
+        user.changeThumbnail(thumbnail);
+
+        userRepository.update(user);
     }
 
     @Transactional
-    public boolean changeUserInfo(UserInfoUpdateCommand command) {
-        User user = getUserById(command.userId());
-        checkValidNickName(user.getId(), command.nickName());
+    public void changeUserInfo(UserInfoUpdateCommand command) {
+        checkValidNickName(command.userId(), command.nickName());
 
-        return user.changeNickName(command.nickName());
+        User user = userRepository.getByUserId(command.userId());
+        user.changeNickName(command.nickName());
+
+        userRepository.update(user);
     }
 
-    private User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(LoginUserNotFoundException::new);
-    }
-
-    private void checkValidNickName(Long userId, String nickName) {
+    private void checkValidNickName(String userId, String nickName) {
         boolean isExist = userRepository.findByNickName(nickName)
-                .map(user -> ObjectUtils.notEqual(user.getId(), userId))
+                .map(user -> ObjectUtils.notEqual(user.getUserId(), userId))
                 .orElse(false);
 
         if (isExist) {

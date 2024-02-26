@@ -10,10 +10,10 @@
         <li class="delete">삭제</li>
       </ul>
       <template v-if="!isMobile">
-        <UserTable :user="currentUser"></UserTable>
+        <UserTable :userEntity="currentUser"></UserTable>
       </template>
       <template v-else>
-        <UserTableMobile :user="currentUser"></UserTableMobile>
+        <UserTableMobile :userEntity="currentUser"></UserTableMobile>
       </template>
     </div>
 

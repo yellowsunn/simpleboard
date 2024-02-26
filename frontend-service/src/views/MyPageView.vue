@@ -1,10 +1,10 @@
 <template>
   <div v-if="userInfo" class="mx-auto" style="max-width: 950px">
-    <div class="d-flex justify-content-between user-info-content">
+    <div class="d-flex justify-content-between userEntity-info-content">
       <div class="mx-3" style="width: 360px">
         <MyPageUserInfo :userInfo="userInfo"
                         @update-thumbnail="updateThumbnail"
-                        @update-user-info="updateUserInfo"></MyPageUserInfo>
+                        @update-userEntity-info="updateUserInfo"></MyPageUserInfo>
       </div>
       <div class="vr my-3"></div>
       <div class="mx-3" style="width: 360px">
@@ -85,7 +85,7 @@ export default {
 
 <style scoped>
 @media (max-width: 720px) {
-  .user-info-content {
+  .userEntity-info-content {
     align-items: center;
     flex-direction: column;
   }

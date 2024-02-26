@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(InternalUserController.class)
-class InternalUserControllerTest extends RestDocsApiTest {
+class InternalUserControllerTestEntity extends RestDocsApiTest {
     @MockBean
     InternalUserService internalUserService;
 

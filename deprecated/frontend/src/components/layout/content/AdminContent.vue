@@ -15,14 +15,14 @@
         <li class="delete">삭제</li>
       </ul>
       <template v-if="!isMobile">
-        <UserTable v-for="user in usersData" :user="user" :key="user.username"></UserTable>
+        <UserTable v-for="userEntity in usersData" :userEntity="userEntity" :key="userEntity.username"></UserTable>
         <infinite-loading :identifier="infiniteId" @infinite="infiniteHandler" spinner="spiral">
           <span slot="no-more"></span>
           <span slot="no-results"></span>
         </infinite-loading>
       </template>
       <template v-else>
-        <UserTableMobile v-for="user in usersData" :user="user" :key="user.username"></UserTableMobile>
+        <UserTableMobile v-for="userEntity in usersData" :userEntity="userEntity" :key="userEntity.username"></UserTableMobile>
         <infinite-loading :identifier="infiniteId" @infinite="infiniteHandler" spinner="spiral">
           <span slot="no-more"></span>
           <span slot="no-results"></span>
@@ -86,7 +86,7 @@ export default {
         $state.complete();
       } else {
         await this.$store.dispatch('GET_USERS', {
-          search: this.search, 
+          search: this.search,
           cursor: this.cursor
         });
         $state.loaded();

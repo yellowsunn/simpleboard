@@ -19,7 +19,7 @@
         <li class="title">
           <span class="text" @click="movePostPage(postData.id)">{{ postData.title }}<span class="comment" v-if="postData.commentSize > 0">({{ postData.commentSize }})</span></span>
           <i class="far fa-image" v-if="postData.hasImage"></i>
-          
+
         </li>
         <li class="writer">{{ postData.writer || '[탈퇴한 사용자]' }}</li>
         <li class="time">{{ postData.time }}</li>
@@ -31,10 +31,10 @@
         <div class="title_row">
           <span class="text"><span v-if="postData.type === 'NOTICE'" style="padding-right: 4px">[공지]</span>{{ postData.title }}<span class="comment" v-if="postData.commentSize > 0">({{ postData.commentSize }})</span></span>
           <i class="far fa-image" v-if="postData.hasImage"></i>
-          
+
         </div>
         <div class="info_row">
-          <span class="writer"><i class="far fa-user"></i> {{ postData.writer || '[탈퇴한 사용자]' }}</span>
+          <span class="writer"><i class="far fa-userEntity"></i> {{ postData.writer || '[탈퇴한 사용자]' }}</span>
           <span class="text_bar"> | </span>
           <span class="time">날짜 {{ postData.time }}</span>
           <span class="text-bar"> | </span>

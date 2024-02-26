@@ -8,10 +8,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record UserInfoUpdateRequest(
-        @NotBlank @Pattern(regexp = VALID_NICKNAME_REGEX, message = VALID_NICKNAME_MESSAGE) String nickName
+        @NotBlank
+        @Pattern(regexp = VALID_NICKNAME_REGEX, message = VALID_NICKNAME_MESSAGE)
+        String nickName
 ) {
 
-    public UserInfoUpdateCommand toCommand(Long userId) {
+    public UserInfoUpdateCommand toCommand(String userId) {
         return UserInfoUpdateCommand.builder()
                 .userId(userId)
                 .nickName(nickName)

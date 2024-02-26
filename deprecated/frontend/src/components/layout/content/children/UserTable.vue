@@ -1,8 +1,8 @@
 <template>
   <ul class="data">
-    <li class="username">{{ user.username }}</li>
-    <li class="createdDate">{{ user.createdDate }}</li>
-    <li class="role">{{ user.role }}</li>
+    <li class="username">{{ userEntity.username }}</li>
+    <li class="createdDate">{{ userEntity.createdDate }}</li>
+    <li class="role">{{ userEntity.role }}</li>
     <li class="edit">
       <i v-if="isMe" class="fas fa-pen" @click="changePassowrd"></i>
     </li>
@@ -15,24 +15,24 @@
 <script>
 export default {
   props: {
-    user: Object,
+    userEntity: Object,
     websocket: WebSocket
   },
   data() {
     return {
       edit: false,
       data: {
-        username: this.user.username,
-        role: this.user.role,
+        username: this.userEntity.username,
+        role: this.userEntity.role,
       },
     }
   },
   computed: {
     isMe() {
-      return this.$store.state.userInfo.id === this.user.id;
+      return this.$store.state.userInfo.id === this.userEntity.id;
     },
     isValidDelete() {
-      return this.$store.state.userInfo.role === 'ADMIN' && this.user.role !== 'ADMIN';
+      return this.$store.state.userInfo.role === 'ADMIN' && this.userEntity.role !== 'ADMIN';
     }
   },
   methods: {
@@ -40,7 +40,7 @@ export default {
       if (this.isRoot) return;
       this.data = {
         ...this.data,
-        role: this.user.role
+        role: this.userEntity.role
       };
       this.edit = !this.edit;
     },
@@ -55,11 +55,11 @@ export default {
             alert('탈퇴가 성공적으로 완료되었습니다.');
             this.$router.push('/');
           } else if (this.isValidDelete) {
-            await this.$store.dispatch('DELETE_USER', this.user.id);
+            await this.$store.dispatch('DELETE_USER', this.userEntity.id);
             alert('탈퇴가 성공적으로 완료되었습니다.');
             this.$router.go(0);
-          } 
-          
+          }
+
         } catch (error) {
           alert("실패했습니다.");
         }

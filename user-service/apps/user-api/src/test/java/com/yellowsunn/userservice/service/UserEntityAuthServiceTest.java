@@ -5,8 +5,8 @@ import com.yellowsunn.common.utils.token.RefreshTokenHandler;
 import com.yellowsunn.userservice.application.UserAuthService;
 import com.yellowsunn.userservice.constant.OAuth2Type;
 import com.yellowsunn.userservice.domain.user.Provider;
-import com.yellowsunn.userservice.domain.user.User;
-import com.yellowsunn.userservice.domain.user.UserProvider;
+import com.yellowsunn.userservice.domain.user.UserEntity;
+import com.yellowsunn.userservice.domain.user.UserProviderEntity;
 import com.yellowsunn.userservice.application.command.UserEmailLoginCommand;
 import com.yellowsunn.userservice.application.command.UserEmailSignUpCommand;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
@@ -14,8 +14,6 @@ import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
 import com.yellowsunn.userservice.infrastructure.http.oauth2.OAuth2UserInfo;
 import com.yellowsunn.userservice.application.port.TempUserCacheRepository;
-import com.yellowsunn.userservice.application.port.UserProviderRepository;
-import com.yellowsunn.userservice.application.port.UserRepository;
 import com.yellowsunn.userservice.utils.BCryptPasswordEncoder;
 import com.yellowsunn.userservice.utils.PasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,9 +30,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class UserAuthServiceTest {
-    UserRepository userRepository = mock(UserRepository.class);
-    UserProviderRepository userProviderRepository = mock(UserProviderRepository.class);
+class UserEntityAuthServiceTest {
+    UserDeprecatedRepository userDeprecatedRepository = mock(UserDeprecatedRepository.class);
+    UserProviderDeprecatedRepository userProviderDeprecatedRepository = mock(UserProviderDeprecatedRepository.class);
     TempUserCacheRepository tempUserCacheRepository = mock(TempUserCacheRepository.class);
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -45,8 +43,8 @@ class UserAuthServiceTest {
         var accessTokenGenerator = new AccessTokenHandler(UUID.randomUUID().toString(), Duration.ofSeconds(5L));
         var refreshTokenGenerator = new RefreshTokenHandler(UUID.randomUUID().toString(), Duration.ofSeconds(10L));
         sut = new UserAuthService(
-                userRepository,
-                userProviderRepository,
+                userDeprecatedRepository,
+                userProviderDeprecatedRepository,
                 tempUserCacheRepository,
                 passwordEncoder,
                 accessTokenGenerator,
@@ -61,10 +59,10 @@ class UserAuthServiceTest {
         var nickName = "test";
         var command = UserEmailSignUpCommand.builder().email(email).password("password").nickName(nickName).build();
 
-        given(userRepository.findByEmail(email)).willReturn(Optional.empty());
-        given(userRepository.save(any(User.class))).willAnswer(i -> i.getArguments()[0]);
-        given(userRepository.existsByNickName(nickName)).willReturn(false);
-        given(userProviderRepository.save(any(UserProvider.class))).willAnswer(i -> i.getArguments()[0]);
+        given(userDeprecatedRepository.findByEmail(email)).willReturn(Optional.empty());
+        given(userDeprecatedRepository.save(any(UserEntity.class))).willAnswer(i -> i.getArguments()[0]);
+        given(userDeprecatedRepository.existsByNickName(nickName)).willReturn(false);
+        given(userProviderDeprecatedRepository.save(any(UserProviderEntity.class))).willAnswer(i -> i.getArguments()[0]);
 
         // when
         boolean isSuccess = sut.signUpEmail(command);
@@ -79,7 +77,7 @@ class UserAuthServiceTest {
         var email = "test@example.com";
         var command = UserEmailSignUpCommand.builder().email(email).password("password").build();
 
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
+        given(userDeprecatedRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
 
         // when
         Throwable throwable = catchThrowable(() -> sut.signUpEmail(command));
@@ -95,8 +93,8 @@ class UserAuthServiceTest {
         var email = "test@example.com";
         var nickName = "test";
         var command = UserEmailSignUpCommand.builder().email(email).password("password").nickName(nickName).build();
-        given(userRepository.findByEmail(email)).willReturn(Optional.empty());
-        given(userRepository.existsByNickName(nickName)).willReturn(true);
+        given(userDeprecatedRepository.findByEmail(email)).willReturn(Optional.empty());
+        given(userDeprecatedRepository.existsByNickName(nickName)).willReturn(true);
 
         // when
         Throwable throwable = catchThrowable(() -> sut.signUpEmail(command));
@@ -111,8 +109,8 @@ class UserAuthServiceTest {
         var email = "test@example.com";
         var password = "password";
         var command = UserEmailLoginCommand.builder().email(email).password(password).build();
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
-        given(userProviderRepository.existsByUserIdAndProvider(any(), eq(Provider.EMAIL))).willReturn(true);
+        given(userDeprecatedRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
+        given(userProviderDeprecatedRepository.existsByUserIdAndProvider(any(), eq(Provider.EMAIL))).willReturn(true);
 
         UserLoginTokenDto userLoginTokenDto = sut.loginEmail(command);
 
@@ -126,8 +124,8 @@ class UserAuthServiceTest {
         var email = "test@example.com";
         var password = "otherpassword";
         var command = UserEmailLoginCommand.builder().email(email).password(password).build();
-        given(userRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
-        given(userProviderRepository.existsByUserIdAndProvider(any(), eq(Provider.EMAIL))).willReturn(true);
+        given(userDeprecatedRepository.findByEmail(email)).willReturn(Optional.of(getTestUser()));
+        given(userProviderDeprecatedRepository.existsByUserIdAndProvider(any(), eq(Provider.EMAIL))).willReturn(true);
 
         // when
         Throwable throwable = catchThrowable(() -> sut.loginEmail(command));
@@ -143,7 +141,7 @@ class UserAuthServiceTest {
         var email = "test@example.com";
         var password = "password";
         var command = UserEmailLoginCommand.builder().email(email).password(password).build();
-        given(userRepository.findByEmail(email)).willReturn(Optional.empty());
+        given(userDeprecatedRepository.findByEmail(email)).willReturn(Optional.empty());
 
         // when
         Throwable throwable = catchThrowable(() -> sut.loginEmail(command));
@@ -158,12 +156,12 @@ class UserAuthServiceTest {
         // given
         var oAuth2UserInfo = new OAuth2UserInfo("test@example.com", "https://example.com/thumbnail.png");
         var google = Provider.GOOGLE;
-        var userProvider = UserProvider.builder()
+        var userProvider = UserProviderEntity.builder()
                 .providerEmail(oAuth2UserInfo.email())
                 .provider(google)
                 .user(getTestUser())
                 .build();
-        given(userProviderRepository.findByProviderEmailAndProvider(oAuth2UserInfo.email(), google))
+        given(userProviderDeprecatedRepository.findByProviderEmailAndProvider(oAuth2UserInfo.email(), google))
                 .willReturn(Optional.of(userProvider));
 
         // when
@@ -187,8 +185,8 @@ class UserAuthServiceTest {
         assertThat(tempUserToken).isNotBlank();
     }
 
-    private User getTestUser() {
-        return User.emailUserBuilder()
+    private UserEntity getTestUser() {
+        return UserEntity.emailUserBuilder()
                 .email("test@example.com")
                 .nickName("nickName")
                 .password(passwordEncoder.encode("password"))

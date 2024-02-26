@@ -1,6 +1,6 @@
 package com.yellowsunn.userservice.controller;
 
-import com.yellowsunn.common.exception.LoginUserNotFoundException;
+import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.userservice.application.UserAuthFacade;
 import com.yellowsunn.userservice.application.UserFacade;
 import com.yellowsunn.userservice.application.UserAuthService;
@@ -47,7 +47,7 @@ class ExceptionHandlerTest extends RestDocsApiTest {
     @DisplayName("로그인 유저를 찾을 수 없음")
     @Test
     void userNotFoundError() throws Exception {
-        given(userService.deleteUserInfo(1L)).willThrow(LoginUserNotFoundException.class);
+        given(userService.deleteUserInfo(1L)).willThrow(UserNotFoundException.class);
 
         mockMvc.perform(delete("/api/v2/users/me").header(USER_ID, 1L))
                 .andDo(print())

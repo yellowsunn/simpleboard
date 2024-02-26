@@ -14,7 +14,7 @@
                             </span>
                 </div>
                 <div class="etc">
-                    <div class="nick-name" :class="[ !article.nickName ? 'deleted-user': '' ]">{{
+                    <div class="nick-name" :class="[ !article.nickName ? 'deleted-userEntity': '' ]">{{
                         article.nickName || '[탈퇴한사용자]'
                         }}
                     </div>
@@ -57,7 +57,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.deleted-user {
+.deleted-userEntity {
   font-style: italic;
 }
 

@@ -35,9 +35,9 @@ public class ExternalUserAuthController {
     @PostMapping("/api/v2/auth/email/signup")
     public ResultResponse<Boolean> signUpEmail(@Valid @RequestBody EmailSignUpRequest request) {
         var command = request.toUserSignUpCommand();
-        return ResultResponse.ok(
-                userAuthService.signUpEmail(command)
-        );
+        userAuthService.signUpEmail(command);
+
+        return ResultResponse.ok(true);
     }
 
     @PostMapping("/api/v2/auth/email/login")
@@ -70,7 +70,8 @@ public class ExternalUserAuthController {
     }
 
     @PutMapping("/api/v2/auth/oauth2/link")
-    public ResultResponse<Boolean> linkOAuth2(@LoginUser Long userId,
+    public ResultResponse<Boolean> linkOAuth2(
+            @LoginUser String userId,
             @Valid @RequestBody OAuth2LinkUserRequest request
     ) {
         var command = request.toCommand(userId);
@@ -81,13 +82,12 @@ public class ExternalUserAuthController {
 
     @DeleteMapping("/api/v2/auth/oauth2/link")
     public ResultResponse<Boolean> unlinkOAuth2(
-            @LoginUser Long userId,
+            @LoginUser String userId,
             @RequestParam String type
     ) {
         var oAuth2Type = OAuth2Type.convertFrom(type);
-        return ResultResponse.ok(
-                userAuthService.unlinkOAuth2User(userId, oAuth2Type)
-        );
+        userAuthService.unlinkOAuth2User(userId, oAuth2Type);
+        return ResultResponse.ok(true);
     }
 
     @PostMapping("/api/v2/auth/token")

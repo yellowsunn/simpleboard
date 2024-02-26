@@ -28,7 +28,7 @@ class GoogleOAuth2RestHttpClientTest extends RestHttpClientTest {
 
         OAuth2UserInfo userInfo = httpClient.findUserInfo(token, OAuth2Request.LOGIN);
 
-        assertThat(userInfo.email()).isEqualTo("user@example.com");
+        assertThat(userInfo.email()).isEqualTo("userEntity@example.com");
     }
 
     private String getTestResponse() {
@@ -39,7 +39,7 @@ class GoogleOAuth2RestHttpClientTest extends RestHttpClientTest {
                   "aud": "32555350559.apps.googleusercontent.com",
                   "sub": "111260650121185072906",
                   "hd": "google.com",
-                  "email": "user@example.com",
+                  "email": "userEntity@example.com",
                   "email_verified": "true",
                   "at_hash": "_LLKKivfvfme9eoQ3WcMIg",
                   "iat": "1650053185",

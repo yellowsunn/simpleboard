@@ -1,7 +1,6 @@
 package com.yellowsunn.userservice.persistence.user;
 
-import com.yellowsunn.userservice.domain.user.User;
-import com.yellowsunn.userservice.infrastructure.persistence.UserJpaRepository;
+import com.yellowsunn.userservice.domain.user.UserEntity;
 import com.yellowsunn.userservice.persistence.PersistenceIntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,45 +11,45 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserJpaRepositoryTest extends PersistenceIntegrationTest {
+class UserEntityJpaRepositoryTest extends PersistenceIntegrationTest {
     @Autowired
     TestEntityManager em;
 
-    UserJpaRepository userJpaRepository;
+    UserJpaDeprecatedRepository userJpaRepository;
 
     @BeforeEach
     void setUp() {
-        userJpaRepository = new UserJpaRepository(em.getEntityManager());
+        userJpaRepository = new UserJpaDeprecatedRepository(em.getEntityManager());
     }
 
     @Test
     void save() {
         // given
-        User user = User.emailUserBuilder()
+        UserEntity userEntity = UserEntity.emailUserBuilder()
                 .email("test@example.com")
                 .password("12345678")
                 .nickName("nickName")
                 .build();
 
         // when
-        User savedUser = userJpaRepository.save(user);
+        UserEntity savedUserEntity = userJpaRepository.save(userEntity);
 
         // then
-        assertThat(savedUser.getId()).isPositive();
+        assertThat(savedUserEntity.getId()).isPositive();
     }
 
     @Test
     void findByEmailAndPassword() {
         // given
-        User user = User.emailUserBuilder()
+        UserEntity userEntity = UserEntity.emailUserBuilder()
                 .email("test2@example.com")
                 .password("12345678")
                 .nickName("test")
                 .build();
-        userJpaRepository.save(user);
+        userJpaRepository.save(userEntity);
 
         // when
-        Optional<User> findUser = userJpaRepository.findByEmailAndPassword(user.getEmail(), user.getPassword());
+        Optional<UserEntity> findUser = userJpaRepository.findByEmailAndPassword(userEntity.getEmail(), userEntity.getPassword());
 
         // then
         assertThat(findUser).isPresent();

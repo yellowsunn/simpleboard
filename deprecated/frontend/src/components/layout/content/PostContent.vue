@@ -7,7 +7,7 @@
     <div class="title_info">
       <div class="title"><span class="notice" v-if="postData.type === 'NOTICE'">[공지]</span>{{postData.title }}</div>
       <div class="info">
-        <span class="writer"><i class="far fa-user"></i> {{ postData.username || '[탈퇴한 사용자]' }} </span>
+        <span class="writer"><i class="far fa-userEntity"></i> {{ postData.username || '[탈퇴한 사용자]' }} </span>
         <span class="text_bar"> | </span>
         <span class="time">날짜 {{ postData.createdDate }}</span>
         <span class="text-bar"> | </span>

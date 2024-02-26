@@ -7,7 +7,7 @@
           <span>Register</span>
         </div>
         <div class="info">
-          <b-input class="input_box" v-model="account.username" placeholder="user name" :required="true"></b-input>
+          <b-input class="input_box" v-model="account.username" placeholder="userEntity name" :required="true"></b-input>
           <b-input class="input_box" v-model="account.password" type="password" placeholder="password" :state="validPasswordSize" :required="true"></b-input>
           <div class="confirm_input_box">
             <b-input class="input_box" v-model="confirmPassword" type="password" placeholder="confirm password" :state="validPasswordSize && checkSamePassword" aria-describedby="input-live-feedback" :required="true"></b-input>
@@ -50,7 +50,7 @@ export default {
     invalidateFeedback() {
       if (!this.validPasswordSize) {
         return "password must be 8-16 characters";
-      } 
+      }
       return !this.checkSamePassword ? "password mismatch" : "";
     }
   },

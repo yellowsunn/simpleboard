@@ -10,8 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 
 public record OAuth2SignUpRequest(
         String state,
-        @NotBlank String tempUserToken,
-        @NotBlank @Pattern(regexp = VALID_NICKNAME_REGEX, message = VALID_NICKNAME_MESSAGE) String nickName
+
+        @NotBlank
+        String tempUserToken,
+
+        @NotBlank
+        @Pattern(regexp = VALID_NICKNAME_REGEX, message = VALID_NICKNAME_MESSAGE)
+        String nickName
 ) {
 
     public UserOAuth2SignUpCommand toUserOAuth2SignUpCommand() {

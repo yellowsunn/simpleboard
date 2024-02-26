@@ -1,26 +1,29 @@
 package com.yellowsunn.userservice.application.port;
 
-import com.yellowsunn.userservice.domain.user.User;
+import com.yellowsunn.userservice.domain.User;
+import com.yellowsunn.userservice.domain.user.Provider;
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
 
-    User save(User entity);
+    void insert(User user);
 
-    Optional<User> findByEmailAndPassword(String email, String password);
+    void update(User user);
 
-    Optional<User> findByEmail(String email);
+    void delete(User user);
 
-    Optional<User> findById(Long id);
+    Optional<User> findByEmailAndProvider(String email, Provider provider);
 
-    boolean delete(User entity);
-
-    boolean existsByNickName(String nickName);
-
-    Optional<User> findByUUID(String uuid);
+    Optional<User> findByUserId(String userId);
 
     Optional<User> findByNickName(String nickName);
 
-    List<User> findByIds(List<Long> ids);
+    List<User> findByUserIds(List<String> userIds);
+
+    User getByUserId(String userId);
+
+    boolean existsByEmailAndProvider(String email, Provider provider);
+
+    boolean existsByNickName(String nickName);
 }

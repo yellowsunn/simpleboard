@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class UserAuthFacadeTest {
+class UserEntityAuthFacadeTest {
     UserAuthService userAuthService = mock(UserAuthService.class);
     OAuth2UserInfoHttpClient oAuth2UserInfoHttpClient = mock(OAuth2UserInfoHttpClient.class);
     TempUserCacheRepository tempUserCacheRepository = mock(TempUserCacheRepository.class);

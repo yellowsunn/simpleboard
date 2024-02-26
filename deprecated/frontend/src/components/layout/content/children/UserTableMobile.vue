@@ -2,8 +2,8 @@
   <div class="label_and_data">
     <div class="label" @click="changeToggle">
       <div>
-        <i class="fas fa-user-circle"></i>
-        <span>{{ user.username }}</span>
+        <i class="fas fa-userEntity-circle"></i>
+        <span>{{ userEntity.username }}</span>
       </div>
       <div>
         <i class="fas" :class="toggle ? 'fa-minus' : 'fa-plus'"></i>
@@ -13,15 +13,15 @@
       <ul>
         <li class="username">
           <span>아이디: </span>
-          <div>{{ user.username }}</div>
+          <div>{{ userEntity.username }}</div>
         </li>
         <li class="password">
           <span>가입날짜: </span>
-          <div>{{ user.createdDate }}</div>
+          <div>{{ userEntity.createdDate }}</div>
         </li>
         <li class="role">
           <span>권한: </span>
-          <div>{{ user.role }}</div>
+          <div>{{ userEntity.role }}</div>
         </li>
       </ul>
       <div class="buttons">
@@ -40,25 +40,25 @@ export default {
     VueSlideToggle
   },
   props: {
-    user: Object,
+    userEntity: Object,
   },
   data() {
     return {
       toggle: false,
       edit: false,
       data: {
-        username: this.user.username,
+        username: this.userEntity.username,
         password: "",
-        role: this.user.role,
+        role: this.userEntity.role,
       }
     }
   },
   computed: {
     isMe() {
-      return this.$store.state.userInfo.id === this.user.id;
+      return this.$store.state.userInfo.id === this.userEntity.id;
     },
     isValidDelete() {
-      return this.$store.state.userInfo.role === 'ADMIN' && this.user.role !== 'ADMIN';
+      return this.$store.state.userInfo.role === 'ADMIN' && this.userEntity.role !== 'ADMIN';
     }
   },
   methods: {
@@ -76,11 +76,11 @@ export default {
             alert('탈퇴가 성공적으로 완료되었습니다.');
             this.$router.push('/');
           } else if (this.isValidDelete) {
-            await this.$store.dispatch('DELETE_USER', this.user.id);
+            await this.$store.dispatch('DELETE_USER', this.userEntity.id);
             alert('탈퇴가 성공적으로 완료되었습니다.');
             this.$router.go(0);
-          } 
-          
+          }
+
         } catch (error) {
           alert("실패했습니다.");
         }
@@ -115,7 +115,7 @@ select {
     display: flex;
     justify-content: space-between;
     padding: $normal-padding;
-    .fa-user-circle {
+    .fa-userEntity-circle {
       margin-right: 6px;
     }
   }

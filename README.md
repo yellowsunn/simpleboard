@@ -11,7 +11,7 @@
 
 | 서비스                  | 문서                                                                       |
 |----------------------|--------------------------------------------------------------------------|
-| USER SERVICE         | [링크](https://yellowsunn.github.io/simpleboard/user-service.html)         |
+| USER SERVICE         | [링크](https://yellowsunn.github.io/simpleboard/userEntity-service.html)         |
 | BOARD SERVICE        | [링크](https://yellowsunn.github.io/simpleboard/board-service.html)        |
 | NOTIFICATION SERVICE | [링크](https://yellowsunn.github.io/simpleboard/notification-service.html) |
 | IMAGE SERVICE        | [링크](https://yellowsunn.github.io/simpleboard/image-service.html)        |

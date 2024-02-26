@@ -1,7 +1,7 @@
 package com.yellowsunn.boardservice.exception
 
 import com.yellowsunn.common.exception.LoginRequireException
-import com.yellowsunn.common.exception.LoginUserNotFoundException
+import com.yellowsunn.common.exception.UserNotFoundException
 import com.yellowsunn.common.response.ResultResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -38,8 +38,8 @@ class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(LoginUserNotFoundException::class)
-    protected fun handleUserNotFoundException(e: LoginUserNotFoundException): ResultResponse<Void> {
+    @ExceptionHandler(UserNotFoundException::class)
+    protected fun handleUserNotFoundException(e: UserNotFoundException): ResultResponse<Void> {
         logger.warn("Not found user. message={}", e.message, e)
         return ResultResponse.notFoundLoginUser()
     }

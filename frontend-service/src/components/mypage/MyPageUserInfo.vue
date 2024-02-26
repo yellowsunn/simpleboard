@@ -3,11 +3,11 @@
         <div class="d-flex m-3 fs-5 fw-bold">회원 정보 변경</div>
         <!-- 썸네일 이미지 변경 -->
         <div class="my-4">
-            <img v-if="userInfo?.thumbnail" class="rounded-circle user-thumbnail" :src="userInfo.thumbnail"
+            <img v-if="userInfo?.thumbnail" class="rounded-circle userEntity-thumbnail" :src="userInfo.thumbnail"
                  alt="thumbnail"
                  @click="$refs.fileInput.click()"
                  referrerpolicy="no-referrer-when-downgrade"/>
-            <img v-else class="rounded-circle user-thumbnail" src="../../assets/default-thumbnail.svg"
+            <img v-else class="rounded-circle userEntity-thumbnail" src="../../assets/default-thumbnail.svg"
                  alt="default_thumbnail"
                  @click="$refs.fileInput.click()">
             <input ref="fileInput" type="file" accept="image/*" @change="handleThumbnailChange" v-show="false">
@@ -82,7 +82,7 @@ export default {
       }
 
       if (data === true) {
-        this.$emit('update-user-info', {
+        this.$emit('update-userEntity-info', {
           nickName: this.nickName,
         })
         this.$store.dispatch('editFinished')
@@ -93,7 +93,7 @@ export default {
 </script>
 
 <style scoped>
-.user-thumbnail {
+.userEntity-thumbnail {
     cursor: pointer;
     object-fit: cover;
     width: 80px;

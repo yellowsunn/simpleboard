@@ -4,14 +4,14 @@
             <div class="title">{{ article.title }}</div>
         </div>
         <div class="etc">
-            <div class="user-image">
-                <img v-if="article.user?.thumbnail" class="rounded-circle" :src="article.user.thumbnail" referrerpolicy="no-referrer-when-downgrade"/>
+            <div class="userEntity-image">
+                <img v-if="article.userEntity?.thumbnail" class="rounded-circle" :src="article.userEntity.thumbnail" referrerpolicy="no-referrer-when-downgrade"/>
                 <img v-else class="rounded-circle" src="../../assets/default-thumbnail.svg" :width="width"
                      :height="height"
                      alt="thumbnail"/>
             </div>
             <div class="nick-name">
-                {{ article.user?.nickName }}
+                {{ article.userEntity?.nickName }}
             </div>
             <div class="dot"></div>
             <div class="created-at">
@@ -77,7 +77,7 @@ export default {
   color: rgb(0 0 0 / 40%);
   align-items: center;
 
-  .user-image {
+  .userEntity-image {
     margin-right: 5px;
 
     img {

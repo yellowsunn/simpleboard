@@ -22,19 +22,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        Long userId = toLongOrNull(webRequest.getHeader(USER_ID));
+        String userId = webRequest.getHeader(USER_ID);
         LoginUser loginUser = parameter.getParameterAnnotation(LoginUser.class);
         if (loginUser != null && loginUser.required() && userId == null) {
             throw new LoginRequireException();
         }
         return userId;
-    }
-
-    private Long toLongOrNull(String value) {
-        try {
-            return Long.parseLong(value);
-        } catch (Exception e) {
-            return null;
-        }
     }
 }

@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class OAuth2UserInfoHttpClientFactoryTest {
+class OAuth2UserInfoHttpClientFactoryTestEntity {
     OAuth2UserInfoHttpClient googleClient = mock(OAuth2UserInfoHttpClient.class);
     OAuth2UserInfoHttpClient naverClient = mock(OAuth2UserInfoHttpClient.class);
 

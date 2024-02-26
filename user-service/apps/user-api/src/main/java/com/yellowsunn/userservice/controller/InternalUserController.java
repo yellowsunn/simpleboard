@@ -20,12 +20,12 @@ public class InternalUserController {
     private final InternalUserService internalUserService;
 
     @GetMapping("/api/internal/v1/users/{userId}")
-    public InternalUserInfoDto findUser(@PathVariable Long userId) {
+    public InternalUserInfoDto findUser(@PathVariable String userId) {
         return internalUserService.findUserInfo(userId);
     }
 
     @GetMapping("/api/internal/v1/users")
-    public List<InternalUserSimpleDto> findUsers(@RequestParam(name = "id") @Size(max = 200) List<Long> ids) {
-        return internalUserService.findUsers(ids);
+    public List<InternalUserSimpleDto> findUsers(@RequestParam(name = "id") @Size(max = 200) List<String> userIds) {
+        return internalUserService.findUsers(userIds);
     }
 }

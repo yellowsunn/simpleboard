@@ -16,7 +16,7 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = {TestRedisConfiguration.class, RedisConfiguration.class})
-class TempUserRedisRepositoryIntegrationTest {
+class TempUserRedisRepositoryIntegrationTestEntity {
 
     @Autowired
     RedisTemplate<String, TempUser> redisTemplate;

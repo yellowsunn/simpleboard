@@ -6,10 +6,10 @@ import com.yellowsunn.common.annotation.LoginUser;
 import com.yellowsunn.common.response.ResultResponse;
 import com.yellowsunn.userservice.application.UserFacade;
 import com.yellowsunn.userservice.application.UserService;
+import com.yellowsunn.userservice.application.command.FileUploadCommand;
 import com.yellowsunn.userservice.controller.request.UserInfoUpdateRequest;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
 import com.yellowsunn.userservice.exception.CustomIOException;
-import com.yellowsunn.userservice.application.command.FileUploadCommand;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,33 +34,33 @@ public class ExternalUserController {
     private final UserService userService;
 
     @GetMapping("/api/v2/users/me")
-    public ResultResponse<UserMyInfoDto> findMyInfo(@LoginUser Long userId) {
+    public ResultResponse<UserMyInfoDto> findMyInfo(@LoginUser String userId) {
         return ResultResponse.ok(
                 userService.findUserInfo(userId)
         );
     }
 
     @DeleteMapping("/api/v2/users/me")
-    public ResultResponse<Boolean> deleteMyInfo(@LoginUser Long userId) {
-        return ResultResponse.ok(
-                userService.deleteUserInfo(userId)
-        );
+    public ResultResponse<Boolean> deleteMyInfo(@LoginUser String userId) {
+        userService.deleteUserInfo(userId);
+
+        return ResultResponse.ok(true);
     }
 
     @PutMapping("/api/v2/users/me")
     public ResultResponse<Boolean> updateMyInfo(
-            @LoginUser Long userId,
+            @LoginUser String userId,
             @Valid @RequestBody UserInfoUpdateRequest request
     ) {
         var command = request.toCommand(userId);
-        return ResultResponse.ok(
-                userService.changeUserInfo(command)
-        );
+        userService.changeUserInfo(command);
+
+        return ResultResponse.ok(true);
     }
 
     @PatchMapping("/api/v2/users/me/thumbnail")
     public ResultResponse<String> updateMyThumbnail(
-            @LoginUser Long userId,
+            @LoginUser String userId,
             @RequestParam MultipartFile thumbnail
     ) {
         if (isNotImageType(thumbnail.getContentType())) {

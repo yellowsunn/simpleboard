@@ -1,109 +1,84 @@
 package com.yellowsunn.userservice.application;
 
 import com.yellowsunn.common.exception.ExpiredAccessTokenException;
-import com.yellowsunn.common.exception.LoginUserNotFoundException;
+import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.common.utils.token.AccessTokenHandler;
 import com.yellowsunn.common.utils.token.AccessTokenPayload;
 import com.yellowsunn.common.utils.token.RefreshTokenHandler;
 import com.yellowsunn.userservice.application.command.UserEmailLoginCommand;
 import com.yellowsunn.userservice.application.command.UserEmailSignUpCommand;
 import com.yellowsunn.userservice.application.command.UserOAuth2SignUpCommand;
+import com.yellowsunn.userservice.application.port.TempUserCacheRepository;
+import com.yellowsunn.userservice.application.port.UserRepository;
 import com.yellowsunn.userservice.constant.OAuth2Type;
+import com.yellowsunn.userservice.domain.User;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.TempUser;
-import com.yellowsunn.userservice.domain.user.User;
-import com.yellowsunn.userservice.domain.user.UserProvider;
+import com.yellowsunn.userservice.domain.vo.UserProvider;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
 import com.yellowsunn.userservice.infrastructure.http.oauth2.OAuth2UserInfo;
-import com.yellowsunn.userservice.application.port.TempUserCacheRepository;
-import com.yellowsunn.userservice.application.port.UserProviderRepository;
-import com.yellowsunn.userservice.application.port.UserRepository;
 import com.yellowsunn.userservice.utils.PasswordEncoder;
 import java.time.Duration;
-import java.util.Objects;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 @RequiredArgsConstructor
 @Service
 public class UserAuthService {
 
-    private final UserRepository userRepository;
-    private final UserProviderRepository userProviderRepository;
     private final TempUserCacheRepository tempUserCacheRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccessTokenHandler accessTokenHandler;
     private final RefreshTokenHandler refreshTokenHandler;
 
+    private final UserRepository userRepository;
+
     private final Duration tempUserDuration = Duration.ofMinutes(30);
 
     @Transactional
-    public boolean signUpEmail(UserEmailSignUpCommand command) {
-        verifyAlreadyExistEmail(command.email());
+    public void signUpEmail(UserEmailSignUpCommand command) {
+        verifyAlreadyExistEmail(command.email(), Provider.EMAIL);
         verifyAlreadyExistNickName(command.nickName());
 
-        var emailUser = User.emailUserBuilder()
-                .email(command.email())
-                .password(passwordEncoder.encode(command.password()))
-                .nickName(command.nickName())
-                .thumbnail(null)
-                .build();
-        var savedUser = userRepository.save(emailUser);
+        String userId = UUID.randomUUID().toString();
 
-        var userProvider = UserProvider.builder()
-                .user(savedUser)
-                .provider(Provider.EMAIL)
-                .providerEmail(savedUser.getEmail())
-                .build();
-        var savedUserProvider = userProviderRepository.save(userProvider);
-        return savedUserProvider != null;
+        User emailUser = User.createEmailUser(userId, command.email(), command.nickName(),
+                passwordEncoder.encode(command.password()));
+
+        userRepository.insert(emailUser);
     }
 
     @Transactional
     public UserLoginTokenDto signUpOAuth2(UserOAuth2SignUpCommand command, TempUser tempUser) {
-        verifyAlreadyExistEmail(tempUser.getEmail());
+        verifyAlreadyExistEmail(tempUser.getEmail(), tempUser.getProvider());
         verifyAlreadyExistNickName(command.nickName());
 
-        var user = User.oauth2UserBuilder()
-                .email(tempUser.getEmail())
-                .nickName(command.nickName())
-                .thumbnail(tempUser.getThumbnail())
-                .build();
-        var savedUser = userRepository.save(user);
+        String userId = UUID.randomUUID().toString();
 
-        var userProvider = UserProvider.builder()
-                .user(savedUser)
-                .provider(tempUser.getProvider())
-                .providerEmail(tempUser.getEmail())
-                .build();
-        userProviderRepository.save(userProvider);
+        User oAuth2User = User.createOAuth2User(userId, tempUser.getEmail(), command.nickName(),
+                tempUser.getThumbnail(), tempUser.getProvider());
 
-        return generateUserToken(savedUser);
+        userRepository.insert(oAuth2User);
+
+        return generateUserToken(userId);
     }
 
-    @Transactional(readOnly = true)
     public UserLoginTokenDto loginEmail(UserEmailLoginCommand command) {
-        User user = userRepository.findByEmail(command.email())
-                .filter(u -> userProviderRepository.existsByUserIdAndProvider(u.getId(), Provider.EMAIL))
-                .filter(u -> passwordEncoder.matches(command.password(), u.getPassword()))
+        User foundUser = userRepository.findByEmailAndProvider(command.email(), Provider.EMAIL)
+                .filter(user -> passwordEncoder.matches(command.password(), user.getPassword()))
                 .orElseThrow(() -> new CustomUserException(UserErrorCode.INVALID_LOGIN));
 
-        return generateUserToken(user);
+        return generateUserToken(foundUser.getUserId());
     }
 
-    @Transactional(readOnly = true)
-    public UserLoginTokenDto loginOAuth2(OAuth2UserInfo userInfo, OAuth2Type type) {
-        User user = userProviderRepository.findByProviderEmailAndProvider(userInfo.email(), type.toProvider())
-                .map(UserProvider::getUser)
+    public UserLoginTokenDto loginOAuth2(String email, OAuth2Type type) {
+        return userRepository.findByEmailAndProvider(email, type.toProvider())
+                .map(it -> generateUserToken(it.getUserId()))
                 .orElse(null);
-        if (user == null) {
-            return null;
-        }
-        return generateUserToken(user);
     }
 
     @Transactional
@@ -120,39 +95,31 @@ public class UserAuthService {
     }
 
     @Transactional
-    public boolean linkOAuth2User(Long userId, String providerEmail, OAuth2Type type) {
+    public void linkOAuth2User(String userId, String providerEmail, OAuth2Type type) {
         Provider provider = type.toProvider();
-        Assert.notNull(provider, "OAuth2 provider must not be null.");
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(LoginUserNotFoundException::new);
+        User user = userRepository.findByEmailAndProvider(providerEmail, provider)
+                .orElseThrow(UserNotFoundException::new);
 
-        boolean isAlreadyFinished = checkAlreadyExistProvider(user.getId(), providerEmail, provider);
-        if (isAlreadyFinished) {
-            return true;
+        if (user.isNotSameUser(userId)) {
+            throw new CustomUserException(UserErrorCode.LINK_AT_LEAST_ONE_USER_PROVIDER);
         }
 
-        var userProvider = UserProvider.builder()
-                .user(user)
-                .provider(provider)
-                .providerEmail(providerEmail)
-                .build();
-        return userProviderRepository.save(userProvider) != null;
+        UserProvider userProvider = UserProvider.createOAuth2Provider(providerEmail, provider);
+        user.addUserProvider(userProvider);
+        userRepository.update(user);
     }
 
 
     @Transactional
-    public boolean unlinkOAuth2User(Long userId, OAuth2Type type) {
+    public void unlinkOAuth2User(String userId, OAuth2Type type) {
         Provider provider = type.toProvider();
-        Assert.notNull(provider, "OAuth2 provider must not be null.");
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(LoginUserNotFoundException::new);
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
 
-        // TODO: 동시성 이슈 고려 필요
-        checkAtLeastOneProvider(user.getId());
-
-        return userProviderRepository.deleteByUserIdAndProvider(user.getId(), provider);
+        user.deleteProvider(provider);
+        userRepository.update(user);
     }
 
     public UserLoginTokenDto refreshUserToken(String encodedAccessToken, String encodedRefreshToken) {
@@ -168,44 +135,22 @@ public class UserAuthService {
                 .build();
     }
 
-    private void verifyAlreadyExistEmail(String email) {
-        userRepository.findByEmail(email)
-                .ifPresent(user -> {
-                    throw new CustomUserException(UserErrorCode.ALREADY_EXIST_EMAIL);
-                });
+    private void verifyAlreadyExistEmail(String email, Provider provider) {
+        boolean alreadyExist = userRepository.existsByEmailAndProvider(email, provider);
+        if (alreadyExist) {
+            throw new CustomUserException(UserErrorCode.ALREADY_EXIST_EMAIL);
+        }
     }
 
     private void verifyAlreadyExistNickName(String nickName) {
-        boolean isExist = userRepository.existsByNickName(nickName);
-        if (isExist) {
+        boolean alreadyExist = userRepository.existsByNickName(nickName);
+        if (alreadyExist) {
             throw new CustomUserException(UserErrorCode.ALREADY_EXIST_NICKNAME);
         }
     }
 
-    private boolean checkAlreadyExistProvider(Long userId, String providerEmail, Provider provider) {
-        // 사용하지 않는 새로운 provider 인 경우
-        var userProviderOptional = userProviderRepository.findByProviderEmailAndProvider(providerEmail, provider);
-        if (userProviderOptional.isEmpty()) {
-            return false;
-        }
-
-        // 내 계정에서 이미 사용중인 Provider 경우
-        var userProvider = userProviderOptional.get();
-        if (isMyUserProvider(userId, userProvider)) {
-            return true;
-        }
-
-        // 다른 계정에서 사용중인 Provider라면 예외 반환
-        throw new CustomUserException(UserErrorCode.LINK_AT_OTHER_USER_PROVIDER);
-    }
-
-    private boolean isMyUserProvider(Long userId, UserProvider userProvider) {
-        return Objects.equals(userId, userProvider.getUser().getId());
-    }
-
-    private UserLoginTokenDto generateUserToken(User user) {
-        String accessToken = accessTokenHandler.generateEncodedToken(
-                new AccessTokenPayload(user.getId(), user.getUuid(), user.getEmail()));
+    private UserLoginTokenDto generateUserToken(String userId) {
+        String accessToken = accessTokenHandler.generateEncodedToken(new AccessTokenPayload(userId));
         String refreshToken = refreshTokenHandler.generateEncodedToken();
 
         return UserLoginTokenDto.builder()
@@ -214,32 +159,16 @@ public class UserAuthService {
                 .build();
     }
 
-    private void checkAtLeastOneProvider(Long userId) {
-        long providerCount = userProviderRepository.countProvidersByUserId(userId);
-        if (providerCount <= 1) {
-            throw new CustomUserException(UserErrorCode.LINK_AT_LEAST_ONE_USER_PROVIDER);
-        }
-    }
-
     private AccessTokenPayload generateNewEncodedAccessToken(String encodedAccessToken) {
-        Long userId;
-        String email;
-        String userUUID;
         try {
             var tokenPayload = accessTokenHandler.parseEncodedToken(encodedAccessToken);
-            userId = tokenPayload.id();
-            email = tokenPayload.email();
-            userUUID = tokenPayload.uuid();
+            return AccessTokenPayload.builder()
+                    .userId(tokenPayload.userId())
+                    .build();
         } catch (ExpiredAccessTokenException e) {
-            userId = e.getUserId();
-            email = e.getEmail();
-            userUUID = e.getUserUUID();
+            return AccessTokenPayload.builder()
+                    .userId(e.getUserUUID())
+                    .build();
         }
-
-        return AccessTokenPayload.builder()
-                .id(userId)
-                .email(email)
-                .uuid(userUUID)
-                .build();
     }
 }

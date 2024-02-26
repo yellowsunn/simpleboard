@@ -192,13 +192,13 @@ export default {
 
 .comment-reply, .comment-delete {
   cursor: pointer;
-  user-select: none;
+  userEntity-select: none;
   height: fit-content;
 }
 
 .like-count {
   cursor: pointer;
-  user-select: none;
+  userEntity-select: none;
 }
 
 .deleted-comment {

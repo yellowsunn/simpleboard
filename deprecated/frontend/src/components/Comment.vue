@@ -10,7 +10,7 @@
           <i class="far fa-times-circle" @click.stop="deleteComment(comment.id, comment.username)" v-if="currentUser === comment.username"></i>
         </div>
         <div class="info">
-          <span class="writer"><i class="far fa-user"></i> {{ comment.username || '[탈퇴한 사용자]' }} </span>
+          <span class="writer"><i class="far fa-userEntity"></i> {{ comment.username || '[탈퇴한 사용자]' }} </span>
           <span class="text_bar"> | </span>
           <span class="time">{{ comment.createdDate }}</span>
         </div>

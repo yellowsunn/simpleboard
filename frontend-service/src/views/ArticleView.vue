@@ -9,15 +9,15 @@
            @click="isArticleLiked ? handleUndoLike() : handleLike()">
         <font-awesome-icon icon="fa-regular fa-thumbs-up" v-if="!isArticleLiked"/>
         <font-awesome-icon icon="fa-solid fa-thumbs-up" v-else/>
-        <div style="user-select: none">좋아요</div>
+        <div style="userEntity-select: none">좋아요</div>
       </div>
     </section>
     <section class="button-group">
       <button class="btn btn-outline-secondary py-2" @click="$router.push('/articles')">목록</button>
-      <button class="btn btn-outline-success py-2" v-if="userUUID === article?.user?.uuid"
+      <button class="btn btn-outline-success py-2" v-if="userUUID === article?.userEntity?.uuid"
               @click="routeArticleEdit">수정
       </button>
-      <button class="btn btn-outline-danger py-2" v-if="userUUID === article?.user?.uuid"
+      <button class="btn btn-outline-danger py-2" v-if="userUUID === article?.userEntity?.uuid"
               @click="handleRemoveArticle">삭제
       </button>
     </section>
@@ -52,7 +52,7 @@ export default {
   provide() {
     return {
       likedCommentIds: computed(() => this.likedCommentIds),
-      writerUUID: computed(() => this.article?.user?.uuid),
+      writerUUID: computed(() => this.article?.userEntity?.uuid),
     }
   },
   async mounted() {

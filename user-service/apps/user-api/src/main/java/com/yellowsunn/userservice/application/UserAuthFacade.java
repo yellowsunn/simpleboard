@@ -3,6 +3,7 @@ package com.yellowsunn.userservice.application;
 import com.yellowsunn.userservice.application.command.UserOAuth2LinkCommand;
 import com.yellowsunn.userservice.application.command.UserOAuth2LoginOrSignUpCommand;
 import com.yellowsunn.userservice.application.command.UserOAuth2SignUpCommand;
+import com.yellowsunn.userservice.application.port.TempUserCacheRepository;
 import com.yellowsunn.userservice.constant.OAuth2Request;
 import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.dto.UserLoginTokenDto;
@@ -11,7 +12,6 @@ import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
 import com.yellowsunn.userservice.infrastructure.http.oauth2.OAuth2UserInfo;
 import com.yellowsunn.userservice.infrastructure.http.oauth2.OAuth2UserInfoHttpClientFactory;
-import com.yellowsunn.userservice.application.port.TempUserCacheRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -47,7 +47,7 @@ public class UserAuthFacade {
         verifyOAuth2ProviderEmailIsNotBlank(userInfo);
 
         // 로그인
-        UserLoginTokenDto userLoginTokenDto = userAuthService.loginOAuth2(userInfo, command.type());
+        UserLoginTokenDto userLoginTokenDto = userAuthService.loginOAuth2(userInfo.email(), command.type());
         if (userLoginTokenDto != null) {
             return UserOAuth2LoginOrSignUpDto.loginBuilder()
                     .accessToken(userLoginTokenDto.accessToken())
@@ -68,7 +68,8 @@ public class UserAuthFacade {
         OAuth2UserInfo userInfo = oAuth2UserInfoHttpClient.findUserInfo(command.oAuth2Token(), OAuth2Request.USER_LINK);
         verifyOAuth2ProviderEmailIsNotBlank(userInfo);
 
-        return userAuthService.linkOAuth2User(command.userId(), userInfo.email(), command.type());
+        userAuthService.linkOAuth2User(command.userId(), userInfo.email(), command.type());
+        return true;
     }
 
     // OAuth2 계정 이메일을 조회할 수 없는 경우 예외 발생 (이메일 조회에 동의 하지 않은 경우)

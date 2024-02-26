@@ -1,4 +1,4 @@
-create table user (
+create table userEntity (
 	user_id bigint not null auto_increment,
     username varchar(50),
     password varchar(512),
@@ -17,7 +17,7 @@ create table posts (
     created_date datetime,
     last_modified_date datetime,
     primary key (post_id),
-    foreign key (user_id) references user(user_id)
+    foreign key (user_id) references userEntity(user_id)
 );
 
 create table post_hit (
@@ -37,7 +37,7 @@ create table comment (
     created_date datetime,
     primary key (comment_id),
     foreign key (parent_id) references comment(comment_id),
-    foreign key (user_id) references user(user_id),
+    foreign key (user_id) references userEntity(user_id),
     foreign key (post_id) references posts(post_id)
 );
 

@@ -1,11 +1,9 @@
 package com.yellowsunn.userservice.service;
 
-import com.yellowsunn.common.exception.LoginUserNotFoundException;
+import com.yellowsunn.common.exception.UserNotFoundException;
 import com.yellowsunn.userservice.application.UserService;
-import com.yellowsunn.userservice.domain.user.User;
+import com.yellowsunn.userservice.domain.user.UserEntity;
 import com.yellowsunn.userservice.dto.UserMyInfoDto;
-import com.yellowsunn.userservice.application.port.UserProviderRepository;
-import com.yellowsunn.userservice.application.port.UserRepository;
 import com.yellowsunn.userservice.utils.BCryptPasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,22 +16,22 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class UserServiceTest {
-    UserRepository userRepository = mock(UserRepository.class);
-    UserProviderRepository userProviderRepository = mock(UserProviderRepository.class);
+class UserEntityServiceTest {
+    UserDeprecatedRepository userDeprecatedRepository = mock(UserDeprecatedRepository.class);
+    UserProviderDeprecatedRepository userProviderDeprecatedRepository = mock(UserProviderDeprecatedRepository.class);
 
     UserService sut;
 
     @BeforeEach
     void setUp() {
-        sut = new UserService(userRepository, userProviderRepository);
+        sut = new UserService(userDeprecatedRepository, userProviderDeprecatedRepository);
     }
 
     @Test
     void findUserInfo() {
         // given
         var userId = 1L;
-        given(userRepository.findById(userId)).willReturn(Optional.of(getTestUser()));
+        given(userDeprecatedRepository.findById(userId)).willReturn(Optional.of(getTestUser()));
 
         // when
         UserMyInfoDto userInfo = sut.findUserInfo(userId);
@@ -46,21 +44,21 @@ class UserServiceTest {
     void findUserInfo_failed_when_user_not_found() {
         // given
         var userId = 1L;
-        given(userRepository.findById(userId)).willReturn(Optional.empty());
+        given(userDeprecatedRepository.findById(userId)).willReturn(Optional.empty());
 
         // when
         Throwable throwable = catchThrowable(() -> sut.findUserInfo(userId));
 
         // then
-        assertThat(throwable).isInstanceOf(LoginUserNotFoundException.class);
+        assertThat(throwable).isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
     void deleteUserInfo() {
         // given
         var userId = 1L;
-        given(userRepository.findById(userId)).willReturn(Optional.of(getTestUser()));
-        given(userRepository.delete(any(User.class))).willReturn(true);
+        given(userDeprecatedRepository.findById(userId)).willReturn(Optional.of(getTestUser()));
+        given(userDeprecatedRepository.delete(any(UserEntity.class))).willReturn(true);
 
         // when
         boolean isDeleted = sut.deleteUserInfo(userId);
@@ -72,7 +70,7 @@ class UserServiceTest {
     void deleteUserInfo_return_true_when_already_deleted() {
         // given
         var userId = 1L;
-        given(userRepository.findById(userId)).willReturn(Optional.empty());
+        given(userDeprecatedRepository.findById(userId)).willReturn(Optional.empty());
 
         // when
         boolean isDeleted = sut.deleteUserInfo(userId);
@@ -87,7 +85,7 @@ class UserServiceTest {
         var userId = 1L;
         var user = getTestUser();
         var updatedThumbnail = "https://example.com/thubnail.png";
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userDeprecatedRepository.findById(1L)).willReturn(Optional.of(user));
 
         boolean isSuccess = sut.changeUserThumbnail(userId, updatedThumbnail);
 
@@ -95,8 +93,8 @@ class UserServiceTest {
         assertThat(user.getThumbnail()).isEqualTo(updatedThumbnail);
     }
 
-    private User getTestUser() {
-        return User.emailUserBuilder()
+    private UserEntity getTestUser() {
+        return UserEntity.emailUserBuilder()
                 .email("test@example.com")
                 .nickName("nickName")
                 .password(new BCryptPasswordEncoder().encode("password"))

@@ -13,7 +13,7 @@ public record OAuth2LinkUserRequest(
         @NotBlank String type
 ) {
 
-    public UserOAuth2LinkCommand toCommand(Long userId) {
+    public UserOAuth2LinkCommand toCommand(String userId) {
         return UserOAuth2LinkCommand.builder()
                 .userId(userId)
                 .oAuth2Token(token)

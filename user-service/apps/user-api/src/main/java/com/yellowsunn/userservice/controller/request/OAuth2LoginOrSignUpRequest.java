@@ -10,9 +10,14 @@ import jakarta.validation.constraints.NotBlank;
  * @param state CSRF Token (회원가입 시 확인하는데 사용)
  */
 public record OAuth2LoginOrSignUpRequest(
-        @NotBlank String token,
-        @NotBlank String type,
-        @NotBlank String state
+        @NotBlank
+        String token,
+
+        @NotBlank
+        String type,
+
+        @NotBlank
+        String state
 ) {
 
     public UserOAuth2LoginOrSignUpCommand toCommand() {

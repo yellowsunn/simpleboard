@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ExternalUserController.class)
-class ExternalUserControllerTest extends RestDocsApiTest {
+class ExternalUserControllerTestEntity extends RestDocsApiTest {
     @MockBean
     UserFacade userFacade;
 

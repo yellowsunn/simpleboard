@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record UserInfoUpdateCommand(
-        Long userId,
+        String userId,
         String nickName
 ) {
 
