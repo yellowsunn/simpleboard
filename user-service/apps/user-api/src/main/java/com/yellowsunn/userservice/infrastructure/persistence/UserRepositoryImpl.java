@@ -11,7 +11,6 @@ import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.UserEntity;
 import com.yellowsunn.userservice.domain.user.UserProviderEntity;
 import com.yellowsunn.userservice.domain.vo.UserProvider;
-import com.yellowsunn.userservice.dto.UserProviderCreate;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
@@ -40,10 +39,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Transactional
     @Override
     public void insert(User user) {
-        UserEntity userEntity = UserEntity.create(user.toUserCreate());
+        UserEntity userEntity = UserEntity.create(user);
         userJpaRepository.save(userEntity);
 
-        List<UserProviderEntity> userProviderEntities = UserProviderEntity.creates(user.toUserProviderCreates());
+        List<UserProviderEntity> userProviderEntities = UserProviderEntity.creates(user.getUserId(),
+                user.getUserProviders());
         userProviderJpaRepository.saveAll(userProviderEntities);
     }
 
@@ -52,19 +52,17 @@ public class UserRepositoryImpl implements UserRepository {
     public void update(User user) {
         UserEntity userEntity = userJpaRepository.findByUserId(user.getUserId())
                 .orElseThrow(() -> new IllegalStateException("Not found user."));
-        userEntity.update(user.toUserUpdate());
+        userEntity.update(user);
 
         List<UserProviderEntity> userProviderEntities = userProviderJpaRepository.findByUserId(user.getUserId());
 
         List<UserProvider> prevUserProviders = userProviderEntities.stream()
                 .map(UserProviderEntity::toUserProvider)
                 .toList();
+
         List<UserProvider> newUserProviders = ListUtils.removeAll(user.getUserProviders(), prevUserProviders);
 
-        List<UserProviderCreate> userProviderCreates = newUserProviders.stream()
-                .map(it -> it.toUserProviderCreate(user.getUserId()))
-                .toList();
-        userProviderJpaRepository.saveAll(UserProviderEntity.creates(userProviderCreates));
+        userProviderJpaRepository.saveAll(UserProviderEntity.creates(user.getUserId(), newUserProviders));
 
         List<UserProvider> deletedUserProviders = ListUtils.removeAll(prevUserProviders, user.getUserProviders());
         deletedUserProviders.forEach(it -> deleteUserProviderEntity(user.getUserId(), it.getProvider(), it.getEmail()));
@@ -170,6 +168,7 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean existsByNickName(String nickName) {
         Long count = jpaQueryFactory
                 .select(userEntity.count())
+                .from(userEntity)
                 .where(userEntity.nickName.eq(nickName))
                 .fetchFirst();
 
@@ -177,19 +176,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private void deleteUserProviderEntity(String userId, Provider provider, String email) {
-        Long id = jpaQueryFactory
-                .select(userProviderEntity.id)
-                .from(userProviderEntity)
-                .where(
-                        userProviderEntity.userId.eq(userId),
-                        userProviderEntity.provider.eq(provider),
-                        userProviderEntity.providerEmail.eq(email)
-                )
-                .fetchFirst();
-        if (id == null) {
-            return;
-        }
-
-        userProviderJpaRepository.deleteById(id);
+        userProviderJpaRepository.findByProviderAndProviderEmail(provider, email)
+                .filter(it -> StringUtils.equals(it.getUserId(), userId))
+                .ifPresent(userProviderJpaRepository::delete);
     }
 }

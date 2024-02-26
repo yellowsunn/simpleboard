@@ -98,7 +98,7 @@ public class UserAuthService {
     public void linkOAuth2User(String userId, String providerEmail, OAuth2Type type) {
         Provider provider = type.toProvider();
 
-        User user = userRepository.findByEmailAndProvider(providerEmail, provider)
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         if (user.isNotSameUser(userId)) {
@@ -167,7 +167,7 @@ public class UserAuthService {
                     .build();
         } catch (ExpiredAccessTokenException e) {
             return AccessTokenPayload.builder()
-                    .userId(e.getUserUUID())
+                    .userId(e.getUserId())
                     .build();
         }
     }

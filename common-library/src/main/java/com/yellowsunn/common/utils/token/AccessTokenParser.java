@@ -36,31 +36,15 @@ public class AccessTokenParser {
             String payload = objectMapper.writeValueAsString(claims.getBody());
             return objectMapper.readValue(payload, AccessTokenPayload.class);
         } catch (ExpiredJwtException e) {
-            throw new ExpiredAccessTokenException(e, getUserId(e), getUserUUID(e), getEmail(e));
+            throw new ExpiredAccessTokenException(e, getUserId(e));
         } catch (Exception e) {
             throw new JwtTokenParseException(e);
         }
     }
 
-    private Long getUserId(ExpiredJwtException e) {
+    private String getUserId(ExpiredJwtException e) {
         try {
-            return ((Number) e.getClaims().get("id")).longValue();
-        } catch (Exception throwable) {
-            return null;
-        }
-    }
-
-    private String getUserUUID(ExpiredJwtException e) {
-        try {
-            return (String) e.getClaims().get("uuid");
-        } catch (Exception throwable) {
-            return null;
-        }
-    }
-
-    private String getEmail(ExpiredJwtException e) {
-        try {
-            return (String) e.getClaims().get("email");
+            return (String) e.getClaims().get("userId");
         } catch (Exception throwable) {
             return null;
         }

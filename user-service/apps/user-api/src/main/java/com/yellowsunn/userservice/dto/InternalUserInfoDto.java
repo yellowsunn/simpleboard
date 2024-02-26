@@ -2,7 +2,6 @@ package com.yellowsunn.userservice.dto;
 
 import com.yellowsunn.userservice.domain.User;
 import com.yellowsunn.userservice.domain.user.Provider;
-import com.yellowsunn.userservice.domain.vo.UserProvider;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,12 +18,9 @@ public record InternalUserInfoDto(
     public static InternalUserInfoDto from(User user) {
         return InternalUserInfoDto.builder()
                 .userId(user.getUserId())
-                .email(user.getEmail())
                 .nickName(user.getNickName())
                 .thumbnail(user.getThumbnail())
-                .providers(user.getUserProviders().stream()
-                        .map(UserProvider::getProvider)
-                        .toList()
-                ).build();
+                .providers(user.providers())
+                .build();
     }
 }

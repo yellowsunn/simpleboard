@@ -1,28 +1,26 @@
 create table users
 (
-    user_id     bigint       not null auto_increment,
-    nickname    varchar(50)  not null,
+    id          bigint       not null auto_increment,
+    user_id     varchar(50)  not null unique,
     email       varchar(100) not null,
+    nickname    varchar(50)  not null unique,
     password    varchar(100) null,
-    uuid        varchar(50)  not null,
     thumbnail   varchar(255) null,
     role        varchar(50)  not null,
     created_at  timestamp(6) not null,
     modified_at timestamp(6) not null,
-    primary key (user_id),
-    unique key uk_email (email),
-    unique key uk_uuid (uuid),
-    unique key uk_nickname (nickname)
+    primary key (id)
 );
-CREATE INDEX idx_email ON users (email);
 
 create table user_provider
 (
-    user_provider_id bigint       not null auto_increment,
-    user_id          bigint      not null,
-    provider         varchar(50)  not null,
-    provider_email    varchar(100) not null,
-    primary key (user_provider_id)
+    id             bigint       not null auto_increment,
+    user_id        varchar(50)  not null,
+    provider       varchar(50)  not null,
+    provider_email varchar(100) not null,
+    primary key (id)
 );
 
-CREATE INDEX idx_user_id_and_provider on user_provider(user_id, provider);
+CREATE INDEX idx_user_id on user_provider (user_id);
+ALTER TABLE user_provider
+    ADD UNIQUE KEY unique_provider_provider_email (provider, provider_email);

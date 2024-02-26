@@ -5,11 +5,9 @@ import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 import com.yellowsunn.userservice.domain.user.Provider;
 import com.yellowsunn.userservice.domain.user.UserRole;
 import com.yellowsunn.userservice.domain.vo.UserProvider;
-import com.yellowsunn.userservice.dto.UserCreate;
-import com.yellowsunn.userservice.dto.UserProviderCreate;
-import com.yellowsunn.userservice.dto.UserUpdate;
 import com.yellowsunn.userservice.exception.CustomUserException;
 import com.yellowsunn.userservice.exception.UserErrorCode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.Builder;
@@ -21,8 +19,8 @@ import org.springframework.util.Assert;
 public class User {
 
     private String userId;
-    private String nickName;
     private String email;
+    private String nickName;
     private String password;
     private String thumbnail;
     private UserRole role;
@@ -31,15 +29,15 @@ public class User {
     private List<UserProvider> userProviders;
 
     @Builder
-    public User(String userId, String nickName, String email, String password, String thumbnail, UserRole role,
+    public User(String userId, String email, String nickName, String password, String thumbnail, UserRole role,
             List<UserProvider> userProviders) {
         this.userId = userId;
-        this.nickName = nickName;
         this.email = email;
+        this.nickName = nickName;
         this.password = password;
         this.thumbnail = thumbnail;
         this.role = role;
-        this.userProviders = emptyIfNull(userProviders);
+        this.userProviders = new ArrayList<>(emptyIfNull(userProviders));
     }
 
     public static User createEmailUser(String userId, String email, String nickName, String password) {
@@ -61,6 +59,7 @@ public class User {
                 .email(email)
                 .nickName(nickName)
                 .thumbnail(thumbnail)
+                .role(UserRole.ROLE_USER)
                 .userProviders(List.of(UserProvider.createOAuth2Provider(email, provider)))
                 .build();
     }
@@ -68,36 +67,6 @@ public class User {
     public List<Provider> providers() {
         return userProviders.stream()
                 .map(UserProvider::getProvider)
-                .toList();
-    }
-
-    public UserCreate toUserCreate() {
-        return UserCreate.builder()
-                .userId(userId)
-                .email(email)
-                .password(password)
-                .nickName(nickName)
-                .thumbnail(thumbnail)
-                .role(role)
-                .build();
-    }
-
-    public UserUpdate toUserUpdate() {
-        List<UserProviderCreate> userProviderCreates = userProviders.stream()
-                .map(it -> it.toUserProviderCreate(userId))
-                .toList();
-
-        return UserUpdate.builder()
-                .nickName(nickName)
-                .password(password)
-                .thumbnail(thumbnail)
-                .addedUserProviders(userProviderCreates)
-                .build();
-    }
-
-    public List<UserProviderCreate> toUserProviderCreates() {
-        return userProviders.stream()
-                .map(it -> it.toUserProviderCreate(userId))
                 .toList();
     }
 

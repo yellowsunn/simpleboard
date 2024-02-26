@@ -3,8 +3,6 @@ package com.yellowsunn.userservice.domain.user;
 import com.yellowsunn.userservice.domain.BaseTimeEntity;
 import com.yellowsunn.userservice.domain.User;
 import com.yellowsunn.userservice.domain.vo.UserProvider;
-import com.yellowsunn.userservice.dto.UserCreate;
-import com.yellowsunn.userservice.dto.UserUpdate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,12 +12,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.List;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Getter
 @Entity
@@ -31,16 +27,15 @@ public class UserEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String userId;
+
+    private String email;
+
     @Column(name = "nickname", unique = true)
     private String nickName;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
     private String password;
-
-    @Column(nullable = false, unique = true)
-    private String userId;
 
     private String thumbnail;
 
@@ -49,60 +44,26 @@ public class UserEntity extends BaseTimeEntity {
     private UserRole role;
 
     @Builder(access = AccessLevel.PRIVATE)
-    private UserEntity(Long id, String nickName, String email, String password, String userId, String thumbnail,
+    private UserEntity(Long id, String email, String nickName, String password, String userId, String thumbnail,
             UserRole role) {
         this.id = id;
-        this.nickName = nickName;
         this.email = email;
+        this.nickName = nickName;
         this.password = password;
         this.userId = userId;
         this.thumbnail = thumbnail;
         this.role = role;
     }
 
-    @Builder(builderMethodName = "emailUserBuilder", builderClassName = "EmailUserBuilder")
-    private UserEntity(@NonNull String email,
-            @NonNull String password,
-            @NonNull String nickName,
-            String thumbnail) {
-        this.email = email;
-        this.password = password;
-        this.userId = UUID.randomUUID().toString();
-        this.nickName = nickName;
-        this.role = UserRole.ROLE_USER;
-        this.thumbnail = thumbnail;
-    }
-
-    @Builder(builderMethodName = "oauth2UserBuilder", builderClassName = "OAut2UserBuilder")
-    private UserEntity(@NonNull String email,
-            @NonNull String nickName,
-            String thumbnail) {
-        this.email = email;
-        this.userId = UUID.randomUUID().toString();
-        this.nickName = nickName;
-        this.role = UserRole.ROLE_USER;
-        this.thumbnail = thumbnail;
-    }
-
-    public static UserEntity create(UserCreate userCreate) {
+    public static UserEntity create(User user) {
         return UserEntity.builder()
-                .email(userCreate.email())
-                .nickName(userCreate.nickName())
-                .password(userCreate.password())
-                .userId(userCreate.userId())
-                .thumbnail(userCreate.thumbnail())
-                .role(userCreate.role())
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .nickName(user.getNickName())
+                .password(user.getPassword())
+                .thumbnail(user.getThumbnail())
+                .role(user.getRole())
                 .build();
-    }
-
-    public boolean changeThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-        return true;
-    }
-
-    public boolean changeNickName(String nickName) {
-        this.nickName = nickName;
-        return true;
     }
 
     public User toUser(List<UserProviderEntity> userProviderEntities) {
@@ -121,9 +82,9 @@ public class UserEntity extends BaseTimeEntity {
                 .build();
     }
 
-    public void update(UserUpdate userUpdate) {
-        this.nickName = userUpdate.nickName();
-        this.password = userUpdate.password();
-        this.thumbnail = userUpdate.thumbnail();
+    public void update(User user) {
+        this.nickName = user.getNickName();
+        this.password = user.getPassword();
+        this.thumbnail = user.getThumbnail();
     }
 }
