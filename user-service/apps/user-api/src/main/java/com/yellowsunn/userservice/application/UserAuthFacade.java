@@ -27,10 +27,8 @@ public class UserAuthFacade {
     public UserLoginTokenDto signUpOAuth2(UserOAuth2SignUpCommand command) {
         // 임시 회원 정보 조회
         TempUser tempUser = tempUserCacheRepository.findByTokenAndCsrfToken(command.tempUserToken(),
-                command.csrfToken());
-        if (tempUser == null) {
-            throw new CustomUserException(UserErrorCode.INVALID_TEMP_USER);
-        }
+                        command.csrfToken())
+                .orElseThrow(() -> new CustomUserException(UserErrorCode.INVALID_TEMP_USER));
 
         // 추가 정보 입력후 회원 가입 완료
         UserLoginTokenDto userLoginTokenDto = userAuthService.signUpOAuth2(command, tempUser);

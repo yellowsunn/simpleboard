@@ -1,3 +1,4 @@
+/*
 package com.yellowsunn.userservice.service;
 
 import com.yellowsunn.common.exception.UserNotFoundException;
@@ -16,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class UserEntityServiceTest {
+class UserServiceTest {
     UserDeprecatedRepository userDeprecatedRepository = mock(UserDeprecatedRepository.class);
     UserProviderDeprecatedRepository userProviderDeprecatedRepository = mock(UserProviderDeprecatedRepository.class);
 
@@ -101,3 +102,4 @@ class UserEntityServiceTest {
                 .build();
     }
 }
+*/

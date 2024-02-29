@@ -1,22 +1,21 @@
 package com.yellowsunn.userservice.redis;
 
-import com.yellowsunn.userservice.domain.user.TempUser;
-import com.yellowsunn.userservice.domain.user.Provider;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.yellowsunn.userservice.config.RedisConfiguration;
+import com.yellowsunn.userservice.domain.user.Provider;
+import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.infrastructure.redis.TempUserRedisRepository;
 import com.yellowsunn.userservice.redis.config.TestRedisConfiguration;
+import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.time.Duration;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @SpringBootTest(classes = {TestRedisConfiguration.class, RedisConfiguration.class})
-class TempUserRedisRepositoryIntegrationTestEntity {
+class TempUserRedisRepositoryIntegrationTest {
 
     @Autowired
     RedisTemplate<String, TempUser> redisTemplate;
@@ -37,7 +36,7 @@ class TempUserRedisRepositoryIntegrationTestEntity {
                 .build();
 
         sut.save(tempUser, Duration.ofSeconds(3L));
-        TempUser foundTempUser = sut.findByTokenAndCsrfToken(tempUser.getToken(), tempUser.getCsrfToken());
+        TempUser foundTempUser = sut.findByTokenAndCsrfToken(tempUser.getToken(), tempUser.getCsrfToken()).get();
 
         assertThat(foundTempUser.getEmail()).isEqualTo(tempUser.getEmail());
         assertThat(foundTempUser.getProvider()).isEqualTo(tempUser.getProvider());

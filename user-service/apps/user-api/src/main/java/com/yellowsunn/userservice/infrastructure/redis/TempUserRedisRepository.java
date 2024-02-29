@@ -1,12 +1,16 @@
 package com.yellowsunn.userservice.infrastructure.redis;
 
-import com.yellowsunn.userservice.domain.user.TempUser;
 import com.yellowsunn.userservice.application.port.TempUserCacheRepository;
+import com.yellowsunn.userservice.domain.user.TempUser;
 import java.time.Duration;
+import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class TempUserRedisRepository implements TempUserCacheRepository {
 
@@ -24,19 +28,21 @@ public class TempUserRedisRepository implements TempUserCacheRepository {
     }
 
     @Override
-    public TempUser findByTokenAndCsrfToken(String token, String csrfToken) {
+    public Optional<TempUser> findByTokenAndCsrfToken(String token, String csrfToken) {
         String key = generateKey(token);
         TempUser tempUser = redisTemplate.opsForValue().get(key);
-        if (tempUser != null && StringUtils.equals(tempUser.getCsrfToken(), csrfToken)) {
-            return tempUser;
-        }
-        return null;
+
+        return Optional.ofNullable(tempUser)
+                .filter(it -> StringUtils.equals(tempUser.getCsrfToken(), csrfToken));
     }
 
     @Override
-    public boolean deleteByToken(String token) {
+    public void deleteByToken(String token) {
         String key = generateKey(token);
-        return Boolean.TRUE.equals(redisTemplate.delete(key));
+        Boolean result = redisTemplate.delete(key);
+        if (BooleanUtils.isNotTrue(result)) {
+            log.error("Redis failed to delete key. key={}", key);
+        }
     }
 
     private String generateKey(String token) {

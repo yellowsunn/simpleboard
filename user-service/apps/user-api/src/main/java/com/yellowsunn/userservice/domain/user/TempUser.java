@@ -26,11 +26,11 @@ public class TempUser {
         this.email = email;
         this.provider = provider;
         this.thumbnail = thumbnail;
-        this.token = generateBase64UUid();
+        this.token = generateBase64Uuid();
         this.csrfToken = csrfToken;
     }
 
-    private String generateBase64UUid() {
+    private String generateBase64Uuid() {
         String uuid = UUID.randomUUID().toString();
         return Base64Handler.encode(uuid);
     }
