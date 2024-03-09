@@ -9,5 +9,20 @@ spring:
       - 'classpath:application-mongodb.yml'
       - 'classpath:application-redis.yml'
 ---
-server.port: 8081
-spring.config.activate.on-profile: local
+server:
+  port: 8081
+spring:
+  config:
+    activate:
+      on-profile: local
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import:
+      - optional:configserver:http://172.16.90.6
+  cloud:
+    config:
+      profile: dev
+      name: mysql, redis, mongodb

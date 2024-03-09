@@ -6,12 +6,15 @@ plugins {
 }
 val asciidoctorExtensions: Configuration by configurations.creating
 
+extra["springCloudVersion"] = "2022.0.4"
+
 dependencies {
     implementation(project(":common-library"))
     implementation(project(":board-service:libs:board-core"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.apache.commons:commons-text:1.10.0")
@@ -26,6 +29,12 @@ dependencies {
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 
     asciidoctorExtensions("org.springframework.restdocs:spring-restdocs-asciidoctor")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 tasks {
