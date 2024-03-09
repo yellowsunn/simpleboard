@@ -15,7 +15,7 @@ spring.config.activate.on-profile: dev
 spring:
   data:
     redis:
-      host: 192.168.29.17
-      port: 6379
+      host: ${redis.host}
+      port: ${redis.port}
       connect-timeout: 3000
       timeout: 1000
