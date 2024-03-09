@@ -20,7 +20,16 @@ spring.config.activate.on-profile: local
 my-kafka:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
 ---
-spring.config.activate.on-profile: dev
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import:
+      - optional:configserver:http://172.16.90.6
+  cloud:
+    config:
+      profile: dev
+      name: mysql, mongodb
 
 my-kafka:
   bootstrap-servers: dev-kafka.yellowsunn.com:9092
