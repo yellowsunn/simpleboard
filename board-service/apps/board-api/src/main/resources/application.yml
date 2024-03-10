@@ -8,6 +8,9 @@ spring:
       - 'classpath:application-kafka-producer.yml'
       - 'classpath:application-mongodb.yml'
       - 'classpath:application-redis.yml'
+  cloud:
+    config:
+      enabled: false
 ---
 server:
   port: 8081
@@ -24,5 +27,6 @@ spring:
       - optional:configserver:http://172.16.90.6
   cloud:
     config:
+      enabled: true
       profile: dev
       name: mysql, redis, mongodb
