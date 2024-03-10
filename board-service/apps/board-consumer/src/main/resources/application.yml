@@ -13,6 +13,9 @@ spring:
     import:
       - 'classpath:application-persistence.yml'
       - 'classpath:application-mongodb.yml'
+  cloud:
+    config:
+      enabled: false
 ---
 server.port: 8181
 spring.config.activate.on-profile: local
@@ -28,6 +31,7 @@ spring:
       - optional:configserver:http://172.16.90.6
   cloud:
     config:
+      enabled: true
       profile: dev
       name: mysql, mongodb
 

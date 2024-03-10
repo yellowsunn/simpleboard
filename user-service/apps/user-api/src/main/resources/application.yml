@@ -7,14 +7,14 @@ spring:
       - 'classpath:application-user-core.yml'
       - 'classpath:application-redis.yml'
       - 'classpath:application-http.yml'
+  cloud:
+    config:
+      enabled: false
 ---
 spring:
   config:
     activate:
       on-profile: local
-  cloud:
-    config:
-      enabled: false
 ---
 spring:
   config:
@@ -24,6 +24,7 @@ spring:
       - optional:configserver:http://172.16.90.6
   cloud:
     config:
+      enabled: true
       profile: dev
       name: mysql, redis
 

@@ -10,6 +10,9 @@ spring:
       - 'classpath:application-persistence.yml'
       - 'classpath:application-kafka-producer.yml'
       - 'classpath:application-redis.yml'
+  cloud:
+    config:
+      enabled: false
 ---
 server.port: 8281
 spring.config.activate.on-profile: local
@@ -23,5 +26,6 @@ spring:
       - optional:configserver:http://172.16.90.6
   cloud:
     config:
+      enabled: true
       profile: dev
       name: mysql, redis
