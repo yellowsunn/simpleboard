@@ -13,6 +13,5 @@ spring.config.activate.on-profile: dev
 spring:
   data:
     mongodb:
-      uri: ${mongodb-dev-uri}/board?authSource=admin
+      uri: mongodb+srv://${mongodb.username}:${mongodb.password}@${mongodb.host}/board?authSource=admin
       auto-index-creation: true
-

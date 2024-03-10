@@ -15,4 +15,4 @@ my-kafka:
 spring.config.activate.on-profile: dev
 
 my-kafka:
-  bootstrap-servers: 192.168.29.201:9092, 192.168.29.202:9092, 192.168.29.203:9092
+  bootstrap-servers: dev-kafka.yellowsunn.com:9092
