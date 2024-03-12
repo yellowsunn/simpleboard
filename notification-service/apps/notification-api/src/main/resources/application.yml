@@ -1,6 +1,8 @@
 spring:
   profiles:
     default: local
+  application:
+    name: simpleboard-notification-service
   config:
     import:
       - 'classpath:application-mongodb.yml'

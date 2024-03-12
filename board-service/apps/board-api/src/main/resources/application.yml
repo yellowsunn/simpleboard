@@ -1,6 +1,8 @@
 spring:
   profiles:
     default: local
+  application:
+    name: simpleboard-board-service
   config:
     import:
       - 'classpath:application-persistence.yml'
