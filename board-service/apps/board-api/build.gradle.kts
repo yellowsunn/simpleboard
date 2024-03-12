@@ -53,7 +53,7 @@ tasks {
 
 configure<JibExtension> {
     from {
-        image = "eclipse-temurin:17-jre-alpine"
+        image = "yellowsunn/eclipse-temurin:17-jre-alpine-pinpoint-2.5.2"
     }
     container {
         ports = listOf("8080")
