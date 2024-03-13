@@ -12,6 +12,15 @@ spring:
   cloud:
     config:
       enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      profile: ${spring.profiles.active}
 ---
 spring:
   config:
@@ -29,4 +38,3 @@ spring:
       enabled: true
       profile: dev
       name: mysql, redis
-
