@@ -1,0 +1,306 @@
+[INFO ] [2024-03-13T13:52:14.221+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [background-preinit] org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.0.Final
+[INFO ] [2024-03-13T13:52:14.262+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExceptionHandlerTest - Starting ExceptionHandlerTest using Java 17.0.10 with PID 2686 (started by runner in /home/runner/work/simpleboard/simpleboard/user-service/apps/user-api)
+[INFO ] [2024-03-13T13:52:14.264+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExceptionHandlerTest - No active profile set, falling back to 1 default profile: "local"
+[INFO ] [2024-03-13T13:52:15.672+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:15.673+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:15.676+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[INFO ] [2024-03-13T13:52:15.703+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExceptionHandlerTest - Started ExceptionHandlerTest in 1.888 seconds (process running for 3.272)
+[INFO ] [2024-03-13T13:52:15.742+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:15.743+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:15.744+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[WARN ] [2024-03-13T13:52:15.796+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.exception.GlobalExceptionHandler - Not found user. message=null
+com.yellowsunn.common.exception.LoginUserNotFoundException: null
+[INFO ] [2024-03-13T13:52:15.891+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:15.891+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:15.892+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[ERROR] [2024-03-13T13:52:15.894+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.exception.GlobalExceptionHandler - Unknown exception. message=null
+java.lang.RuntimeException: null
+[INFO ] [2024-03-13T13:52:15.911+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:15.912+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:15.913+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[WARN ] [2024-03-13T13:52:15.915+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.exception.GlobalExceptionHandler - Illegal request. message=<< message >>
+java.lang.IllegalArgumentException: << message >>
+	at com.yellowsunn.userservice.controller.ExternalUserController.deleteMyInfo(ExternalUserController.java:46)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:207)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:152)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:884)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1081)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:974)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)
+	at org.springframework.web.servlet.FrameworkServlet.doDelete(FrameworkServlet.java:936)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:553)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:165)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:201)
+	at com.yellowsunn.userservice.controller.ExceptionHandlerTest.badRequest(ExceptionHandlerTest.java:66)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:727)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:217)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:53)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:99)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:79)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:75)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:62)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+	at jdk.proxy1/jdk.proxy1.$Proxy2.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:193)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:113)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+[INFO ] [2024-03-13T13:52:15.936+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:15.936+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:15.937+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[WARN ] [2024-03-13T13:52:15.939+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.exception.GlobalExceptionHandler - Login required. message=로그인이 필요합니다.
+com.yellowsunn.common.exception.LoginRequireException: 로그인이 필요합니다.
+	at com.yellowsunn.userservice.filter.LoginUserArgumentResolver.resolveArgument(LoginUserArgumentResolver.java:26)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:181)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:148)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:884)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:797)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1081)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:974)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1011)
+	at org.springframework.web.servlet.FrameworkServlet.doDelete(FrameworkServlet.java:936)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:553)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:165)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:201)
+	at com.yellowsunn.userservice.controller.ExceptionHandlerTest.requiredLoginTest(ExceptionHandlerTest.java:37)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:727)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:217)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:53)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:99)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:79)
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:75)
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:62)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+	at jdk.proxy1/jdk.proxy1.$Proxy2.stop(Unknown Source)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:193)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100)
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60)
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:113)
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+[INFO ] [2024-03-13T13:52:15.968+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.yellowsunn.userservice.controller.ExternalUserAuthControllerTest]: ExternalUserAuthControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[INFO ] [2024-03-13T13:52:15.973+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.yellowsunn.userservice.UserServiceApplication for test class com.yellowsunn.userservice.controller.ExternalUserAuthControllerTest
+[INFO ] [2024-03-13T13:52:16.053+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExternalUserAuthControllerTest - Starting ExternalUserAuthControllerTest using Java 17.0.10 with PID 2686 (started by runner in /home/runner/work/simpleboard/simpleboard/user-service/apps/user-api)
+[INFO ] [2024-03-13T13:52:16.054+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExternalUserAuthControllerTest - No active profile set, falling back to 1 default profile: "local"
+[INFO ] [2024-03-13T13:52:16.260+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.261+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.262+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[INFO ] [2024-03-13T13:52:16.268+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExternalUserAuthControllerTest - Started ExternalUserAuthControllerTest in 0.292 seconds (process running for 3.837)
+[INFO ] [2024-03-13T13:52:16.276+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.276+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.277+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[INFO ] [2024-03-13T13:52:16.405+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.405+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.406+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:16.450+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.451+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.451+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:16.496+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.496+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.496+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:16.663+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.663+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.664+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[INFO ] [2024-03-13T13:52:16.689+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.689+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.690+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:16.713+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.714+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.714+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:16.741+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:16.741+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:16.741+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:16.765+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.yellowsunn.userservice.controller.ExternalUserControllerTest]: ExternalUserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[INFO ] [2024-03-13T13:52:16.769+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.yellowsunn.userservice.UserServiceApplication for test class com.yellowsunn.userservice.controller.ExternalUserControllerTest
+[INFO ] [2024-03-13T13:52:16.837+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExternalUserControllerTest - Starting ExternalUserControllerTest using Java 17.0.10 with PID 2686 (started by runner in /home/runner/work/simpleboard/simpleboard/user-service/apps/user-api)
+[INFO ] [2024-03-13T13:52:16.837+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExternalUserControllerTest - No active profile set, falling back to 1 default profile: "local"
+[INFO ] [2024-03-13T13:52:17.003+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:17.003+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:17.003+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:17.010+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.ExternalUserControllerTest - Started ExternalUserControllerTest in 0.238 seconds (process running for 4.578)
+[INFO ] [2024-03-13T13:52:17.015+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:17.015+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:17.016+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:17.042+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:17.042+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:17.043+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[INFO ] [2024-03-13T13:52:17.057+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:17.057+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:17.058+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[INFO ] [2024-03-13T13:52:17.076+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:17.076+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:17.076+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:17.095+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.yellowsunn.userservice.controller.InternalUserControllerTest]: InternalUserControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+[INFO ] [2024-03-13T13:52:17.099+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.yellowsunn.userservice.UserServiceApplication for test class com.yellowsunn.userservice.controller.InternalUserControllerTest
+[INFO ] [2024-03-13T13:52:17.157+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.InternalUserControllerTest - Starting InternalUserControllerTest using Java 17.0.10 with PID 2686 (started by runner in /home/runner/work/simpleboard/simpleboard/user-service/apps/user-api)
+[INFO ] [2024-03-13T13:52:17.158+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.InternalUserControllerTest - No active profile set, falling back to 1 default profile: "local"
+[INFO ] [2024-03-13T13:52:17.343+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:17.343+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:17.343+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
+[INFO ] [2024-03-13T13:52:17.348+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] com.yellowsunn.userservice.controller.InternalUserControllerTest - Started InternalUserControllerTest in 0.246 seconds (process running for 4.916)
+[INFO ] [2024-03-13T13:52:17.351+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:17.351+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:17.352+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 1 ms
+[INFO ] [2024-03-13T13:52:17.387+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.boot.test.mock.web.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+[INFO ] [2024-03-13T13:52:17.388+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Initializing Servlet ''
+[INFO ] [2024-03-13T13:52:17.388+0000] [simpleboard-user-service] [PROFILE_IS_UNDEFINED] [Test worker] org.springframework.test.web.servlet.TestDispatcherServlet - Completed initialization in 0 ms
