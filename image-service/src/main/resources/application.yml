@@ -10,6 +10,15 @@ cloud:
     credentials:
       access-key: ${aws-access-key}
       secret-key: ${aws-secret-key}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      profile: ${spring.profiles.active}
 ---
 server.port: 8082
 spring.config.activate.on-profile: local

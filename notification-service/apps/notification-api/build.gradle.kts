@@ -13,11 +13,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.data:spring-data-commons")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation(project(":common-library"))
     implementation(project(":notification-service:libs:notification-core"))
 
     runtimeOnly(project(":notification-service:libs:infra-mongodb"))
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 
     testImplementation("io.mockk:mockk:${NotificationVersions.mockk}")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
